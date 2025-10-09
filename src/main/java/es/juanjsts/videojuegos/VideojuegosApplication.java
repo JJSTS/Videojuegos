@@ -1,13 +1,20 @@
 package es.juanjsts.videojuegos;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@Slf4j
 @SpringBootApplication
-public class VideojuegosApplication {
+public class VideojuegosApplication implements CommandLineRunner {
 
-	public static void main(String[] args) {
-		SpringApplication.run(VideojuegosApplication.class, args);
-	}
+    void main(String[] args) {
+        SpringApplication.run(VideojuegosApplication.class, args);
+    }
 
+    @Override
+    public void run(String... args) throws Exception{
+        IO.println("Iniciando Spring Boot Application");
+    }
 }

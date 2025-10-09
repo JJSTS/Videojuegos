@@ -1,0 +1,40 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+### getTarjetasAll
+GET http://localhost:3000/api/v1/videojuegos
+
+### getTarjetasAll
+GET http://localhost:3000/api/v1/videojuegos?nombre=among us
+
+### getTarjetasById
+GET http://localhost:3000/api/v1/videojuegos/2
+
+### getTarjetasById (una que no existe)
+GET http://localhost:3000/api/v1/videojuegos/3
+
+### Nueva tarjeta
+POST http://localhost:3000/api/v1/videojuegos
+Content-Type: application/json
+
+{
+  "nombre" : "Rust",
+  "almacenamiento" : "25.0 GB",
+  "fechaDeCreacion": "2016-12-31",
+  "costo": 0.00
+}
+
+### Actualizar tarjeta
+PUT http://localhost:3000/api/v1/videojuegos/1
+Content-Type: application/json
+
+{
+  "nombre" : "Rust",
+  "almacenamiento" : "25.0 GB",
+  "fechaDeCreacion": "2016-12-31",
+  "costo": 0.00
+}
+
+### Delete tarjeta
+DELETE localhost:3000/api/v1/videojuegos/3
