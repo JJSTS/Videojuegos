@@ -11,7 +11,7 @@ import static java.lang.IO.*;
 @SpringBootApplication
 public class VideojuegosApplication implements CommandLineRunner {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(VideojuegosApplication.class, args);
     }
 

@@ -1,15 +1,21 @@
 package es.juanjsts.videojuegos.services;
 
+import es.juanjsts.videojuegos.exceptions.VideojuegoNotFoundException;
 import es.juanjsts.videojuegos.models.Videojuego;
 import es.juanjsts.videojuegos.repositories.VideojuegosRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@CacheConfig(cacheNames = "videojuegos")
 @Slf4j
 @Service
 public class VideojuegoServiceImpl implements VideojuegosService {
@@ -42,19 +48,22 @@ public class VideojuegoServiceImpl implements VideojuegosService {
         return videojuegoRepository.findAllByNombreAndGenero(nombre, genero);
     }
 
+    @Cacheable
     @Override
     public Videojuego findById(Long id) {
         log.info("Buscando videojuego con id: {}", id);
-        return videojuegoRepository.findById(id).orElse(null);
+        return videojuegoRepository.findById(id).orElseThrow(() -> new VideojuegoNotFoundException(id));
     }
 
+    @Cacheable
     @Override
     public Videojuego findByUuid(String uuid) {
         log.info("Buscando videojuego con uuid: {}", uuid);
         var myUUID = UUID.fromString(uuid);
-        return videojuegoRepository.findByUuid(myUUID).orElse(null);
+        return videojuegoRepository.findByUuid(myUUID).orElseThrow(() -> new VideojuegoNotFoundException(uuid));
     }
 
+    @CachePut
     @Override
     public Videojuego save(Videojuego videojuego) {
         log.info("Guardando videojuego: {}", videojuego);
@@ -73,6 +82,7 @@ public class VideojuegoServiceImpl implements VideojuegosService {
         return videojuegoRepository.save(nuevoVideojuego);
     }
 
+    @CachePut
     @Override
     public Videojuego update(Long id, Videojuego videojuego) {
         log.info("Actualizando videojuego con id: {}", id);
@@ -91,6 +101,7 @@ public class VideojuegoServiceImpl implements VideojuegosService {
         return videojuegoRepository.save(videojuegoActualizado);
     }
 
+    @CacheEvict
     @Override
     public void deleteById(Long id) {
         log.info("Eliminando videojuego con id: {}", id);
