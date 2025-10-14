@@ -2,7 +2,8 @@ package es.juanjsts.videojuegos.controllers;
 
 
 import es.juanjsts.videojuegos.models.Videojuego;
-import es.juanjsts.videojuegos.repositories.VideojuegosRepositoryImpl;
+import es.juanjsts.videojuegos.services.VideojuegosService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,65 +11,52 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequestMapping("api/${api.version}/videojuegos")
 @RestController
 public class VideojuegosRestController {
-    private final VideojuegosRepositoryImpl videojuegoRepository;
+    private final VideojuegosService videojuegosService;
 
     @Autowired
-    public VideojuegosRestController(VideojuegosRepositoryImpl videojuegoRepository) {
-        this.videojuegoRepository = videojuegoRepository;
+    public VideojuegosRestController(VideojuegosService videojuegosService) {
+        this.videojuegosService = videojuegosService;
     }
 
     @GetMapping()
-    public ResponseEntity<List<Videojuego>> getAllVideojuegos(@RequestParam(required = false) String nombre) {
-        if (nombre != null){
-            return ResponseEntity.ok(videojuegoRepository.findByNombre(nombre));
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(videojuegoRepository.findAll());
-        }
+    public ResponseEntity<List<Videojuego>> getAllV(@RequestParam(required = false) String nombre,
+                                                    @RequestParam(required = false) String genero) {
+        log.info("Buscando videojuegos por nombre: {}, genero: {}", nombre, genero);
+        return ResponseEntity.ok(videojuegosService.findAll(nombre, genero));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Videojuego> getVideojuegoById(@PathVariable Long id){
-        return videojuegoRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        log.info("Buscando videojuego con id: {}", id);
+        return ResponseEntity.ok(videojuegosService.findById(id));
     }
 
     @PostMapping()
     public ResponseEntity<Videojuego> createVideojuego(@RequestBody Videojuego videojuego){
-        var saved = videojuegoRepository.save(videojuego);
+        var saved = videojuegosService.save(videojuego);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Videojuego> updateVideojuego(@PathVariable Long id, @RequestBody Videojuego videojuego){
-        return videojuegoRepository.findById(id)
-                .map(p -> {
-                    var updated = videojuegoRepository.save(videojuego);
-                    return ResponseEntity.status(HttpStatus.CREATED).body(updated);
-                })
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Videojuego> update(@PathVariable Long id, @RequestBody Videojuego videojuego){
+        log.info("Actualizando videojuego con id: {} con videojuego: {}", id, videojuego);
+        return ResponseEntity.ok(videojuegosService.update(id, videojuego));
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Videojuego> updatePartialVideojuego(@PathVariable Long id, @RequestBody Videojuego videojuego){
-        return videojuegoRepository.findById(id)
-                .map(p -> {
-                    var updated = videojuegoRepository.save(videojuego);
-                    return ResponseEntity.status(HttpStatus.CREATED).body(updated);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        log.info("Actualizando parcialmente videojuego con id: {} con videojuego: {}", id, videojuego);
+        return ResponseEntity.ok(videojuegosService.update(id, videojuego));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        return videojuegoRepository.findById(id)
-                .map(p -> {
-                    videojuegoRepository.deleteById(id);
-                    return ResponseEntity.status(HttpStatus.NO_CONTENT).<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        log.info("Eliminando videojuego con id: {}", id);
+        videojuegosService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

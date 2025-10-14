@@ -11,6 +11,7 @@ public class Videojuego {
     private final Long id;
 
     private final String nombre;
+    private final String genero;
     private final String almacenamiento;
     private final LocalDate fechaDeCreacion;
     private final Double costo;

@@ -9,7 +9,11 @@ import java.util.UUID;
 public interface VideojuegosRepository {
     List <Videojuego> findAll();
 
-    List<Videojuego> findByNombre(String name);
+    List<Videojuego> findAllByNombre(String nombre);
+
+    List<Videojuego> findAllByGenero(String genero);
+
+    List<Videojuego> findAllByNombreAndGenero(String nombre, String genero);
 
     Optional<Videojuego> findById(Long id);
 
@@ -24,4 +28,6 @@ public interface VideojuegosRepository {
     void deleteById(Long id);
 
     void deleteByUuid(UUID uuid);
+
+    Long nextId();
 }

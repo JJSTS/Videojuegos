@@ -5,16 +5,18 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import static java.lang.IO.*;
+
 @Slf4j
 @SpringBootApplication
 public class VideojuegosApplication implements CommandLineRunner {
 
-    void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(VideojuegosApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception{
-        IO.println("Iniciando Spring Boot Application");
+        println("Iniciando Spring Boot Application");
     }
 }
