@@ -1,19 +1,22 @@
 package es.juanjsts.videojuegos.services;
 
+import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
+import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
+import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
 import es.juanjsts.videojuegos.models.Videojuego;
 
 import java.util.List;
 
 public interface VideojuegosService {
-    List<Videojuego> findAll(String nombre, String genero);
+    List<VideojuegoResponseDto> findAll(String nombre, String genero);
 
-    Videojuego findById(Long id);
+    VideojuegoResponseDto findById(Long id);
 
-    Videojuego findByUuid(String uuid);
+    VideojuegoResponseDto findByUuid(String uuid);
 
-    Videojuego save(Videojuego videojuego);
+    VideojuegoResponseDto save(VideojuegoCreateDto videojuegocreateDto);
 
-    Videojuego update(Long id, Videojuego videojuego);
+    VideojuegoResponseDto update(Long id, VideojuegoUpdateDto videojuegoupdateDto);
 
     void deleteById(Long id);
 }
