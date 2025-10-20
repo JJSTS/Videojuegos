@@ -12,7 +12,7 @@ GET http://localhost:3000/api/v1/videojuegos?nombre=among us
 GET http://localhost:3000/api/v1/videojuegos/2
 
 ### getTarjetasById (una que no existe)
-GET http://localhost:3000/api/v1/videojuegos/3
+GET http://localhost:3000/api/v1/videojuegos/5
 
 ### Nueva tarjeta
 POST http://localhost:3000/api/v1/videojuegos
@@ -24,6 +24,18 @@ Content-Type: application/json
   "almacenamiento" : "25.0 GB",
   "fechaDeCreacion": "2016-12-31",
   "costo": 0.00
+}
+
+### Nueva tarjeta con Validacion
+POST http://localhost:3000/api/v1/videojuegos
+Content-Type: application/json
+
+{
+  "nombre" : "Rust",
+  "genero" :"",
+  "almacenamiento" : "12.111111 GB",
+  "fechaDeCreacion": "2016-12-31",
+  "costo": -12.31
 }
 
 ### Actualizar tarjeta

@@ -1,8 +1,6 @@
 package es.juanjsts.videojuegos.dto;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -10,16 +8,16 @@ import java.time.LocalDate;
 
 @Data
 public class VideojuegoCreateDto {
-    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(min = 3, max = 50, message = "El género debe tener entre 3 y 50 caracteres")
     private final String nombre;
 
-    @NotBlank(message = "Debe especificar el género del videojuego")
+    @Size(min = 3, max = 50, message = "El género debe tener entre 3 y 50 caracteres")
     private final String genero;
 
-    @NotBlank(message = "Debe indicar el espacio de almacenamiento requerido")
+    @Pattern(regexp = "^\\d+(\\.\\d+)?\\s+(GB|MB|TB)$", message = "El espacio de almacenamiento debe ser un decimal o un entero junto con GB, MB o TB")
     private final String almacenamiento;
 
-    @FutureOrPresent(message = "La fecha de creación debe ser actual o futura")
+    @PastOrPresent(message = "La fecha de creación debe ser presente o pasado")
     private final LocalDate fechaDeCreacion;
 
     @PositiveOrZero(message = "El costo debe ser positivo o cero")

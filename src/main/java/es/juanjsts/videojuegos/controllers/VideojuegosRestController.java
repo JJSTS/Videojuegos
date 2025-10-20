@@ -5,6 +5,7 @@ import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
 import es.juanjsts.videojuegos.services.VideojuegosService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,19 +43,19 @@ public class VideojuegosRestController {
     }
 
     @PostMapping()
-    public ResponseEntity<VideojuegoResponseDto> create(@RequestBody VideojuegoCreateDto videojuegoCreateDto){
+    public ResponseEntity<VideojuegoResponseDto> create(@Valid @RequestBody VideojuegoCreateDto videojuegoCreateDto){
         var saved = videojuegosService.save(videojuegoCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VideojuegoResponseDto> update(@PathVariable Long id, @RequestBody VideojuegoUpdateDto videojuegoUpdateDto){
+    public ResponseEntity<VideojuegoResponseDto> update(@PathVariable Long id, @Valid @RequestBody VideojuegoUpdateDto videojuegoUpdateDto){
         log.info("Actualizando videojuego con id: {} con videojuego: {}", id, videojuegoUpdateDto);
         return ResponseEntity.ok(videojuegosService.update(id, videojuegoUpdateDto));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<VideojuegoResponseDto> updatePartial(@PathVariable Long id, @RequestBody VideojuegoUpdateDto videojuegoUpdateDto){
+    public ResponseEntity<VideojuegoResponseDto> updatePartial(@PathVariable Long id,@Valid @RequestBody VideojuegoUpdateDto videojuegoUpdateDto){
         log.info("Actualizando parcialmente videojuego con id: {} con videojuego: {}", id, videojuegoUpdateDto);
         return ResponseEntity.ok(videojuegosService.update(id, videojuegoUpdateDto));
     }
