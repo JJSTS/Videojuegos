@@ -8,10 +8,10 @@ import java.time.LocalDate;
 
 @Data
 public class VideojuegoUpdateDto {
-    @Size(min = 3, max = 100, message = "El género debe tener entre 3 y 50 caracteres")
+    @Size(min = 3, max = 40, message = "El género debe tener entre 3 y 40 caracteres")
     private final String nombre;
 
-    @Size(min = 3, max = 50, message = "El género debe tener entre 3 y 50 caracteres")
+    @Size(min = 3, max = 20, message = "El género debe tener entre 3 y 20 caracteres")
     private final String genero;
 
     @Pattern(regexp = "^\\d+(\\.\\d+)?\\s+(GB|MB|TB)$", message = "El espacio de almacenamiento debe ser un decimal o un entero junto con GB, MB o TB")
