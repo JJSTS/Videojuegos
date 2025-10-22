@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
-@CacheConfig(cacheNames = "videojuegos")
+@CacheConfig(cacheNames = {"videojuegos"})
 @Slf4j
 @Service
 public class VideojuegoServiceImpl implements VideojuegosService {
