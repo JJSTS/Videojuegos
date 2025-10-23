@@ -13,12 +13,39 @@ import java.util.*;
 public class VideojuegosRepositoryImpl implements VideojuegosRepository {
     private final Map<Long, Videojuego> videojuegos = new LinkedHashMap<>(
             Map.of(
-            1L,new Videojuego(1L, "Among us", "Party","3.0 GB", LocalDate.of(2018,8,8),2.99,
-                    LocalDateTime.now(), LocalDateTime.now(), UUID.randomUUID()),
-            2L,new Videojuego(2L, "Fortnite", "Battle Royale","15.0 GB", LocalDate.of(2019,10,14),0.00,
-                    LocalDateTime.now(), LocalDateTime.now(), UUID.randomUUID()),
-            3L,new Videojuego(3L, "League of Legends", "MOBA","25.0 GB", LocalDate.of(2015,11,15),0.00,
-                    LocalDateTime.now(), LocalDateTime.now(), UUID.randomUUID())
+            1L,Videojuego.builder()
+                            .id(1L)
+                            .nombre("Among us")
+                            .genero("Party")
+                            .almacenamiento("3.0 GB")
+                            .fechaDeCreacion(LocalDate.of(2018,8,8))
+                            .costo(2.99)
+                            .createdAt(LocalDateTime.now())
+                            .updatedAt(LocalDateTime.now())
+                            .uuid(UUID.randomUUID())
+                            .build(),
+            2L, Videojuego.builder()
+                            .id(2L)
+                            .nombre("Fortnite")
+                            .genero("Battle Royale")
+                            .almacenamiento("15.0 GB")
+                            .fechaDeCreacion(LocalDate.of(2019,10,14))
+                            .costo(0.00)
+                            .createdAt(LocalDateTime.now())
+                            .updatedAt(LocalDateTime.now())
+                            .uuid(UUID.randomUUID())
+                            .build(),
+            3L,Videojuego.builder()
+                            .id(3L)
+                            .nombre("League of Legends").
+                            genero("MOBA")
+                            .almacenamiento("25.0 GB")
+                            .fechaDeCreacion(LocalDate.of(2015,11,15))
+                            .costo(0.00)
+                            .createdAt(LocalDateTime.now())
+                            .updatedAt(LocalDateTime.now())
+                            .uuid(UUID.randomUUID())
+                            .build()
     ));
 
     @Override

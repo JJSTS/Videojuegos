@@ -1,11 +1,12 @@
 package es.juanjsts.videojuegos.models;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+@Builder
 @Data
 public class Videojuego {
     private final Long id;

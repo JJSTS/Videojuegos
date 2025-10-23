@@ -7,8 +7,8 @@ import es.juanjsts.videojuegos.exceptions.VideojuegoNotFoundException;
 import es.juanjsts.videojuegos.mappers.VideojuegoMapper;
 import es.juanjsts.videojuegos.models.Videojuego;
 import es.juanjsts.videojuegos.repositories.VideojuegosRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @CacheConfig(cacheNames = {"videojuegos"})
 @Slf4j
 @Service
@@ -25,11 +26,6 @@ public class VideojuegoServiceImpl implements VideojuegosService {
     private final VideojuegosRepository videojuegoRepository;
     private final VideojuegoMapper videojuegoMapper;
 
-    @Autowired
-    public VideojuegoServiceImpl(VideojuegosRepository videojuegoRepository, VideojuegoMapper videojuegoMapper) {
-        this.videojuegoRepository = videojuegoRepository;
-        this.videojuegoMapper = videojuegoMapper;
-    }
 
     @Override
     public List<VideojuegoResponseDto> findAll(String nombre, String genero) {

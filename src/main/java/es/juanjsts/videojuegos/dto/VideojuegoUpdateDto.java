@@ -1,11 +1,12 @@
 package es.juanjsts.videojuegos.dto;
 
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
-
+@Builder
 @Data
 public class VideojuegoUpdateDto {
     @Size(min = 3, max = 40, message = "El género debe tener entre 3 y 40 caracteres")

@@ -1,11 +1,13 @@
 package es.juanjsts.videojuegos.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Builder
 @Data
 public class VideojuegoResponseDto {
     private final Long id;
