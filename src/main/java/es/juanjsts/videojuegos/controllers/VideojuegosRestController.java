@@ -42,6 +42,7 @@ public class VideojuegosRestController {
 
     @PostMapping()
     public ResponseEntity<VideojuegoResponseDto> create(@Valid @RequestBody VideojuegoCreateDto videojuegoCreateDto){
+        log.info("Creando videojuego: {}", videojuegoCreateDto);
         var saved = videojuegosService.save(videojuegoCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }

@@ -28,11 +28,11 @@ public class VideojuegoMapper {
     public Videojuego toVideojuego(VideojuegoUpdateDto videojuegoUpdateDto, Videojuego videojuegoActual) {
         return Videojuego.builder()
                 .id(videojuegoActual.getId())
-                .nombre(videojuegoActual.getNombre() != null ? videojuegoUpdateDto.getNombre() : videojuegoActual.getNombre())
-                .genero(videojuegoActual.getGenero() != null ? videojuegoUpdateDto.getGenero() : videojuegoActual.getGenero())
-                .almacenamiento(videojuegoActual.getAlmacenamiento() != null ? videojuegoUpdateDto.getAlmacenamiento() : videojuegoActual.getAlmacenamiento())
-                .fechaDeCreacion(videojuegoActual.getFechaDeCreacion() != null ? videojuegoUpdateDto.getFechaDeCreacion() : videojuegoActual.getFechaDeCreacion())
-                .costo(videojuegoActual.getCosto() != null ? videojuegoUpdateDto.getCosto() : videojuegoActual.getCosto())
+                .nombre(videojuegoUpdateDto.getNombre() != null ? videojuegoUpdateDto.getNombre() : videojuegoActual.getNombre())
+                .genero(videojuegoUpdateDto.getGenero() != null ? videojuegoUpdateDto.getGenero() : videojuegoActual.getGenero())
+                .almacenamiento(videojuegoUpdateDto.getAlmacenamiento() != null ? videojuegoUpdateDto.getAlmacenamiento() : videojuegoActual.getAlmacenamiento())
+                .fechaDeCreacion(videojuegoUpdateDto.getFechaDeCreacion() != null ? videojuegoUpdateDto.getFechaDeCreacion() : videojuegoActual.getFechaDeCreacion())
+                .costo(videojuegoUpdateDto.getCosto() != null ? videojuegoUpdateDto.getCosto() : videojuegoActual.getCosto())
                 .createdAt(videojuegoActual.getCreatedAt())
                 .updatedAt(LocalDateTime.now())
                 .uuid(videojuegoActual.getUuid())
@@ -49,6 +49,7 @@ public class VideojuegoMapper {
                 .costo(videojuego.getCosto())
                 .createdAt(videojuego.getCreatedAt())
                 .updatedAt(videojuego.getUpdatedAt())
+                .uuid(videojuego.getUuid())
                 .build();
     }
 
