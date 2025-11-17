@@ -1,11 +1,12 @@
-package es.juanjsts.videojuegos.models;
+package es.juanjsts.plataformas.models;
 
-import es.juanjsts.plataformas.models.Plataforma;
+import es.juanjsts.videojuegos.models.Videojuego;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -16,29 +17,29 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "VIDEOJUEGOS")
-public class Videojuego {
-    //ID
+@Table(name = "PLATAFORMAS")
+public class Plataforma {
+    //Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
     //Atributos
     @Column(nullable = false, length = 50)
     private String nombre;
+
     @Column(nullable = false, length = 50)
-    private String genero;
-    @Column(nullable = false, length = 8)
-    private String almacenamiento;
+    private String fabricante;
+
+    @Column(nullable = false, length = 20)
+    private String tipo;
+
     @Column(nullable = false)
-    private LocalDate fechaDeCreacion;
-    @Column(nullable = false)
-    private Double costo;
+    private LocalDate fechaDeLanzamiento;
 
     //Relacion y atributo
-    @ManyToOne()
-    @JoinColumn(name = "plataforma_id")
-    private Plataforma plataforma;
+    @OneToMany(mappedBy = "plataforma")
+    private List<Videojuego> videojuegos;
 
     //Atributos de la tabla
     @Column(updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

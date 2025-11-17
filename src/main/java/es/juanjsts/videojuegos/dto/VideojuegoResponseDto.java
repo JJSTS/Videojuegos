@@ -1,5 +1,6 @@
 package es.juanjsts.videojuegos.dto;
 
+import es.juanjsts.plataformas.models.Plataforma;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class VideojuegoResponseDto {
     private String nombre;
     private String genero;
     private String almacenamiento;
+    private String plataforma;
     private LocalDate fechaDeCreacion;
     private Double costo;
 

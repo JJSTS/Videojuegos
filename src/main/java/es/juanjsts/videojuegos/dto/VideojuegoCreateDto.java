@@ -1,5 +1,6 @@
 package es.juanjsts.videojuegos.dto;
 
+import es.juanjsts.plataformas.models.Plataforma;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,9 @@ public class VideojuegoCreateDto {
 
     @Pattern(regexp = "^\\d+(\\.\\d+)?\\s+(GB|MB|TB)$", message = "El espacio de almacenamiento debe ser un decimal o un entero junto con GB, MB o TB")
     private final String almacenamiento;
+
+    @Size(min = 1, max = 20, message = "La plataforma debe tener entre 1 y 20 caracteres")
+    private final Plataforma plataforma;
 
     @PastOrPresent(message = "La fecha de creación debe ser presente o pasado")
     private final LocalDate fechaDeCreacion;

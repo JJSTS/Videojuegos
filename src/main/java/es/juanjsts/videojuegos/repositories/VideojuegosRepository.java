@@ -1,33 +1,34 @@
 package es.juanjsts.videojuegos.repositories;
 
 import es.juanjsts.videojuegos.models.Videojuego;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface VideojuegosRepository {
-    List <Videojuego> findAll();
-
+public interface VideojuegosRepository extends JpaRepository<Videojuego, Long> {
     List<Videojuego> findAllByNombre(String nombre);
 
-    List<Videojuego> findAllByGenero(String genero);
+    List<Videojuego> findAllByGeneroContainingIgnoreCase(String genero);
 
-    List<Videojuego> findAllByNombreAndGenero(String nombre, String genero);
+    List<Videojuego> findAllByNombreAndGeneroContainingIgnoreCase(String nombre, String genero);
 
-    Optional<Videojuego> findById(Long id);
-
+    //Por UUID
     Optional<Videojuego> findByUuid(UUID uuid);
-
-    boolean existsById(Long id);
-
     boolean existsByUuid(UUID uuid);
-
-    Videojuego save(Videojuego videojuego);
-
-    void deleteById(Long id);
-
     void deleteByUuid(UUID uuid);
 
-    Long nextId();
+    //En caso esté borrado
+    List<Videojuego> findByIsDeleted(Boolean isDeleted);
+
+    // Actualizar la tarjeta con isDeleted a true
+    @Modifying // Para indicar que es una consulta de actualización
+    @Query("UPDATE Videojuego v SET v.isDeleted = true WHERE v.id = :id")
+
+    // Consulta de actualización
+    void updateIsDeletedToTrueById(Long id);
+
 }

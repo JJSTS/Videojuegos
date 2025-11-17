@@ -1,5 +1,6 @@
 package es.juanjsts.videojuegos.services;
 
+import es.juanjsts.plataformas.services.PlataformaService;
 import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
@@ -25,7 +26,7 @@ import java.util.UUID;
 public class VideojuegoServiceImpl implements VideojuegosService {
     private final VideojuegosRepository videojuegoRepository;
     private final VideojuegoMapper videojuegoMapper;
-
+    private final PlataformaService plataformaService;
 
     @Override
     public List<VideojuegoResponseDto> findAll(String nombre, String genero) {
@@ -41,11 +42,11 @@ public class VideojuegoServiceImpl implements VideojuegosService {
 
         if (nombre == null || nombre.isEmpty()){
             log.info("Buscando videojuegos por genero: {}", genero);
-            return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByGenero(genero));
+            return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByGeneroContainingIgnoreCase(genero));
         }
 
         log.info("Buscando videojuegos por nombre: {} y genero: {}", nombre, genero);
-        return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByNombreAndGenero(nombre, genero));
+        return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByNombreAndGeneroContainingIgnoreCase(nombre, genero));
     }
 
     @Cacheable(key = "#id")
@@ -76,8 +77,8 @@ public class VideojuegoServiceImpl implements VideojuegosService {
     @Override
     public VideojuegoResponseDto save(VideojuegoCreateDto videojuegocreateDto) {
         log.info("Guardando videojuego: {}", videojuegocreateDto);
-        Long id = videojuegoRepository.nextId();
-        Videojuego nuevoVideojuego = videojuegoMapper.toVideojuego(id, videojuegocreateDto);
+        var plataforma = plataformaService.findByNombre(videojuegocreateDto.getNombre());
+        Videojuego nuevoVideojuego = videojuegoMapper.toVideojuego(videojuegocreateDto, plataforma);
         return videojuegoMapper.toVideojuegoResponseDto(videojuegoRepository.save(nuevoVideojuego));
     }
 

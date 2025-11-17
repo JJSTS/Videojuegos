@@ -1,5 +1,6 @@
 package es.juanjsts.videojuegos.dto;
 
+import es.juanjsts.plataformas.models.Plataforma;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Data;

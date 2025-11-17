@@ -1,4 +1,4 @@
-package es.juanjsts.videojuegos;
+package es.juanjsts;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
