@@ -1,5 +1,6 @@
 package es.juanjsts.plataformas.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import es.juanjsts.videojuegos.models.Videojuego;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,6 +39,7 @@ public class Plataforma {
     private LocalDate fechaDeLanzamiento;
 
     //Relacion y atributo
+    @JsonIgnoreProperties("plataforma")
     @OneToMany(mappedBy = "plataforma")
     private List<Videojuego> videojuegos;
 

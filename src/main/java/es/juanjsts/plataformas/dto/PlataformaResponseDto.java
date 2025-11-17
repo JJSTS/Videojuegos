@@ -22,7 +22,6 @@ public class PlataformaResponseDto {
     private  String fabricante;
     private  String tipo;
     private  LocalDate fechaDeLanzamiento;
-    private  List<Videojuego> videojuegos;
     private Boolean isDeleted = false;
 
     private  LocalDateTime createdAt = LocalDateTime.now();

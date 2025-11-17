@@ -14,6 +14,5 @@ public class PlataformaCreatedDto {
     private final String fabricante;
     private final String tipo;
     private final LocalDate fechaDeLanzamiento;
-    private final List<Videojuego> videojuegos;
     private final Boolean isDeleted;
 }

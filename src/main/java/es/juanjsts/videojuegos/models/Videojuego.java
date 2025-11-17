@@ -1,5 +1,6 @@
 package es.juanjsts.videojuegos.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import es.juanjsts.plataformas.models.Plataforma;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,6 +38,7 @@ public class Videojuego {
 
     //Relacion y atributo
     @ManyToOne()
+    @JsonIgnoreProperties("videojuego")
     @JoinColumn(name = "plataforma_id")
     private Plataforma plataforma;
 
