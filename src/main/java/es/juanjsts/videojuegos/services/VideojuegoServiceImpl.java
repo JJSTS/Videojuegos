@@ -42,7 +42,7 @@ public class VideojuegoServiceImpl implements VideojuegosService {
 
         if (nombre == null || nombre.isEmpty()){
             log.info("Buscando videojuegos por genero: {}", genero);
-            return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByGeneroContainingIgnoreCase(genero));
+            return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByGeneroContainingIgnoreCase(genero.toLowerCase()));
         }
 
         log.info("Buscando videojuegos por nombre: {} y genero: {}", nombre, genero);
@@ -77,7 +77,7 @@ public class VideojuegoServiceImpl implements VideojuegosService {
     @Override
     public VideojuegoResponseDto save(VideojuegoCreateDto videojuegocreateDto) {
         log.info("Guardando videojuego: {}", videojuegocreateDto);
-        var plataforma = plataformaService.findByNombre(videojuegocreateDto.getNombre());
+        var plataforma = plataformaService.findByNombre(videojuegocreateDto.getPlataforma());
         Videojuego nuevoVideojuego = videojuegoMapper.toVideojuego(videojuegocreateDto, plataforma);
         return videojuegoMapper.toVideojuegoResponseDto(videojuegoRepository.save(nuevoVideojuego));
     }

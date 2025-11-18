@@ -1,7 +1,6 @@
 package es.juanjsts.plataformas.controllers;
 
 import es.juanjsts.plataformas.dto.PlataformaCreatedDto;
-import es.juanjsts.plataformas.dto.PlataformaResponseDto;
 import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
 import es.juanjsts.plataformas.models.Plataforma;
 import es.juanjsts.plataformas.services.PlataformaService;
@@ -21,7 +20,7 @@ public class PlataformaRestController {
     private final PlataformaService plataformaService;
 
     @GetMapping
-    public ResponseEntity<List<PlataformaResponseDto>> getAll(@RequestParam(required = false) String nombre,
+    public ResponseEntity<List<Plataforma>> getAll(@RequestParam(required = false) String nombre,
                                                               @RequestParam(required = false) String fabricante) {
         log.info("Buscando plataformas por nombre: {}, fabricante: {}", nombre, fabricante);
         return ResponseEntity.ok(plataformaService.findAll(nombre,fabricante));
@@ -34,14 +33,14 @@ public class PlataformaRestController {
     }
 
     @PostMapping()
-    public ResponseEntity<PlataformaResponseDto> create(@RequestBody PlataformaCreatedDto plataformaCreatedDto){
+    public ResponseEntity<Plataforma> create(@RequestBody PlataformaCreatedDto plataformaCreatedDto){
         log.info("Creando plataforma: {}", plataformaCreatedDto);
         var saved = plataformaService.save(plataformaCreatedDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PlataformaResponseDto> update(@PathVariable Long id,@RequestBody PlataformaUpdateDto plataformaUpdateDto) {
+    public ResponseEntity<Plataforma> update(@PathVariable Long id,@RequestBody PlataformaUpdateDto plataformaUpdateDto) {
         log.info("Actualizando plataforma: {}", plataformaUpdateDto);
         return ResponseEntity.ok(plataformaService.update(id, plataformaUpdateDto));
     }

@@ -1,7 +1,8 @@
 package es.juanjsts.plataformas.mappers;
 
 import es.juanjsts.plataformas.dto.PlataformaCreatedDto;
-import es.juanjsts.plataformas.dto.PlataformaResponseDto;
+//import es.juanjsts.plataformas.dto.PlataformaResponseDto;
+//import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
 import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
 import es.juanjsts.plataformas.models.Plataforma;
 import org.springframework.stereotype.Component;
@@ -19,9 +20,6 @@ public class PlataformaMapper {
                 .fabricante(plataformaCreatedDto.getFabricante())
                 .tipo(plataformaCreatedDto.getTipo())
                 .fechaDeLanzamiento(plataformaCreatedDto.getFechaDeLanzamiento())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .uuid(UUID.randomUUID())
                 .build();
     }
 
@@ -36,25 +34,5 @@ public class PlataformaMapper {
                 .uuid(plataformaActual.getUuid())
                 .isDeleted(plataformaUpdateDto.getIsDeleted() != null ? plataformaUpdateDto.getIsDeleted() : plataformaActual.getIsDeleted())
                 .build();
-    }
-
-    public PlataformaResponseDto toPlataformaResponseDto(Plataforma plataforma){
-        return PlataformaResponseDto.builder()
-                .id(plataforma.getId())
-                .nombre(plataforma.getNombre())
-                .fabricante(plataforma.getFabricante())
-                .tipo(plataforma.getTipo())
-                .fechaDeLanzamiento(plataforma.getFechaDeLanzamiento())
-                .createdAt(plataforma.getCreatedAt())
-                .updatedAt(plataforma.getUpdatedAt())
-                .uuid(plataforma.getUuid())
-                .isDeleted(plataforma.getIsDeleted())
-                .build();
-    }
-
-    public List<PlataformaResponseDto> toResponseDtoList(List<Plataforma> plataformas){
-        return plataformas.stream()
-                .map(this::toPlataformaResponseDto)
-                .toList();
     }
 }

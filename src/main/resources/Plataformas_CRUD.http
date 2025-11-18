@@ -5,3 +5,22 @@ GET https://examples.http-client.intellij.net/get
 ###
 
 GET http://localhost:3000/api/v1/plataformas
+
+###
+
+GET http://localhost:3000/api/v1/plataformas/1
+###
+
+GET http://localhost:3000/api/v1/plataformas/2
+
+### Nueva tarjeta
+POST http://localhost:3000/api/v1/plataformas
+Content-Type: application/json
+
+{
+  "nombre" : "Riot Client",
+  "fabricante" :"Riot Games",
+  "tipo": "PC",
+  "fechaDeLanzamiento": "2019-12-31",
+  "isDeleted": false
+}

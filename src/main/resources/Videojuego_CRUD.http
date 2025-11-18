@@ -19,8 +19,9 @@ POST http://localhost:3000/api/v1/videojuegos
 Content-Type: application/json
 
 {
-  "nombre" : "Rust",
+  "nombre" : "Mario Bros",
   "genero" :"Supervivencia",
+  "plataforma": "Riot Client",
   "almacenamiento" : "25.0 GB",
   "fechaDeCreacion": "2016-12-31",
   "costo": 0.00

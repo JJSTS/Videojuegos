@@ -1,7 +1,6 @@
 package es.juanjsts.plataformas.services;
 
 import es.juanjsts.plataformas.dto.PlataformaCreatedDto;
-import es.juanjsts.plataformas.dto.PlataformaResponseDto;
 import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
 import es.juanjsts.plataformas.exceptions.PlataformaException;
 import es.juanjsts.plataformas.exceptions.PlataformaNotFound;
@@ -28,12 +27,12 @@ public class PlataformaServiceImpl implements PlataformaService{
     private final PlataformaMapper plataformaMapper;
 
     @Override
-    public List<PlataformaResponseDto> findAll(String nombre, String fabricante) {
+    public List<Plataforma> findAll(String nombre, String fabricante) {
         if ((nombre == null || nombre.isEmpty()) && (fabricante == null || fabricante.isEmpty())){
             log.info("Buscando todas las plataformas");
-            return plataformaMapper.toResponseDtoList(plataformaRepository.findAll());
+            return plataformaRepository.findAll();
         } else {
-            return plataformaMapper.toResponseDtoList(plataformaRepository.findAllByNombreAndFabricanteContainingIgnoreCase(nombre, fabricante));
+            return plataformaRepository.findAllByNombreAndFabricanteContainingIgnoreCase(nombre, fabricante);
         }
     }
 
@@ -48,22 +47,22 @@ public class PlataformaServiceImpl implements PlataformaService{
     @Override
     @Cacheable(key = "#nombre")
     public Plataforma findByNombre(String nombre) {
-        return (plataformaRepository.findByNombreEqualsIgnoreCase(nombre)
-                .orElseThrow(() -> new PlataformaNotFound(nombre)));
+        return plataformaRepository.findByNombreEqualsIgnoreCase(nombre)
+                .orElseThrow(() -> new PlataformaNotFound(nombre));
     }
 
     @Override
     @CachePut(key = "#result.id")
-    public PlataformaResponseDto save(PlataformaCreatedDto plataforma) {
+    public Plataforma save(PlataformaCreatedDto plataforma) {
         log.info("Guardando plataforma: {}", plataforma);
-        return plataformaMapper.toPlataformaResponseDto(plataformaRepository.save(plataformaMapper.toPlataforma(plataforma)));
+        return plataformaRepository.save(plataformaMapper.toPlataforma(plataforma));
     }
 
     @Override
     @CachePut(key = "#result.id")
-    public PlataformaResponseDto update(Long id, PlataformaUpdateDto plataforma) {
+    public Plataforma update(Long id, PlataformaUpdateDto plataforma) {
         Plataforma plataformaActual = findById(id);
-        return plataformaMapper.toPlataformaResponseDto(plataformaRepository.save(plataformaMapper.toPlataforma(plataforma, plataformaActual)));
+        return plataformaRepository.save(plataformaMapper.toPlataforma(plataforma, plataformaActual));
     }
 
     @Override

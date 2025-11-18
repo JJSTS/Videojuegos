@@ -20,7 +20,7 @@ public class VideojuegoCreateDto {
     private final String almacenamiento;
 
     @Size(min = 1, max = 20, message = "La plataforma debe tener entre 1 y 20 caracteres")
-    private final Plataforma plataforma;
+    private final String plataforma;
 
     @PastOrPresent(message = "La fecha de creación debe ser presente o pasado")
     private final LocalDate fechaDeCreacion;

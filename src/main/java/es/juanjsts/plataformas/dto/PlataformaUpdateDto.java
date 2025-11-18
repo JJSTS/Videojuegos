@@ -1,11 +1,9 @@
 package es.juanjsts.plataformas.dto;
 
-import es.juanjsts.videojuegos.models.Videojuego;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder
