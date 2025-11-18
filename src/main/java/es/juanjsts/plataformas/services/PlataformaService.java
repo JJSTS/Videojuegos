@@ -7,7 +7,7 @@ import es.juanjsts.plataformas.models.Plataforma;
 import java.util.List;
 
 public interface PlataformaService {
-    List<Plataforma> findAll(String nombre, String fabricante);
+    List<Plataforma> findAll(String nombre);
 
     Plataforma findById(Long id);
 

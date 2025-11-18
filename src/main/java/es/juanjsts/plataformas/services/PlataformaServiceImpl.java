@@ -27,13 +27,20 @@ public class PlataformaServiceImpl implements PlataformaService{
     private final PlataformaMapper plataformaMapper;
 
     @Override
-    public List<Plataforma> findAll(String nombre, String fabricante) {
-        if ((nombre == null || nombre.isEmpty()) && (fabricante == null || fabricante.isEmpty())){
-            log.info("Buscando todas las plataformas");
+    public List<Plataforma> findAll(String nombre) {
+        log.info("Buscando todas las plataformas por nombre: {}", nombre);
+        if (nombre == null || nombre.isEmpty()){
             return plataformaRepository.findAll();
         } else {
-            return plataformaRepository.findAllByNombreAndFabricanteContainingIgnoreCase(nombre, fabricante);
+            return plataformaRepository.findByNombreContainingIgnoreCase(nombre);
         }
+    }
+
+    @Override
+    @Cacheable(key = "#nombre")
+    public Plataforma findByNombre(String nombre) {
+        return plataformaRepository.findByNombreEqualsIgnoreCase(nombre)
+                .orElseThrow(() -> new PlataformaNotFound(nombre));
     }
 
     @Override
@@ -44,12 +51,7 @@ public class PlataformaServiceImpl implements PlataformaService{
                 .orElseThrow(() -> new PlataformaNotFound(id));
     }
 
-    @Override
-    @Cacheable(key = "#nombre")
-    public Plataforma findByNombre(String nombre) {
-        return plataformaRepository.findByNombreEqualsIgnoreCase(nombre)
-                .orElseThrow(() -> new PlataformaNotFound(nombre));
-    }
+
 
     @Override
     @CachePut(key = "#result.id")

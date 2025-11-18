@@ -6,7 +6,7 @@ GET https://examples.http-client.intellij.net/get
 GET http://localhost:3000/api/v1/videojuegos
 
 ### getTarjetasAll
-GET http://localhost:3000/api/v1/videojuegos?nombre=among us
+GET http://localhost:3000/api/v1/videojuegos?nombre=Pepsiman
 
 ### getTarjetasById
 GET http://localhost:3000/api/v1/videojuegos/2

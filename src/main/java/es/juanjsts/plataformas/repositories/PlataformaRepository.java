@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface PlataformaRepository extends JpaRepository<Plataforma, Long> {
+public interface  PlataformaRepository extends JpaRepository<Plataforma, Long> {
     // Encuentra por nombre exacto
     Optional<Plataforma> findByNombreEqualsIgnoreCase(String nombre);
 
@@ -16,7 +16,7 @@ public interface PlataformaRepository extends JpaRepository<Plataforma, Long> {
     Optional<Plataforma> findByNombreEqualsIgnoreCaseAndIsDeletedFalse(String nombre);
 
     //Plataforma por nombre
-    List<Plataforma> findAllByNombreContainingIgnoreCase(String nombre);
+    List<Plataforma> findByNombreContainingIgnoreCase(String nombre);
 
     //Plataforma por fabricante
     List<Plataforma> findAllByFabricanteContainingIgnoreCase(String fabricante);

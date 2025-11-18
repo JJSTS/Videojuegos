@@ -1,15 +1,9 @@
 package es.juanjsts.plataformas.mappers;
 
 import es.juanjsts.plataformas.dto.PlataformaCreatedDto;
-//import es.juanjsts.plataformas.dto.PlataformaResponseDto;
-//import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
 import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
 import es.juanjsts.plataformas.models.Plataforma;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
 @Component
 public class PlataformaMapper {

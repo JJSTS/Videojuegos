@@ -22,7 +22,7 @@ public class Videojuego {
     //ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
     //Atributos
     @Column(nullable = false, length = 50)
@@ -36,12 +36,6 @@ public class Videojuego {
     @Column(nullable = false)
     private Double costo;
 
-    //Relacion y atributo
-    @ManyToOne()
-    @JsonIgnoreProperties("videojuego")
-    @JoinColumn(name = "plataforma_id")
-    private Plataforma plataforma;
-
     //Atributos de la tabla
     @Column(updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Builder.Default
@@ -54,7 +48,12 @@ public class Videojuego {
     private UUID uuid = UUID.randomUUID();
 
     // nueva columna
-    @Column(columnDefinition = "boolean default false")
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
     @Builder.Default
     private Boolean isDeleted = false;
+
+    //Relacion y atributo
+    @ManyToOne
+    @JoinColumn(name = "plataforma_id")
+    private Plataforma plataforma;
 }
