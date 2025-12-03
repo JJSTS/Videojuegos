@@ -8,7 +8,7 @@ GET http://localhost:3000/api/v1/plataformas/1
 
 GET http://localhost:3000/api/v1/plataformas/3
 
-### Nueva tarjeta
+### Nueva plataforma
 POST http://localhost:3000/api/v1/plataformas
 Content-Type: application/json
 

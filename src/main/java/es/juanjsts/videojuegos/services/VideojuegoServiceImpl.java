@@ -1,5 +1,9 @@
 package es.juanjsts.videojuegos.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import es.juanjsts.config.websockets.WebSocketConfig;
+import es.juanjsts.config.websockets.WebSocketHandler;
 import es.juanjsts.plataformas.services.PlataformaService;
 import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
@@ -8,14 +12,19 @@ import es.juanjsts.videojuegos.exceptions.VideojuegoNotFoundException;
 import es.juanjsts.videojuegos.mappers.VideojuegoMapper;
 import es.juanjsts.videojuegos.models.Videojuego;
 import es.juanjsts.videojuegos.repositories.VideojuegosRepository;
+import es.juanjsts.websockets.notifications.dto.VideojuegoNotificationResponse;
+import es.juanjsts.websockets.notifications.mappers.VideojuegoNotificationMapper;
+import es.juanjsts.websockets.notifications.models.Notificacion;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,10 +32,23 @@ import java.util.UUID;
 @CacheConfig(cacheNames = {"videojuegos"})
 @Slf4j
 @Service
-public class VideojuegoServiceImpl implements VideojuegosService {
+public class VideojuegoServiceImpl implements VideojuegosService, InitializingBean {
     private final VideojuegosRepository videojuegoRepository;
     private final VideojuegoMapper videojuegoMapper;
     private final PlataformaService plataformaService;
+
+    private final WebSocketConfig webSocketConfig;
+    private final ObjectMapper objectMapper;
+    private final VideojuegoNotificationMapper videojuegoNotificationMapper;
+    private WebSocketHandler webSocketService;
+
+    public void afterPropertiesSet(){
+        this.webSocketService = this.webSocketConfig.webSocketVideojuegosHandler();
+    }
+
+    public void setWebSocketService(WebSocketHandler webSocketHandler) {
+        this.webSocketService = webSocketHandler;
+    }
 
     @Override
     public List<VideojuegoResponseDto> findAll(String nombre, String genero) {
@@ -79,6 +101,7 @@ public class VideojuegoServiceImpl implements VideojuegosService {
         log.info("Guardando videojuego: {}", videojuegocreateDto);
         var plataforma = plataformaService.findByNombre(videojuegocreateDto.getPlataforma());
         Videojuego nuevoVideojuego = videojuegoMapper.toVideojuego(videojuegocreateDto, plataforma);
+        onChange(Notificacion.Tipo.CREATE, nuevoVideojuego);
         return videojuegoMapper.toVideojuegoResponseDto(videojuegoRepository.save(nuevoVideojuego));
     }
 
@@ -91,14 +114,65 @@ public class VideojuegoServiceImpl implements VideojuegosService {
 
         Videojuego videojuegoActualizado = videojuegoMapper.toVideojuego(videojuegoupdateDto, videojuegoActual);
 
+        onChange(Notificacion.Tipo.UPDATE, videojuegoActualizado);
         return videojuegoMapper.toVideojuegoResponseDto(videojuegoRepository.save(videojuegoActualizado));
     }
 
     @CacheEvict(key = "#id")
     @Override
     public void deleteById(Long id) {
-        log.info("Eliminando videojuego con id: {}", id);
-        videojuegoRepository.findById(id).orElseThrow(()-> new VideojuegoNotFoundException(id));
+        log.debug("Eliminando videojuego con id: {}", id);
+        Videojuego videojuegoDeleted = videojuegoRepository.findById(id).orElseThrow(()-> new VideojuegoNotFoundException(id));
         videojuegoRepository.deleteById(id);
+        onChange(Notificacion.Tipo.DELETE, videojuegoDeleted);
+    }
+
+    void onChange(Notificacion.Tipo tipo, Videojuego data){
+        log.debug("Servicio de productos onChange con tipo: {} y datos: {}", tipo, data);
+
+        if (webSocketService == null){
+            log.warn("No se ha podido enviar la notificación a los clientes ws, no se ha encontrado el servicio");
+            webSocketService = this.webSocketConfig.webSocketVideojuegosHandler();
+        }
+
+        try {
+            Notificacion<VideojuegoNotificationResponse> notificacion = new Notificacion<>(
+                    "VIDEOJUEGOS",
+                    tipo,
+                    videojuegoNotificationMapper.toVideojuegoNotificationDto(data),
+                    LocalDateTime.now().toString()
+            );
+
+            String json = objectMapper.writeValueAsString((notificacion));
+
+            log.info("Enviando mensaje a los clientes ws");
+
+            Thread senderThread = new Thread(() -> {
+                try{
+                    webSocketService.sendMessage(json);
+                } catch (Exception e){
+                    log.error("Error al enviar el mensaje a través del servicio webSocket", e);
+                }
+            });
+
+            senderThread.setName("WebSocketVideojuego-" + data.getId());
+            senderThread.setDaemon(true);
+            senderThread.start();
+            log.info("Hilo de websocket iniciado: {}", data.getId());
+        } catch (JsonProcessingException e){
+            log.error("Error al convertir la notificación a JSON", e);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
