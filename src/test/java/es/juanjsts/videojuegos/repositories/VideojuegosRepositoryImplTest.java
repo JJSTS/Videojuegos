@@ -1,8 +1,12 @@
 package es.juanjsts.videojuegos.repositories;
 
 import es.juanjsts.videojuegos.models.Videojuego;
+import es.juanjsts.videojuegos.services.VideojuegosService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,15 +53,11 @@ class VideojuegosRepositoryImplTest {
             .uuid(UUID.randomUUID())
             .build();
 
-    private VideojuegosRepositoryImpl repository;
+    @Autowired
+    private MockMvcTester mockMvcTester;
 
-    @BeforeEach
-    void setUp() {
-        repository = new VideojuegosRepositoryImpl();
-        repository.save(videojuego1);
-        repository.save(videojuego2);
-        repository.save(videojuego3);
-    }
+    @MockitoBean
+    private VideojuegosService videojuegosService;
 
     @Test
     void findAll() {

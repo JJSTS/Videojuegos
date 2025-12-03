@@ -162,17 +162,5 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
         } catch (JsonProcessingException e){
             log.error("Error al convertir la notificación a JSON", e);
         }
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
