@@ -25,7 +25,6 @@ public class PlataformaMapper {
                 .tipo(plataformaUpdateDto.getTipo() != null ? plataformaUpdateDto.getTipo() : plataformaActual.getTipo())
                 .fechaDeLanzamiento(plataformaUpdateDto.getFechaDeLanzamiento() != null ? plataformaUpdateDto.getFechaDeLanzamiento() : plataformaActual.getFechaDeLanzamiento())
                 .createdAt(plataformaActual.getCreatedAt())
-                .uuid(plataformaActual.getUuid())
                 .isDeleted(plataformaUpdateDto.getIsDeleted() != null ? plataformaUpdateDto.getIsDeleted() : plataformaActual.getIsDeleted())
                 .build();
     }

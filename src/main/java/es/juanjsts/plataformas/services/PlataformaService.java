@@ -17,5 +17,5 @@ public interface PlataformaService {
 
     Plataforma update(Long id, PlataformaUpdateDto plataforma);
 
-    void delete(Long id);
+    void deleteById(Long id);
 }

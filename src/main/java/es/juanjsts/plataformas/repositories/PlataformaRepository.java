@@ -12,21 +12,8 @@ public interface  PlataformaRepository extends JpaRepository<Plataforma, Long> {
     // Encuentra por nombre exacto
     Optional<Plataforma> findByNombreEqualsIgnoreCase(String nombre);
 
-    //Encuentra por nombre exacto y no eliminado
-    Optional<Plataforma> findByNombreEqualsIgnoreCaseAndIsDeletedFalse(String nombre);
-
     //Plataforma por nombre
     List<Plataforma> findByNombreContainingIgnoreCase(String nombre);
-
-    //Plataforma por fabricante
-    List<Plataforma> findAllByFabricanteContainingIgnoreCase(String fabricante);
-
-    List<Plataforma> findAllByNombreAndFabricanteContainingIgnoreCase(String nombre, String fabricante);
-
-    //Plataformas activas
-    List<Plataforma> findAllByNombreContainingIgnoreCaseAndIsDeletedFalse(String nombre);
-
-    List<Plataforma> findAllByIsDeleted(Boolean isDeleted);
 
     //Actualizar la plataforma con isDeleted a true
     @Modifying //Para indicar que es una consulta de actualización

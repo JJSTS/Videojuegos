@@ -26,4 +26,5 @@ create table PLATAFORMAS(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null
 );
 
-alter table if exists videojuegos add constraint FK_VIDEOJUEGOS_PLATAFORMAS_PLATAFORMA_ID foreign key (plataforma_id) references plataformas(id);
+alter table if exists videojuegos
+     add constraint FK_VIDEOJUEGOS_PLATAFORMAS_PLATAFORMA_ID foreign key (plataforma_id) references plataformas(id);

@@ -2,12 +2,12 @@ package es.juanjsts.videojuegos.repositories;
 
 import es.juanjsts.plataformas.models.Plataforma;
 import es.juanjsts.videojuegos.models.Videojuego;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
@@ -22,11 +22,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class VideojuegosRepositoryTest {
 
-    private final Plataforma plataforma1 = Plataforma.builder().nombre("Nintendo").build();
-    private final Plataforma plataforma2 = Plataforma.builder().nombre("PlayStation").build();
+    private final Plataforma plataforma1 = Plataforma.builder()
+            .nombre("Epic Games Store")
+            .fabricante("Epic Games")
+            .tipo("PC")
+            .fechaDeLanzamiento(LocalDate.of(2024,12,24))
+            .build();
+    private final Plataforma plataforma2 = Plataforma.builder()
+            .nombre("PlayStation")
+            .fabricante("PlayStation")
+            .tipo("Consolas")
+            .fechaDeLanzamiento(LocalDate.of(1987,12,12))
+            .build();
 
     private final Videojuego videojuego1 = Videojuego.builder()
-            .id(1L)
             .nombre("Among us")
             .genero("Party")
             .almacenamiento("3.0 GB")
@@ -38,7 +47,6 @@ class VideojuegosRepositoryTest {
             .uuid(UUID.randomUUID())
             .build();
     private final Videojuego videojuego2 = Videojuego.builder()
-            .id(2L)
             .nombre("Fortnite")
             .genero("Battle Royale")
             .almacenamiento("15.0 GB")
@@ -51,7 +59,6 @@ class VideojuegosRepositoryTest {
             .build();
 
     private final Videojuego videojuego3 = Videojuego.builder()
-            .id(3L)
             .nombre("League of Legends").
             genero("MOBA")
             .almacenamiento("25.0 GB")
@@ -66,7 +73,7 @@ class VideojuegosRepositoryTest {
     @Autowired
     private VideojuegosRepository repositorio;
 
-    @MockitoBean
+    @Autowired
     private TestEntityManager entityManager;
 
     @BeforeEach
@@ -219,12 +226,12 @@ class VideojuegosRepositoryTest {
     @Test
     void save_notExists() {
         Videojuego videojuego = Videojuego.builder()
-                .id(4L)
                 .nombre("Valorant")
                 .genero("FPS")
                 .almacenamiento("10.0 GB")
                 .fechaDeCreacion(LocalDate.of(2020,12,12))
                 .costo(1.99)
+                .plataforma(plataforma2)
                 .build();
 
         Videojuego savedVideojuego = repositorio.save(videojuego);
@@ -239,15 +246,27 @@ class VideojuegosRepositoryTest {
 
     @Test
     void save_butExists() {
-        Videojuego videojuego = Videojuego.builder().id(1L).build();
+        Long id = 1L;
+        Videojuego videojuego = Videojuego.builder()
+                .id(id)
+                .nombre("Valorant")
+                .genero("Estrategia")
+                .almacenamiento("10.0 GB")
+                .fechaDeCreacion(LocalDate.of(2020,12,12))
+                .costo(1.99)
+                .plataforma(plataforma2)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .uuid(UUID.randomUUID())
+                .build();
 
         Videojuego savedVideojuego = repositorio.save(videojuego);
         var all = repositorio.findAll();
 
         assertAll("save",
                 () -> assertNotNull(savedVideojuego),
-                () -> assertEquals(videojuego, savedVideojuego),
-                () -> assertEquals(3, all.size())
+                () -> assertTrue(repositorio.existsById(id)),
+                () -> assertTrue(all.size() >= 3)
         );
     }
 

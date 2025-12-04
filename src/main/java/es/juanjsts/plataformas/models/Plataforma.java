@@ -50,9 +50,6 @@ public class Plataforma {
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
-    @Column(unique = true, updatable = false, nullable = false)
-    @Builder.Default
-    private UUID uuid = UUID.randomUUID();
 
     // nueva columna
     @Column(columnDefinition = "boolean default false")

@@ -4,6 +4,7 @@ import es.juanjsts.plataformas.dto.PlataformaCreatedDto;
 import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
 import es.juanjsts.plataformas.models.Plataforma;
 import es.juanjsts.plataformas.services.PlataformaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,22 +39,22 @@ public class PlataformaRestController {
     }
 
     @PostMapping()
-    public ResponseEntity<Plataforma> create(@RequestBody PlataformaCreatedDto plataformaCreatedDto){
+    public ResponseEntity<Plataforma> create(@Valid @RequestBody PlataformaCreatedDto plataformaCreatedDto){
         log.info("Creando plataforma: {}", plataformaCreatedDto);
         var saved = plataformaService.save(plataformaCreatedDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Plataforma> update(@PathVariable Long id,@RequestBody PlataformaUpdateDto plataformaUpdateDto) {
+    public ResponseEntity<Plataforma> update(@PathVariable Long id, @Valid @RequestBody PlataformaUpdateDto plataformaUpdateDto) {
         log.info("Actualizando plataforma con id: {} con plataforma: {}", id,plataformaUpdateDto);
         return ResponseEntity.ok(plataformaService.update(id, plataformaUpdateDto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        log.info("Eliminando plataforma con id: {}", id);
-        plataformaService.delete(id);
+        log.info("Borrando plataforma por id: {}", id);
+        plataformaService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
