@@ -8,7 +8,7 @@ import es.juanjsts.videojuegos.models.Videojuego;
 import java.util.List;
 
 public interface VideojuegosService {
-    List<VideojuegoResponseDto> findAll(String nombre, String genero);
+    List<VideojuegoResponseDto> findAll(String nombre, String plataforma);
 
     VideojuegoResponseDto findById(Long id);
 

@@ -1,12 +1,14 @@
 package es.juanjsts.videojuegos.repositories;
 
+import es.juanjsts.plataformas.models.Plataforma;
 import es.juanjsts.videojuegos.models.Videojuego;
-import es.juanjsts.videojuegos.services.VideojuegosService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.assertj.MockMvcTester;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +18,12 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class VideojuegosRepositoryImplTest {
+@Sql(value = {"/reset.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@DataJpaTest
+class VideojuegosRepositoryTest {
+
+    private final Plataforma plataforma1 = Plataforma.builder().nombre("Nintendo").build();
+    private final Plataforma plataforma2 = Plataforma.builder().nombre("PlayStation").build();
 
     private final Videojuego videojuego1 = Videojuego.builder()
             .id(1L)
@@ -25,6 +32,7 @@ class VideojuegosRepositoryImplTest {
             .almacenamiento("3.0 GB")
             .fechaDeCreacion(LocalDate.of(2018,8,8))
             .costo(2.99)
+            .plataforma(plataforma1)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.randomUUID())
@@ -36,6 +44,7 @@ class VideojuegosRepositoryImplTest {
             .almacenamiento("15.0 GB")
             .fechaDeCreacion(LocalDate.of(2019,10,14))
             .costo(0.00)
+            .plataforma(plataforma2)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.randomUUID())
@@ -48,21 +57,34 @@ class VideojuegosRepositoryImplTest {
             .almacenamiento("25.0 GB")
             .fechaDeCreacion(LocalDate.of(2015,11,15))
             .costo(0.00)
+            .plataforma(plataforma1)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.randomUUID())
             .build();
 
     @Autowired
-    private MockMvcTester mockMvcTester;
+    private VideojuegosRepository repositorio;
 
     @MockitoBean
-    private VideojuegosService videojuegosService;
+    private TestEntityManager entityManager;
+
+    @BeforeEach
+    void setUp() {
+        entityManager.persist(plataforma1);
+        entityManager.persist(plataforma2);
+
+        entityManager.persist(videojuego1);
+        entityManager.persist(videojuego2);
+        entityManager.persist(videojuego3);
+        
+        entityManager.flush();
+    }
 
     @Test
     void findAll() {
         //Atc
-        List<Videojuego> videojuegos = repository.findAll();
+        List<Videojuego> videojuegos = repositorio.findAll();
 
         //Assert
         assertAll("findAll",
@@ -75,7 +97,7 @@ class VideojuegosRepositoryImplTest {
     void findAllByNombre() {
         //Atc
         String nombre = "Among us";
-        List<Videojuego> videojuegos = repository.findAllByNombre(nombre);
+        List<Videojuego> videojuegos = repositorio.findAllByNombre(nombre);
 
         //Assert
         assertAll("findAllByNombre",
@@ -89,7 +111,7 @@ class VideojuegosRepositoryImplTest {
     void findAllByGenero() {
         //Act
         String genero = "MOBA";
-        List<Videojuego> videojuegos = repository.findAllByGenero(genero);
+        List<Videojuego> videojuegos = repositorio.findAllByGeneroContainingIgnoreCase(genero);
 
         //Assert
         assertAll("findByGenero",
@@ -103,7 +125,7 @@ class VideojuegosRepositoryImplTest {
     void findAllByNombreAndGenero() {
         String nombre = "Among us";
         String genero = "Party";
-        List<Videojuego> videojuegos = repository.findAllByNombreAndGenero(nombre, genero);
+        List<Videojuego> videojuegos = repositorio.findAllByNombreAndGeneroContainingIgnoreCase(nombre, genero);
 
         //Assert
         assertAll("findAllByNombreAndGenero",
@@ -117,7 +139,7 @@ class VideojuegosRepositoryImplTest {
     @Test
     void findById_existingId_returnOptionalWithVideojuego() {
         Long id = 1L;
-        Optional<Videojuego> optionaVideojuego = repository.findById(id);
+        Optional<Videojuego> optionaVideojuego = repositorio.findById(id);
 
         assertAll("findById_existingId_returnOptionalWithVideojuego",
                 () -> assertNotNull(optionaVideojuego),
@@ -129,7 +151,7 @@ class VideojuegosRepositoryImplTest {
     @Test
     void findById_nonExistingId_returnEmptyOptional() {
         Long id = 100L;
-        Optional<Videojuego> optionaVideojuego = repository.findById(id);
+        Optional<Videojuego> optionaVideojuego = repositorio.findById(id);
 
         assertAll("findById_nonExistingId_returnEmptyOptional",
                 () -> assertNotNull(optionaVideojuego),
@@ -140,7 +162,7 @@ class VideojuegosRepositoryImplTest {
     @Test
     void findByUuid_existingUuid_returnOptionalWithVideojuego() {
         UUID uuid = videojuego1.getUuid();
-        Optional<Videojuego> optionaVideojuego = repository.findByUuid(uuid);
+        Optional<Videojuego> optionaVideojuego = repositorio.findByUuid(uuid);
 
         assertAll("findByUuid_existingUuid_returnOptionalWithVideojuego",
                 () -> assertNotNull(optionaVideojuego),
@@ -152,7 +174,7 @@ class VideojuegosRepositoryImplTest {
     @Test
     void findByUuid_nonExistingUuid_returnEmptyOptional() {
         UUID uuid = UUID.randomUUID();
-        Optional<Videojuego> optionaVideojuego = repository.findByUuid(uuid);
+        Optional<Videojuego> optionaVideojuego = repositorio.findByUuid(uuid);
 
         assertAll("findByUuid_nonExistingUuid_returnEmptyOptional",
                 () -> assertNotNull(optionaVideojuego),
@@ -163,7 +185,7 @@ class VideojuegosRepositoryImplTest {
     @Test
     void existsById_existingId_returnTrue() {
         Long id = 1L;
-        boolean exists = repository.existsById(id);
+        boolean exists = repositorio.existsById(id);
 
         assertTrue(exists);
 
@@ -172,7 +194,7 @@ class VideojuegosRepositoryImplTest {
     @Test
     void existsById_nonExistingId_returnFalse() {
         Long id = 100L;
-        boolean exists = repository.existsById(id);
+        boolean exists = repositorio.existsById(id);
 
         assertFalse(exists);
     }
@@ -180,7 +202,7 @@ class VideojuegosRepositoryImplTest {
     @Test
     void existsByUuid_existingUuid_returnTrue() {
         UUID uuid = videojuego1.getUuid();
-        boolean exists = repository.existsByUuid(uuid);
+        boolean exists = repositorio.existsByUuid(uuid);
 
         assertTrue(exists);
 
@@ -189,7 +211,7 @@ class VideojuegosRepositoryImplTest {
     @Test
     void existsByUuid_nonExistingUuid_returnFalse() {
         UUID uuid = UUID.randomUUID();
-        boolean exists = repository.existsByUuid(uuid);
+        boolean exists = repositorio.existsByUuid(uuid);
 
         assertFalse(exists);
     }
@@ -205,8 +227,8 @@ class VideojuegosRepositoryImplTest {
                 .costo(1.99)
                 .build();
 
-        Videojuego savedVideojuego = repository.save(videojuego);
-        var all = repository.findAll();
+        Videojuego savedVideojuego = repositorio.save(videojuego);
+        var all = repositorio.findAll();
 
         assertAll("save",
                 () -> assertNotNull(savedVideojuego),
@@ -219,8 +241,8 @@ class VideojuegosRepositoryImplTest {
     void save_butExists() {
         Videojuego videojuego = Videojuego.builder().id(1L).build();
 
-        Videojuego savedVideojuego = repository.save(videojuego);
-        var all = repository.findAll();
+        Videojuego savedVideojuego = repositorio.save(videojuego);
+        var all = repositorio.findAll();
 
         assertAll("save",
                 () -> assertNotNull(savedVideojuego),
@@ -232,37 +254,26 @@ class VideojuegosRepositoryImplTest {
     @Test
     void deleteById_existingId() {
         Long id = 1L;
-        repository.deleteById(id);
+        repositorio.deleteById(id);
 
-        var all = repository.findAll();
+        var all = repositorio.findAll();
 
         assertAll("deleteById_existingId",
                 () -> assertEquals(2, all.size()),
-                () -> assertFalse(repository.existsById(id))
+                () -> assertFalse(repositorio.existsById(id))
         );
     }
 
     @Test
     void deleteByUuid_existingUuid() {
         UUID uuid = videojuego1.getUuid();
-        repository.deleteByUuid(uuid);
+        repositorio.deleteByUuid(uuid);
 
-        var all = repository.findAll();
+        var all = repositorio.findAll();
 
         assertAll("deleteByUuid_existingUuid",
                 () -> assertEquals(2, all.size()),
-                () -> assertFalse(repository.existsByUuid(uuid))
-        );
-    }
-
-    @Test
-    void nextId() {
-        Long nextId = repository.nextId();
-        var all = repository.findAll();
-
-        assertAll("nextId",
-                () -> assertEquals(4L, nextId),
-                () -> assertEquals(3, all.size())
+                () -> assertFalse(repositorio.existsByUuid(uuid))
         );
     }
 }

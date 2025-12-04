@@ -51,24 +51,24 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
     }
 
     @Override
-    public List<VideojuegoResponseDto> findAll(String nombre, String genero) {
-        if ((nombre == null || nombre.isEmpty()) && (genero == null || genero.isEmpty())){
+    public List<VideojuegoResponseDto> findAll(String nombre, String plataforma) {
+        if ((nombre == null || nombre.isEmpty()) && (plataforma == null || plataforma.isEmpty())){
             log.info("Buscando todos los videojuegos");
             return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAll());
         }
 
-        if ((nombre == null || !nombre.isEmpty()) && (genero == null || genero.isEmpty())){
+        if ((nombre == null || !nombre.isEmpty()) && (plataforma == null || plataforma.isEmpty())){
             log.info("Buscando videojuegos por nombre: {}", nombre);
             return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByNombre(nombre));
         }
 
         if (nombre == null || nombre.isEmpty()){
-            log.info("Buscando videojuegos por genero: {}", genero);
-            return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByGeneroContainingIgnoreCase(genero.toLowerCase()));
+            log.info("Buscando videojuegos por genero: {}", plataforma);
+            return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByPlataformaContainsIgnoreCase(plataforma.toLowerCase()));
         }
 
-        log.info("Buscando videojuegos por nombre: {} y genero: {}", nombre, genero);
-        return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByNombreAndGeneroContainingIgnoreCase(nombre, genero));
+        log.info("Buscando videojuegos por nombre: {} y genero: {}", nombre, plataforma);
+        return videojuegoMapper.toResponseDtoList(videojuegoRepository.findAllByNombreAndPlataformaContainsIgnoreCase(nombre, plataforma));
     }
 
     @Cacheable(key = "#id")

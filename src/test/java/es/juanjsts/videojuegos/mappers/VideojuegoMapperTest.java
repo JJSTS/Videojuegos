@@ -1,5 +1,6 @@
 package es.juanjsts.videojuegos.mappers;
 
+import es.juanjsts.plataformas.models.Plataforma;
 import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
 import es.juanjsts.videojuegos.models.Videojuego;
@@ -13,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class VideojuegoMapperTest {
 
+    private final Plataforma plataforma = Plataforma.builder().nombre("Nintendo").build();
+
     private final VideojuegoMapper videojuegoMapper = new VideojuegoMapper();
 
 
@@ -24,19 +27,20 @@ class VideojuegoMapperTest {
                 .nombre("Marvel Rivals")
                 .genero("Hero shooter")
                 .almacenamiento("15 GB")
+                .plataforma("Nintendo")
                 .fechaDeCreacion(LocalDate.of(2024, 12, 6))
                 .costo(0.0)
                 .build();
         //Act
-        var res = videojuegoMapper.toVideojuego(id, videojuegoCreateDto);
+        var res = videojuegoMapper.toVideojuego(videojuegoCreateDto, plataforma);
         //Assert
         assertAll(
-                () -> assertEquals(id, res.getId()),
                 () -> assertEquals(videojuegoCreateDto.getNombre(), res.getNombre()),
                 () -> assertEquals(videojuegoCreateDto.getGenero(), res.getGenero()),
                 () -> assertEquals(videojuegoCreateDto.getAlmacenamiento(), res.getAlmacenamiento()),
                 () -> assertEquals(videojuegoCreateDto.getCosto(), res.getCosto()),
                 () -> assertEquals(videojuegoCreateDto.getFechaDeCreacion(), res.getFechaDeCreacion()),
+                () -> assertEquals(videojuegoCreateDto.getPlataforma(), res.getPlataforma().getNombre()),
                 () -> assertEquals(videojuegoCreateDto.getCosto(), res.getCosto())
         );
     }
@@ -85,6 +89,7 @@ class VideojuegoMapperTest {
                 .almacenamiento("15 GB")
                 .fechaDeCreacion(LocalDate.of(2024, 12, 6))
                 .costo(0.0)
+                .plataforma(plataforma)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .uuid(UUID.randomUUID())

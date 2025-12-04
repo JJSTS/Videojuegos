@@ -1,5 +1,10 @@
 package es.juanjsts.videojuegos.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import es.juanjsts.config.websockets.WebSocketConfig;
+import es.juanjsts.config.websockets.WebSocketHandler;
+import es.juanjsts.plataformas.models.Plataforma;
+import es.juanjsts.plataformas.services.PlataformaService;
 import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
@@ -7,12 +12,15 @@ import es.juanjsts.videojuegos.exceptions.VideojuegoNotFoundException;
 import es.juanjsts.videojuegos.mappers.VideojuegoMapper;
 import es.juanjsts.videojuegos.models.Videojuego;
 import es.juanjsts.videojuegos.repositories.VideojuegosRepository;
+import es.juanjsts.websockets.notifications.mappers.VideojuegoNotificationMapper;
+import es.juanjsts.websockets.notifications.models.Notificacion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,6 +31,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class VideojuegoServiceImplTest {
+    private final Plataforma plataforma = Plataforma.builder().nombre("Nintendo").build();
 
     private final Videojuego videojuego1 = Videojuego.builder()
             .id(1L)
@@ -31,6 +40,7 @@ class VideojuegoServiceImplTest {
             .almacenamiento("3.0 GB")
             .fechaDeCreacion(LocalDate.of(2018,8,8))
             .costo(2.99)
+            .plataforma(plataforma)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.fromString("57727bc2-0c1c-494e-bbaf-e952a778e478"))
@@ -43,6 +53,7 @@ class VideojuegoServiceImplTest {
             .almacenamiento("15.0 GB")
             .fechaDeCreacion(LocalDate.of(2019,10,14))
             .costo(0.00)
+            .plataforma(plataforma)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.fromString("b36835eb-e56a-4023-b058-52bfa600fee5"))
@@ -53,8 +64,23 @@ class VideojuegoServiceImplTest {
     @Mock
     private VideojuegosRepository videojuegosRepository;
 
+    @Mock
+    private PlataformaService plataformaService;
+
     @Spy
     private VideojuegoMapper videojuegoMapper;
+
+    @Mock
+    private WebSocketConfig webSocketConfig;
+
+    @Mock
+    private VideojuegoNotificationMapper videojuegoNotificationMapper;
+
+    @Mock
+    private ObjectMapper objectMapper;
+
+    @Mock
+    private WebSocketHandler webSocketService;
 
     @InjectMocks
     private VideojuegoServiceImpl videojuegoService;
@@ -65,6 +91,7 @@ class VideojuegoServiceImplTest {
     @BeforeEach
     void setUp() {
         videojuegoResponse = videojuegoMapper.toVideojuegoResponseDto(videojuego1);
+        videojuegoService.setWebSocketService(webSocketService);
     }
 
     @Test
@@ -103,39 +130,39 @@ class VideojuegoServiceImplTest {
     }
 
     @Test
-    void findAll_ShouldReturnAllVideojuegos_WhenGeneroParametersProvided() {
-        String genero = "Battle Royale";
+    void findAll_ShouldReturnAllVideojuegos_WhenPlataformaParametersProvided() {
+        String plataforma = "Nintendo";
         List <Videojuego> expectedVideojuego = Arrays.asList(videojuego1);
         List <VideojuegoResponseDto> expectedVideojuegoResponses = videojuegoMapper.toResponseDtoList(expectedVideojuego);
-        when(videojuegosRepository.findAllByGenero(genero)).thenReturn(expectedVideojuego);
+        when(videojuegosRepository.findAllByPlataformaContainsIgnoreCase(plataforma.toLowerCase())).thenReturn(expectedVideojuego);
 
         //Act
-        List <VideojuegoResponseDto> actualVideojuego = videojuegoService.findAll(null, genero);
+        List <VideojuegoResponseDto> actualVideojuego = videojuegoService.findAll(null, plataforma);
 
         //Assert
         assertIterableEquals(expectedVideojuegoResponses, actualVideojuego);
 
         //Verify
-        verify(videojuegosRepository, only()).findAllByGenero(genero);
+        verify(videojuegosRepository, only()).findAllByPlataformaContainsIgnoreCase(plataforma.toLowerCase());
     }
 
     @Test
     void findAll_ShouldReturnAllVideojuegos_WhenBothParametersProvided() {
         //Arrange
         String nombre = "Among us";
-        String genero = "Battle Royale";
-        List <Videojuego> expectedVideojuego = Arrays.asList(videojuego1);
+        String plataforma = "nintendo";
+        List <Videojuego> expectedVideojuego = List.of(videojuego1);
         List <VideojuegoResponseDto> expectedVideojuegoResponses = videojuegoMapper.toResponseDtoList(expectedVideojuego);
-        when(videojuegosRepository.findAllByNombreAndGenero(nombre, genero)).thenReturn(expectedVideojuego);
+        when(videojuegosRepository.findAllByNombreAndPlataformaContainsIgnoreCase(nombre, plataforma.toLowerCase())).thenReturn(expectedVideojuego);
 
         //Act
-        List <VideojuegoResponseDto> actualVideojuego = videojuegoService.findAll(nombre, genero);
+        List <VideojuegoResponseDto> actualVideojuego = videojuegoService.findAll(nombre, plataforma);
 
         //Assert
         assertIterableEquals(expectedVideojuegoResponses, actualVideojuego);
 
         //Verify
-        verify(videojuegosRepository, only()).findAllByNombreAndGenero(nombre, genero);
+        verify(videojuegosRepository, only()).findAllByNombreAndPlataformaContainsIgnoreCase(nombre, plataforma.toLowerCase());
     }
 
     @Test
@@ -201,13 +228,14 @@ class VideojuegoServiceImplTest {
     }
 
     @Test
-    void save_ShouldReturnSavedVideojuego_WhenValidVideojuegoCreatedDtoProvided() {
+    void save_ShouldReturnSavedVideojuego_WhenValidVideojuegoCreatedDtoProvided() throws IOException {
         //Arrange
         VideojuegoCreateDto videojuegoCreateDto = VideojuegoCreateDto.builder()
                 .nombre("Plants vs Zombies Replanted")
                 .genero("tower defense")
                 .almacenamiento("25 GB")
                 .costo(20.99)
+                .plataforma("Nintendo")
                 .build();
 
         Videojuego expectedVideojuego = Videojuego.builder()
@@ -216,15 +244,16 @@ class VideojuegoServiceImplTest {
                 .genero("tower defense")
                 .almacenamiento("25 GB")
                 .costo(20.99)
+                .plataforma(plataforma)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .uuid(UUID.randomUUID())
                 .build();
 
         VideojuegoResponseDto expectedVideojuegoResponse = videojuegoMapper.toVideojuegoResponseDto(expectedVideojuego);
-
-        when(videojuegosRepository.nextId()).thenReturn(1L);
+        when(plataformaService.findByNombre(videojuegoCreateDto.getPlataforma())).thenReturn(plataforma);
         when(videojuegosRepository.save(any(Videojuego.class))).thenReturn(expectedVideojuego);
+        doNothing().when(webSocketService).sendMessage(any());
 
         //Act
         VideojuegoResponseDto actualResponseDto = videojuegoService.save(videojuegoCreateDto);
@@ -233,7 +262,6 @@ class VideojuegoServiceImplTest {
         assertEquals(expectedVideojuegoResponse, actualResponseDto);
 
         //Verify
-        verify(videojuegosRepository).nextId();
         verify(videojuegosRepository).save(videojuegoCaptor.capture());
 
         Videojuego videojuegoCaptured = videojuegoCaptor.getValue();
@@ -241,7 +269,7 @@ class VideojuegoServiceImplTest {
     }
 
     @Test
-    void update_ShouldReturnSavedVideojuego_WhenValidIdAndVideojuegoUpdatedDtoProvided() {
+    void update_ShouldReturnSavedVideojuego_WhenValidIdAndVideojuegoUpdatedDtoProvided() throws IOException{
         //Arrange
         Long id = 1L;
         Double costo = 99.99;
@@ -255,6 +283,7 @@ class VideojuegoServiceImplTest {
 
         videojuegoResponse.setCosto(costo);
         VideojuegoResponseDto expectedVideojuegoResponse = videojuegoResponse;
+        doNothing().when(webSocketService).sendMessage(any());
 
         //Act
         VideojuegoResponseDto actualVideojuegoResponse = videojuegoService.update(id, videojuegoUpdateDto);
@@ -292,10 +321,11 @@ class VideojuegoServiceImplTest {
     }
 
     @Test
-    void deleteById_ShouldDeleteVideojuego_WhenValidIdProvided() {
+    void deleteById_ShouldDeleteVideojuego_WhenValidIdProvided() throws IOException{
         //Arrange
         Long  id = 1L;
         when(videojuegosRepository.findById(id)).thenReturn(Optional.of(videojuego1));
+        doNothing().when(webSocketService).sendMessage(any());
 
         //Act con AssertJ
         assertThatCode(() -> videojuegoService.deleteById(id))
@@ -318,5 +348,14 @@ class VideojuegoServiceImplTest {
 
         //Verify
         verify(videojuegosRepository, never()).deleteById(id);
+    }
+
+    @Test
+    void onChange_ShouldSendMessage_WhenValidDataProvided() throws IOException{
+        //Arrange
+        doNothing().when(webSocketService).sendMessage(any());
+
+        //Act
+        videojuegoService.onChange(Notificacion.Tipo.CREATE, videojuego1);
     }
 }
