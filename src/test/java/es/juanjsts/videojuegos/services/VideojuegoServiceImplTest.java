@@ -8,6 +8,7 @@ import es.juanjsts.plataformas.services.PlataformaService;
 import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
+import es.juanjsts.videojuegos.exceptions.VideojuegoBadUuidException;
 import es.juanjsts.videojuegos.exceptions.VideojuegoNotFoundException;
 import es.juanjsts.videojuegos.mappers.VideojuegoMapper;
 import es.juanjsts.videojuegos.models.Videojuego;
@@ -19,6 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -98,71 +101,93 @@ class VideojuegoServiceImplTest {
     void findAll_ShouldReturnAllVideojuegos_WhenNoParametersProvided() {
         //Arrange
         List <Videojuego> expectedVideojuego = Arrays.asList(videojuego1, videojuego2);
-        List <VideojuegoResponseDto> expectedVideojuegoResponses = videojuegoMapper.toResponseDtoList(expectedVideojuego);
-        when(videojuegosRepository.findAll()).thenReturn(expectedVideojuego);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Videojuego> expectedPage = new PageImpl<>(expectedVideojuego);
+        when(videojuegosRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(expectedPage);
 
         //Act
-        List <VideojuegoResponseDto> actualVideojuego = videojuegoService.findAll(null, null);
-
+        Page<VideojuegoResponseDto> actualPage =
+                videojuegoService.findAll(Optional.empty(), Optional.empty(),Optional.empty(), pageable);
         //Assert
-        assertIterableEquals(expectedVideojuegoResponses, actualVideojuego);
+        assertAll("findAll",
+                () -> assertNotNull(actualPage),
+                () -> assertFalse(actualPage.isEmpty()),
+                () -> assertTrue(actualPage.getTotalElements() > 0)
+        );
 
         //Verify
-        verify(videojuegosRepository, times(1)).findAll();
+        verify(videojuegosRepository, times(1)).findAll(any(Specification.class), any(Pageable.class));
     }
 
     @Test
     void findAll_ShouldReturnAllVideojuegos_WhenNombreParametersProvided() {
         //Arrange
-        String nombre = "Among us";
-        List <Videojuego> expectedVideojuego = Arrays.asList(videojuego1);
-        List <VideojuegoResponseDto> expectedVideojuegoResponses = videojuegoMapper.toResponseDtoList(expectedVideojuego);
-        when(videojuegosRepository.findAllByNombre(nombre)).thenReturn(expectedVideojuego);
+        Optional<String> nombre =  Optional.of("Among us");
+        List <Videojuego> expectedVideojuego = List.of(videojuego1);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Videojuego> expectedPage = new PageImpl<>(expectedVideojuego);
+        when(videojuegosRepository.findAll(any(Specification.class),any(Pageable.class))).thenReturn(expectedPage);
 
         //Act
-        List <VideojuegoResponseDto> actualVideojuego = videojuegoService.findAll(nombre, null);
+        Page<VideojuegoResponseDto> actualPage =
+                videojuegoService.findAll(nombre,Optional.empty(),Optional.empty(),pageable);
 
         //Assert
-        assertIterableEquals(expectedVideojuegoResponses, actualVideojuego);
+        assertAll("findAll",
+                () -> assertNotNull(actualPage),
+                () -> assertFalse(actualPage.isEmpty()),
+                () -> assertTrue(actualPage.getTotalElements() > 0)
+        );
 
         //Verify
-        verify(videojuegosRepository, only()).findAllByNombre(nombre);
+        verify(videojuegosRepository, only()).findAll(any(Specification.class), any(Pageable.class));
     }
 
     @Test
     void findAll_ShouldReturnAllVideojuegos_WhenPlataformaParametersProvided() {
-        String plataforma = "Nintendo";
-        List <Videojuego> expectedVideojuego = Arrays.asList(videojuego1);
-        List <VideojuegoResponseDto> expectedVideojuegoResponses = videojuegoMapper.toResponseDtoList(expectedVideojuego);
-        when(videojuegosRepository.findAllByPlataformaContainsIgnoreCase(plataforma.toLowerCase())).thenReturn(expectedVideojuego);
+        Optional<String> plataforma = Optional.of("Nintendo");
+        List <Videojuego> expectedVideojuego = List.of(videojuego1);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Videojuego> expectedPage = new PageImpl<>(expectedVideojuego);
+        when(videojuegosRepository.findAll(any(Specification.class),any(Pageable.class))).thenReturn(expectedPage);
 
         //Act
-        List <VideojuegoResponseDto> actualVideojuego = videojuegoService.findAll(null, plataforma);
+        Page<VideojuegoResponseDto> actualPage =
+                videojuegoService.findAll(Optional.empty(), plataforma,Optional.empty(),pageable);
 
         //Assert
-        assertIterableEquals(expectedVideojuegoResponses, actualVideojuego);
+        assertAll("findAll",
+                () -> assertNotNull(actualPage),
+                () -> assertFalse(actualPage.isEmpty()),
+                () -> assertTrue(actualPage.getTotalElements() > 0)
+        );
 
         //Verify
-        verify(videojuegosRepository, only()).findAllByPlataformaContainsIgnoreCase(plataforma.toLowerCase());
+        verify(videojuegosRepository, only()).findAll(any(Specification.class), any(Pageable.class));
     }
 
     @Test
     void findAll_ShouldReturnAllVideojuegos_WhenBothParametersProvided() {
         //Arrange
-        String nombre = "Among us";
-        String plataforma = "nintendo";
+        Optional<String> nombre =  Optional.of("Among us");
+        Optional<String> plataforma = Optional.of("Nintendo");
         List <Videojuego> expectedVideojuego = List.of(videojuego1);
-        List <VideojuegoResponseDto> expectedVideojuegoResponses = videojuegoMapper.toResponseDtoList(expectedVideojuego);
-        when(videojuegosRepository.findAllByNombreAndPlataformaContainsIgnoreCase(nombre, plataforma.toLowerCase())).thenReturn(expectedVideojuego);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        Page<Videojuego> expectedPage = new PageImpl<>(expectedVideojuego);
+        when(videojuegosRepository.findAll(any(Specification.class),any(Pageable.class))).thenReturn(expectedPage);
 
         //Act
-        List <VideojuegoResponseDto> actualVideojuego = videojuegoService.findAll(nombre, plataforma);
-
+        Page<VideojuegoResponseDto> actualPage =
+                videojuegoService.findAll(nombre,plataforma,Optional.empty(),pageable);
         //Assert
-        assertIterableEquals(expectedVideojuegoResponses, actualVideojuego);
+        assertAll("findAll",
+                () -> assertNotNull(actualPage),
+                () -> assertFalse(actualPage.isEmpty()),
+                () -> assertTrue(actualPage.getTotalElements() > 0)
+        );
 
         //Verify
-        verify(videojuegosRepository, only()).findAllByNombreAndPlataformaContainsIgnoreCase(nombre, plataforma.toLowerCase());
+        verify(videojuegosRepository, only()).findAll(any(Specification.class), any(Pageable.class));
     }
 
     @Test
@@ -217,11 +242,11 @@ class VideojuegoServiceImplTest {
     @Test
     void findByUuid_ShouldReturnVideojuego_WhenInvalidUuidProvided() {
         //Arrange
-        String uuid = "4lkjnb1bjnkl12bjnk4b214oj2124nib412";
+        String uuid = "42";
 
         //Act y Assert
-        var res =  assertThrows(VideojuegoNotFoundException.class, () -> videojuegoService.findByUuid(uuid));
-        assertEquals("Videojuego con uuid: " + uuid + " no encontrado", res.getMessage());
+        var res =  assertThrows(VideojuegoBadUuidException.class, () -> videojuegoService.findByUuid(uuid));
+        assertEquals("El UUID " + uuid + " no es válido", res.getMessage());
 
         //Verify
         verify(videojuegosRepository, never()).findByUuid(any());
@@ -351,7 +376,7 @@ class VideojuegoServiceImplTest {
     }
 
     @Test
-    void onChange_ShouldSendMessage_WhenValidDataProvided() throws IOException{
+    void onChange_ShouldSendMessage_WhenValidDataProvided() throws IOException {
         //Arrange
         doNothing().when(webSocketService).sendMessage(any());
 

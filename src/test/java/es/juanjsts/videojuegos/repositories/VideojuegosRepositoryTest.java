@@ -2,7 +2,6 @@ package es.juanjsts.videojuegos.repositories;
 
 import es.juanjsts.plataformas.models.Plataforma;
 import es.juanjsts.videojuegos.models.Videojuego;
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,49 +96,6 @@ class VideojuegosRepositoryTest {
         assertAll("findAll",
                 () -> assertNotNull(videojuegos),
                 () -> assertEquals(3, videojuegos.size())
-        );
-    }
-
-    @Test
-    void findAllByNombre() {
-        //Atc
-        String nombre = "Among us";
-        List<Videojuego> videojuegos = repositorio.findAllByNombre(nombre);
-
-        //Assert
-        assertAll("findAllByNombre",
-                () -> assertNotNull(videojuegos),
-                () -> assertEquals(1, videojuegos.size()),
-                () -> assertEquals(nombre, videojuegos.getFirst().getNombre())
-        );
-    }
-
-    @Test
-    void findAllByGenero() {
-        //Act
-        String genero = "MOBA";
-        List<Videojuego> videojuegos = repositorio.findAllByGeneroContainingIgnoreCase(genero);
-
-        //Assert
-        assertAll("findByGenero",
-                () -> assertNotNull(videojuegos),
-                () -> assertEquals(1, videojuegos.size()),
-                () -> assertEquals(genero, videojuegos.getFirst().getGenero())
-        );
-    }
-
-    @Test
-    void findAllByNombreAndGenero() {
-        String nombre = "Among us";
-        String genero = "Party";
-        List<Videojuego> videojuegos = repositorio.findAllByNombreAndGeneroContainingIgnoreCase(nombre, genero);
-
-        //Assert
-        assertAll("findAllByNombreAndGenero",
-                () -> assertNotNull(videojuegos),
-                () -> assertEquals(1, videojuegos.size()),
-                () -> assertEquals(nombre, videojuegos.getFirst().getNombre()),
-                () -> assertEquals(genero, videojuegos.getFirst().getGenero())
         );
     }
 

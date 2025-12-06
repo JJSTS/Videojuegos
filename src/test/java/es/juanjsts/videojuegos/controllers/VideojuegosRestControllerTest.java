@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -16,6 +19,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -31,6 +35,7 @@ class VideojuegosRestControllerTest {
             .id(1L)
             .nombre("Marvel Rivals")
             .genero("Hero shooter")
+            .plataforma("Nintendo")
             .almacenamiento("15 GB")
             .fechaDeCreacion(LocalDate.of(2024, 12, 6))
             .costo(0.0)
@@ -41,6 +46,7 @@ class VideojuegosRestControllerTest {
             .nombre("Clash Royale")
             .genero("Estrategia")
             .almacenamiento("250 MB")
+            .plataforma("Nintendo")
             .fechaDeCreacion(LocalDate.of(2016, 3,2))
             .costo(0.0)
             .build();
@@ -54,8 +60,12 @@ class VideojuegosRestControllerTest {
     @Test
     void getAll() {
         //Arrange
+
         var videojuegoResponses = List.of(videojuegoResponseDto1, videojuegoResponseDto2);
-        when(videojuegosService.findAll(null, null)).thenReturn(videojuegoResponses);
+        var pageable =  PageRequest.of(0, 10, Sort.by("id").ascending());
+        var page = new PageImpl<>(videojuegoResponses);
+        when(videojuegosService.findAll(Optional.empty(), Optional.empty(), Optional.empty(), pageable))
+                .thenReturn(page);
 
         //Act
         var resultado = mockMvcTester.get()
@@ -67,15 +77,16 @@ class VideojuegosRestControllerTest {
         assertThat(resultado)
                 .hasStatusOk()
                 .bodyJson().satisfies(json -> {
-                    assertThat(json).extractingPath("$.length()").isEqualTo(videojuegoResponses.size());
-                    assertThat(json).extractingPath("$[0]")
+                    assertThat(json).extractingPath("$.content.length()").isEqualTo(videojuegoResponses.size());
+                    assertThat(json).extractingPath("$.content[0]")
                             .convertTo(VideojuegoResponseDto.class).isEqualTo(videojuegoResponseDto1);
-                    assertThat(json).extractingPath("$[1]")
+                    assertThat(json).extractingPath("$.content[1]")
                             .convertTo(VideojuegoResponseDto.class).isEqualTo(videojuegoResponseDto2);
                 });
 
         //Verify
-        verify(videojuegosService, times(1)).findAll(null, null);
+        verify(videojuegosService, times(1))
+                .findAll(Optional.empty(), Optional.empty(), Optional.empty(), pageable);
     }
 
     @Test
@@ -83,7 +94,11 @@ class VideojuegosRestControllerTest {
         //Arrange
         var videojuegoResponses = List.of(videojuegoResponseDto2);
         String queryString = "?nombre=" + videojuegoResponseDto2.getNombre();
-        when(videojuegosService.findAll(anyString(), isNull())).thenReturn(videojuegoResponses);
+        Optional<String> nombre = Optional.of(videojuegoResponseDto2.getNombre());
+        var pageable =  PageRequest.of(0, 10, Sort.by("id").ascending());
+        var page = new PageImpl<>(videojuegoResponses);
+        when(videojuegosService.findAll(nombre,Optional.empty(), Optional.empty(), pageable))
+                .thenReturn(page);
 
         //Act
         var resultado = mockMvcTester.get()
@@ -95,21 +110,26 @@ class VideojuegosRestControllerTest {
         assertThat(resultado)
             .hasStatusOk()
                 .bodyJson().satisfies(json -> {
-                   assertThat(json).extractingPath("$.length()").isEqualTo(videojuegoResponses.size());
-                   assertThat(json).extractingPath("$[0]")
+                   assertThat(json).extractingPath("$.content.length()").isEqualTo(videojuegoResponses.size());
+                   assertThat(json).extractingPath("$.content[0]")
                            .convertTo(VideojuegoResponseDto.class).isEqualTo(videojuegoResponseDto2);
                 });
 
         //Verify
-        verify(videojuegosService, times(1)).findAll(anyString(), isNull());
+        verify(videojuegosService, times(1))
+                .findAll(nombre, Optional.empty(), Optional.empty(), pageable);
     }
 
     @Test
-    void getAllByGenero() {
+    void getAllByPlataforma() {
         //Arrange
         var  videojuegoResponses = List.of(videojuegoResponseDto2);
-        String queryString = "?genero=" + videojuegoResponseDto2.getGenero();
-        when(videojuegosService.findAll(isNull(), anyString())).thenReturn(videojuegoResponses);
+        String queryString = "?plataforma=" + videojuegoResponseDto2.getPlataforma();
+        Optional<String> plataforma = Optional.of(videojuegoResponseDto2.getPlataforma());
+        var pageable =  PageRequest.of(0, 10, Sort.by("id").ascending());
+        var page = new PageImpl<>(videojuegoResponses);
+        when(videojuegosService.findAll(Optional.empty(), plataforma, Optional.empty(), pageable))
+                .thenReturn(page);
 
         //Act
         var resultado = mockMvcTester.get()
@@ -121,21 +141,27 @@ class VideojuegosRestControllerTest {
         assertThat(resultado)
             .hasStatusOk()
                 .bodyJson().satisfies(json -> {
-                    assertThat(json).extractingPath("$.length()").isEqualTo(videojuegoResponses.size());
-                    assertThat(json).extractingPath("$[0]")
+                    assertThat(json).extractingPath("$.content.length()").isEqualTo(videojuegoResponses.size());
+                    assertThat(json).extractingPath("$.content[0]")
                             .convertTo(VideojuegoResponseDto.class).isEqualTo(videojuegoResponseDto2);
                 });
         //Verify
-        verify(videojuegosService, only()).findAll(isNull(), anyString());
+        verify(videojuegosService, only())
+                .findAll(Optional.empty(), plataforma, Optional.empty(), pageable);
 
     }
 
     @Test
-    void getAllByNombreAndGenero() {
+    void getAllByNombreAndPlataforma() {
         //Arrange
         var  videojuegoResponses = List.of(videojuegoResponseDto2);
-        String queryString = "?nombre=" + videojuegoResponseDto2.getNombre() + "&genero=" + videojuegoResponseDto2.getGenero();
-        when(videojuegosService.findAll(anyString(), anyString())).thenReturn(videojuegoResponses);
+        String queryString = "?nombre=" + videojuegoResponseDto2.getNombre() + "&plataforma=" + videojuegoResponseDto2.getPlataforma();
+        Optional<String> nombre = Optional.of(videojuegoResponseDto2.getNombre());
+        Optional<String> plataforma = Optional.of(videojuegoResponseDto2.getPlataforma());
+        var pageable =  PageRequest.of(0, 10, Sort.by("id").ascending());
+        var page = new PageImpl<>(videojuegoResponses);
+        when(videojuegosService.findAll(nombre, plataforma, Optional.empty(), pageable))
+                .thenReturn(page);
 
         //Act
         var resultado = mockMvcTester.get()
@@ -146,13 +172,14 @@ class VideojuegosRestControllerTest {
         //Assert
         assertThat(resultado)
                 .bodyJson().satisfies(json -> {
-                   assertThat(json).extractingPath("$.length()").isEqualTo(videojuegoResponses.size());
-                   assertThat(json).extractingPath("$[0]")
+                   assertThat(json).extractingPath("$.content.length()").isEqualTo(videojuegoResponses.size());
+                   assertThat(json).extractingPath("$.content[0]")
                            .convertTo(VideojuegoResponseDto.class).isEqualTo(videojuegoResponseDto2);
                 });
 
         //Verify
-        verify(videojuegosService, only()).findAll(anyString(), anyString());
+        verify(videojuegosService, only())
+                .findAll(nombre, plataforma, Optional.empty(), pageable);
     }
 
     @Test
@@ -250,7 +277,7 @@ class VideojuegosRestControllerTest {
                     "nombre": "Plants vs Zombies Replanted",
                     "genero": "",
                     "almacenamiento": "1 XB",
-                    "fechaDeCreacion": "2025-12-07",
+                    "fechaDeCreacion": "2026-12-07",
                     "costo": 19.99
                 }
                 """;
