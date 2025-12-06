@@ -1,13 +1,21 @@
 package es.juanjsts.videojuegos.controllers;
 
 
+import es.juanjsts.utils.pagination.PageResponse;
+import es.juanjsts.utils.pagination.PaginationLinksUtils;
 import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
 import es.juanjsts.videojuegos.services.VideojuegosService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +23,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -26,12 +36,26 @@ import java.util.Map;
 @RestController
 public class VideojuegosRestController {
     private final VideojuegosService videojuegosService;
+    private final PaginationLinksUtils paginationLinksUtils;
 
     @GetMapping()
-    public ResponseEntity<List<VideojuegoResponseDto>> getAll(@RequestParam(required = false) String nombre,
-                                                              @RequestParam(required = false) String genero) {
-        log.info("Buscando videojuegos por nombre: {}, genero: {}", nombre, genero);
-        return ResponseEntity.ok(videojuegosService.findAll(nombre, genero));
+    public ResponseEntity<PageResponse<VideojuegoResponseDto>> getAll(
+            @RequestParam(required = false) Optional<String> nombre,
+            @RequestParam(required = false) Optional<String> plataforma,
+            @RequestParam(required = false) Optional<Boolean> isDeleted,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction,
+            HttpServletRequest request) {
+        log.info("Buscando videojuegos por nombre: {}, genero: {}", nombre, plataforma);
+        Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(request.getRequestURI().toString());
+        Page<VideojuegoResponseDto> pageResult = videojuegosService.findAll(nombre, plataforma, isDeleted, pageable);
+        return ResponseEntity.ok()
+                .header("link", paginationLinksUtils.createLinkHeader(pageResult,uriBuilder))
+                .body(PageResponse.of(pageResult, sortBy,direction));
     }
 
     @GetMapping("/{id}")

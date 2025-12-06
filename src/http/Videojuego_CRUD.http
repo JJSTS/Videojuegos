@@ -49,3 +49,10 @@ Content-Type: application/json
 
 ### Delete tarjeta
 DELETE localhost:3000/api/v1/videojuegos/6
+
+### Paginación y odenación
+GET http://localhost:3000/api/v1/videojuegos?sortBy=plataforma&direction=desc
+###
+GET http://localhost:3000/api/v1/videojuegos?sortBy=plataforma&direction=desc&size=1
+###
+GET http://localhost:3000/api/v1/videojuegos?sortBy=plataforma&direction=desc&size=1&page=0

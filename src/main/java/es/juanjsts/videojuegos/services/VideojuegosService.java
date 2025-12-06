@@ -3,12 +3,13 @@ package es.juanjsts.videojuegos.services;
 import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
-import es.juanjsts.videojuegos.models.Videojuego;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface VideojuegosService {
-    List<VideojuegoResponseDto> findAll(String nombre, String plataforma);
+    Page<VideojuegoResponseDto> findAll(Optional<String> nombre, Optional<String> plataforma, Optional<Boolean> isDeleted, Pageable pageable);
 
     VideojuegoResponseDto findById(Long id);
 

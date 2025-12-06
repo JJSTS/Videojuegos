@@ -6,6 +6,7 @@ import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
 import es.juanjsts.videojuegos.models.Videojuego;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -62,5 +63,9 @@ public class VideojuegoMapper {
         return videojuegos.stream()
                 .map(this::toVideojuegoResponseDto)
                 .toList();
+    }
+
+    public Page<VideojuegoResponseDto> toResponseDtoPage(Page<Videojuego> videojuegos) {
+        return videojuegos.map(this::toVideojuegoResponseDto);
     }
 }

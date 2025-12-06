@@ -2,6 +2,7 @@ package es.juanjsts.videojuegos.repositories;
 
 import es.juanjsts.videojuegos.models.Videojuego;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
@@ -9,13 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface VideojuegosRepository extends JpaRepository<Videojuego, Long> {
-    List<Videojuego> findAllByNombre(String nombre);
-
-    List<Videojuego> findAllByGeneroContainingIgnoreCase(String genero);
-
-    List<Videojuego> findAllByNombreAndGeneroContainingIgnoreCase(String nombre, String genero);
-
+public interface VideojuegosRepository extends JpaRepository<Videojuego, Long>, JpaSpecificationExecutor<Videojuego> {
     //Busqueda por Plataforma
     @Query("SELECT v FROM Videojuego v WHERE LOWER(v.plataforma) LIKE LOWER(CONCAT('%', :plataforma, '%'))")
     List<Videojuego> findAllByPlataformaContainsIgnoreCase(String plataforma);
