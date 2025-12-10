@@ -3,11 +3,13 @@ package es.juanjsts.plataformas.services;
 import es.juanjsts.plataformas.dto.PlataformaCreatedDto;
 import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
 import es.juanjsts.plataformas.models.Plataforma;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface PlataformaService {
-    List<Plataforma> findAll(String nombre);
+    Page<Plataforma> findAll(Optional<String> nombre, Optional<Boolean> isDeleted, Pageable pageable);
 
     Plataforma findById(Long id);
 

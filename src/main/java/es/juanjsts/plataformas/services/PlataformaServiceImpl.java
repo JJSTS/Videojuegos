@@ -14,9 +14,12 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,13 +30,17 @@ public class PlataformaServiceImpl implements PlataformaService{
     private final PlataformaMapper plataformaMapper;
 
     @Override
-    public List<Plataforma> findAll(String nombre) {
-        log.info("Buscando todas las plataformas por nombre: {}", nombre);
-        if (nombre == null || nombre.isEmpty()){
-            return plataformaRepository.findAll();
-        } else {
-            return plataformaRepository.findByNombreContainingIgnoreCase(nombre);
-        }
+    public Page<Plataforma> findAll(Optional<String> nombre, Optional<Boolean> isDeleted, Pageable pageable) {
+        log.info("Buscando todas las plataformas por nombre: {}, isDeleted {}", nombre, isDeleted);
+        Specification<Plataforma> specNombrePlataforma = (root, query, criteriaBuilder) ->
+                nombre.map(n -> criteriaBuilder.like(criteriaBuilder.lower(root.get("nombre")), "%" + n.toLowerCase() + "%"))
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
+
+        Specification<Plataforma> specIsDeleted = (root, query, criteriaBuilder) ->
+                isDeleted.map(d -> criteriaBuilder.equal(root.get("isDeleted"), d))
+                        .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
+        Specification<Plataforma> criterio = Specification.allOf(specNombrePlataforma, specIsDeleted);
+        return plataformaRepository.findAll(criterio, pageable);
     }
 
     @Override
