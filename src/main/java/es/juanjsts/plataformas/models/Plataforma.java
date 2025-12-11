@@ -1,6 +1,7 @@
 package es.juanjsts.plataformas.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import es.juanjsts.users.models.User;
 import es.juanjsts.videojuegos.models.Videojuego;
 import jakarta.persistence.*;
 import lombok.*;
@@ -55,4 +56,7 @@ public class Plataforma {
     @Column(columnDefinition = "boolean default false")
     @Builder.Default
     private Boolean isDeleted = false;
+
+    @OneToOne(mappedBy = "plataforma")
+    private User usuario;
 }

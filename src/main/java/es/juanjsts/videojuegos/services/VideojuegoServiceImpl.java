@@ -107,6 +107,13 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
         }
     }
 
+    @Override
+    public Page<VideojuegoResponseDto> findByUsuarioId(Long id, Pageable pageable) {
+        log.info("Buscando videojuegos del usuario por id {}", id);
+        return videojuegoRepository.findByUsuarioId(id, pageable)
+                .map(videojuegoMapper::toVideojuegoResponseDto);
+    }
+
     @CachePut(key = "#result.id")
     @Override
     public VideojuegoResponseDto save(VideojuegoCreateDto videojuegocreateDto) {

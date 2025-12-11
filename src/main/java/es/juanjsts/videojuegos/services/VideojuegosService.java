@@ -15,6 +15,8 @@ public interface VideojuegosService {
 
     VideojuegoResponseDto findByUuid(String uuid);
 
+    Page<VideojuegoResponseDto> findByUsuarioId(Long id, Pageable pageable);
+
     VideojuegoResponseDto save(VideojuegoCreateDto videojuegocreateDto);
 
     VideojuegoResponseDto update(Long id, VideojuegoUpdateDto videojuegoupdateDto);
