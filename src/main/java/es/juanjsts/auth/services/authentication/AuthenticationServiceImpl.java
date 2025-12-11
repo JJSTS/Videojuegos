@@ -44,7 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .build();
             try {
                 var userStored = authUsersRepository.save(user);
-                return JwtAuthResponse.builder().token(jwtService.generateToker(userStored)).build();
+                return JwtAuthResponse.builder().token(jwtService.generateToken(userStored)).build();
             } catch (DataIntegrityViolationException ex) {
                 throw new AuthExistingUsernameOrEmail("El usuario con username " + ex.getMessage());
             }
@@ -60,7 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         var user = authUsersRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AuthSignInNotValid("Usuario o contraseña incorrectos"));
-        var jwt = jwtService.generateToker(user);
+        var jwt = jwtService.generateToken(user);
         return JwtAuthResponse.builder().token(jwt).build();
     }
 }

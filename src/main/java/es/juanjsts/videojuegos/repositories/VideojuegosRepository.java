@@ -30,9 +30,9 @@ public interface VideojuegosRepository extends JpaRepository<Videojuego, Long>, 
     @Query("SELECT v FROM Videojuego v WHERE v.plataforma.usuario.id = :usuarioId")
     Page<Videojuego> findByUsuarioId(Long usuarioId, Pageable pageable);
 
-    @Query("SELECT t FROM Videojuego v WHERE v.plataforma.usuario.id = :usuarioId")
+    @Query("SELECT v FROM Videojuego v WHERE v.plataforma.usuario.id = :usuarioId")
     List<Videojuego> findByUsuarioId(Long usuarioId);
 
-    @Query("SELECT CASA WHEN COUNT(v) > 0 THEN true ELSE false END FROM Videojuego v WHERE v.plataforma.usuario.id = :id")
+    @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Videojuego v WHERE v.plataforma.usuario.id = :id")
     Boolean existsByUsuarioId(Long id);
 }

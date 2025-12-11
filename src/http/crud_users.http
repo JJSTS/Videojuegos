@@ -1,0 +1,42 @@
+### getAll
+GET http://localhost:3000/api/v1/users
+
+### getById
+GET http://localhost:3000/api/v1/users/1
+
+### getById (uno que no existe)
+GET http://localhost:3000/api/v1/users/300
+
+### Nuevo usuario (contraseña User1)
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "nombre": "Juano",
+  "apellidos": "Juano Jose",
+  "username": "juano",
+  "password": "$2a$12$RUq2ScW1Kiizu5K4gKoK4OTz80.DWaruhdyfi2lZCB.KeuXTBh0S.",
+  "email": "juano@prueba.es",
+  "roles": [
+    "USER"
+  ]
+}
+
+### Actualiza usuario
+PUT http://localhost:3000/api/v1/users/5
+Content-Type: application/json
+
+{
+  "nombre": "Pepe",
+  "apellidos": "Pepe User",
+  "username": "pepe",
+  "password": "$2a$12$RUq2ScW1Kiizu5K4gKoK4OTz80.DWaruhdyfi2lZCB.KeuXTBh0S.",
+  "email": "pepe@hotmail.com",
+  "roles": [
+    "USER"
+  ]
+}
+
+
+### Delete usuario
+DELETE http://localhost:3000/api/v1/users/5
