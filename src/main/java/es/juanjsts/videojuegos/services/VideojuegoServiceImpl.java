@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import es.juanjsts.config.websockets.WebSocketConfig;
 import es.juanjsts.config.websockets.WebSocketHandler;
 import es.juanjsts.plataformas.models.Plataforma;
+import es.juanjsts.plataformas.repositories.PlataformaRepository;
 import es.juanjsts.plataformas.services.PlataformaService;
 import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
+import es.juanjsts.videojuegos.exceptions.VideojuegoBadRequestException;
 import es.juanjsts.videojuegos.exceptions.VideojuegoBadUuidException;
 import es.juanjsts.videojuegos.exceptions.VideojuegoNotFoundException;
 import es.juanjsts.videojuegos.mappers.VideojuegoMapper;
@@ -21,7 +23,6 @@ import jakarta.persistence.criteria.Join;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.boot.autoconfigure.rsocket.RSocketProperties;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -43,6 +44,7 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
     private final VideojuegosRepository videojuegoRepository;
     private final VideojuegoMapper videojuegoMapper;
     private final PlataformaService plataformaService;
+    private final PlataformaRepository plataformaRepository;
 
     private final WebSocketConfig webSocketConfig;
     private final ObjectMapper objectMapper;
@@ -108,10 +110,31 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
     }
 
     @Override
-    public Page<VideojuegoResponseDto> findByUsuarioId(Long id, Pageable pageable) {
-        log.info("Buscando videojuegos del usuario por id {}", id);
-        return videojuegoRepository.findByUsuarioId(id, pageable)
+    public Page<VideojuegoResponseDto> findByUsuarioId(Long usuarioId, Pageable pageable) {
+        log.info("Buscando videojuegos del usuario por id {}", usuarioId);
+        return videojuegoRepository.findByUsuarioId(usuarioId, pageable)
                 .map(videojuegoMapper::toVideojuegoResponseDto);
+    }
+
+    @Override
+    public VideojuegoResponseDto findByUsuarioId(Long usuarioId, Long idVideojuego) {
+        log.info("Obteniendo videojuego del usuario por id: {}", usuarioId);
+        var videojuego = videojuegoRepository.findByUsuarioId(usuarioId);
+        var videojuegoEncontrado = videojuego.stream().filter(v -> v.getId().equals(idVideojuego))
+                .findFirst().orElse(null);
+        if (videojuegoEncontrado == null) {
+            throw new VideojuegoBadRequestException("El videojuego " + idVideojuego + " no pertenece a este usuario");
+        }
+        return videojuegoMapper.toVideojuegoResponseDto(videojuegoEncontrado);
+    }
+
+    private Plataforma checkPlataforma(String nombrePlataforma){
+        log.info("Buscando videojuego por nombre: {}", nombrePlataforma);
+        var plataforma = plataformaRepository.findByNombreEqualsIgnoreCase(nombrePlataforma);
+        if (plataforma.isEmpty() || plataforma.get().getIsDeleted()){
+            throw new VideojuegoBadRequestException("La plataforma " + nombrePlataforma + " no existe o está borrado");
+        }
+        return plataforma.get();
     }
 
     @CachePut(key = "#result.id")
@@ -122,6 +145,21 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
         Videojuego nuevoVideojuego = videojuegoMapper.toVideojuego(videojuegocreateDto, plataforma);
         onChange(Notificacion.Tipo.CREATE, nuevoVideojuego);
         return videojuegoMapper.toVideojuegoResponseDto(videojuegoRepository.save(nuevoVideojuego));
+    }
+
+    @CachePut(key = "#result.id")
+    @Override
+    public VideojuegoResponseDto save(VideojuegoCreateDto videojuegoCreateDto, Long usuarioId){
+        log.info("Guardando videojuego: {} de usuarioId: {}", videojuegoCreateDto, usuarioId);
+        Plataforma plataforma = checkPlataforma(videojuegoCreateDto.getPlataforma());
+        var usuario = plataforma.getUsuario();
+        if ((usuario != null) && (!usuario.getId().equals(usuarioId))){
+            throw new VideojuegoBadRequestException("La usuario no se corresponde con la plataforma");
+        }
+        Videojuego nuevoVideojuego = videojuegoRepository.save(
+                videojuegoMapper.toVideojuego(videojuegoCreateDto, plataforma));
+        onChange(Notificacion.Tipo.CREATE, nuevoVideojuego);
+        return videojuegoMapper.toVideojuegoResponseDto(nuevoVideojuego);
     }
 
     @CachePut(key = "#result.id")
@@ -137,11 +175,39 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
         return videojuegoMapper.toVideojuegoResponseDto(videojuegoRepository.save(videojuegoActualizado));
     }
 
+    @CachePut(key = "#result.id")
+    @Override
+    public VideojuegoResponseDto update(Long id, VideojuegoUpdateDto videojuegoupdateDto, Long usuarioId){
+        log.info("Actualizando videojuego por id: {}", id);
+        var videojuegoActual = videojuegoRepository.findById(id).orElseThrow(()-> new VideojuegoNotFoundException(id));
+        var usuario = videojuegoActual.getPlataforma().getUsuario();
+        if ((usuario != null) && (!usuario.getId().equals(usuarioId))){
+            throw new VideojuegoBadRequestException("El videojuego " + videojuegoupdateDto.getNombre() + " no pertenece al usuario");
+        }
+        Videojuego videojuegoUpdated = videojuegoRepository.save(
+                videojuegoMapper.toVideojuego(videojuegoupdateDto, videojuegoActual));
+        onChange(Notificacion.Tipo.UPDATE, videojuegoUpdated);
+        return videojuegoMapper.toVideojuegoResponseDto(videojuegoUpdated);
+    }
+
     @CacheEvict(key = "#id")
     @Override
     public void deleteById(Long id) {
         log.debug("Eliminando videojuego con id: {}", id);
         Videojuego videojuegoDeleted = videojuegoRepository.findById(id).orElseThrow(()-> new VideojuegoNotFoundException(id));
+        videojuegoRepository.deleteById(id);
+        onChange(Notificacion.Tipo.DELETE, videojuegoDeleted);
+    }
+
+    @CacheEvict(key = "#id")
+    @Override
+    public void deleteById(Long id, Long usuarioId){
+        log.debug("Eliminando videojuego con id: {}", id);
+        Videojuego videojuegoDeleted = videojuegoRepository.findById(id).orElseThrow(()-> new VideojuegoNotFoundException(id));
+        var usuario = videojuegoDeleted.getPlataforma().getUsuario();
+        if ((usuario != null) && (!usuario.getId().equals(usuarioId))){
+            throw new VideojuegoBadRequestException("El videojuego " + id + " no pertenece al usuario");
+        }
         videojuegoRepository.deleteById(id);
         onChange(Notificacion.Tipo.DELETE, videojuegoDeleted);
     }

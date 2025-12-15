@@ -15,11 +15,15 @@ public interface VideojuegosService {
 
     VideojuegoResponseDto findByUuid(String uuid);
 
-    Page<VideojuegoResponseDto> findByUsuarioId(Long id, Pageable pageable);
+    Page<VideojuegoResponseDto> findByUsuarioId(Long usuarioId, Pageable pageable);
+    VideojuegoResponseDto findByUsuarioId(Long usuarioId, Long idVideojuego);
 
     VideojuegoResponseDto save(VideojuegoCreateDto videojuegocreateDto);
+    VideojuegoResponseDto save(VideojuegoCreateDto videojuegoCreateDto, Long usuarioId);
 
     VideojuegoResponseDto update(Long id, VideojuegoUpdateDto videojuegoupdateDto);
+    VideojuegoResponseDto update(Long id, VideojuegoUpdateDto videojuegoupdateDto, Long usuarioId);
 
     void deleteById(Long id);
+    void deleteById(Long id, Long usuarioId);
 }

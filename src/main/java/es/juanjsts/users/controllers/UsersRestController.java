@@ -75,12 +75,12 @@ public class UsersRestController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> create(@Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest) {
         log.info("save: userRequest: {}", userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(usersService.save(userRequest));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest userRequest) {
         log.info("update: id: {}, userRequest: {}", id, userRequest);
@@ -97,7 +97,7 @@ public class UsersRestController {
 
 
     @GetMapping("/me/profile")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserInfoResponse> me(@AuthenticationPrincipal User user) {
         log.info("Obteniendo usuario");
         return ResponseEntity.ok(usersService.findById(user.getId()));
@@ -142,7 +142,7 @@ public class UsersRestController {
             @PathVariable("id") Long idVideojuego
     ) {
         log.info("Obteniendo videojuego con id: {}", idVideojuego);
-        return ResponseEntity.ok(videojuegosService.findById(idVideojuego));
+        return ResponseEntity.ok(videojuegosService.findByUsuarioId(user.getId(),idVideojuego));
     }
 
     @PostMapping("/me/videojuegos")
@@ -152,7 +152,7 @@ public class UsersRestController {
             @Valid @RequestBody VideojuegoCreateDto videojuegoCreateDto
     ) {
         log.info("Creando videojuego: {}", videojuegoCreateDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(videojuegosService.save(videojuegoCreateDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(videojuegosService.save(videojuegoCreateDto, user.getId()));
     }
 
     @PutMapping("/me/videojuegos/{id}")
@@ -173,6 +173,7 @@ public class UsersRestController {
             @PathVariable("id") Long idVideojuego
     ) {
         log.info("Borrando videojuego con id: {}", idVideojuego);
+        videojuegosService.deleteById(idVideojuego, user.getId());
         return ResponseEntity.noContent().build();
     }
 

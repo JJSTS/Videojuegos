@@ -59,9 +59,6 @@ insert into USUARIOS (nombre, apellidos, username, email, password)
 values ('Admin', 'Admin Fernandez', 'admin','admin@prueba.es','$2a$12$RUq2ScW1Kiizu5K4gKoK4OTz80.DWaruhdyfi2lZCB.KeuXTBh0S.');
 
 insert into USER_ROLES (user_id, roles)
-values (1, 'USER');
-
-insert into USER_ROLES (user_id, roles)
 values (1, 'ADMIN');
 
 -- Contraseña admin: luisitocomunica
