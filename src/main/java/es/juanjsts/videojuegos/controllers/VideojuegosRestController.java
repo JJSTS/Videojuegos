@@ -7,6 +7,11 @@ import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
 import es.juanjsts.videojuegos.services.VideojuegosService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +42,19 @@ public class VideojuegosRestController {
     private final VideojuegosService videojuegosService;
     private final PaginationLinksUtils paginationLinksUtils;
 
+    @Operation(summary = "Obtiene todos los videojuegos", description = "Obtiene una lista de Videojuegos")
+    @Parameters({
+            @Parameter(name = "nombre", description = "Nombre del videojuego", example = ""),
+            @Parameter(name = "plataforma", description = "Plataforma del videojuego", example = ""),
+            @Parameter(name = "isDeleted", description = "Si está borrada o no", example = "false"),
+            @Parameter(name = "page", description = "Número de página", example = "0"),
+            @Parameter(name = "size", description = "Tamaño de la página", example = "10"),
+            @Parameter(name = "sortBy", description = "Campo de ordenación", example = "id"),
+            @Parameter(name = "direction", description = "Dirección de ordenación", example = "asc")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Página de Videojuegos")
+    })
     @GetMapping()
     public ResponseEntity<PageResponse<VideojuegoResponseDto>> getAll(
             @RequestParam(required = false) Optional<String> nombre,

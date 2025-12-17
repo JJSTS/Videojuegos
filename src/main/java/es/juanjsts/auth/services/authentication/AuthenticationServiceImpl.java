@@ -46,7 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 var userStored = authUsersRepository.save(user);
                 return JwtAuthResponse.builder().token(jwtService.generateToken(userStored)).build();
             } catch (DataIntegrityViolationException ex) {
-                throw new AuthExistingUsernameOrEmail("El usuario con username " + ex.getMessage());
+                throw new AuthExistingUsernameOrEmail("El usuario con username " + ex.getMessage() + " o email " + request.getEmail() + " ya existe");
             }
         } else {
             throw new AuthDifferentPasswords("Las contraseñas no coinciden");

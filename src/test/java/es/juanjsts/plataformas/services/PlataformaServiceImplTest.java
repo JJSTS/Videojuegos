@@ -10,7 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -45,6 +51,10 @@ class PlataformaServiceImplTest {
     
     @Mock
     private PlataformaRepository plataformaRepository;
+
+    @Spy
+    private PlataformaMapper plataformaMapper;
+
     // Es la clase que se testea y a la que se inyectan los mocks y espías automáticamente
     @InjectMocks
     private PlataformaServiceImpl plataformaService;
@@ -52,10 +62,12 @@ class PlataformaServiceImplTest {
     @Test
     public void testFindAll() {
         // Arrange
-        when(plataformaRepository.findAll()).thenReturn(List.of(plataforma));
+        var pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        var page = new PageImpl<>(List.of(plataforma));
+        when(plataformaRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
 
         // Act
-        var res = plataformaService.findAll(null);
+        var res = plataformaService.findAll(Optional.empty(), Optional.empty(), pageable);
 
         // Assert
         assertAll("findAll",
@@ -64,7 +76,7 @@ class PlataformaServiceImplTest {
         );
 
         // Verify
-        verify(plataformaRepository, times(1)).findAll();
+        verify(plataformaRepository, times(1)).findAll(any(Specification.class), any(Pageable.class));
     }
 
     @Test
@@ -115,7 +127,7 @@ class PlataformaServiceImplTest {
         // Assert
         assertAll("save",
                 () -> assertNotNull(plataforma),
-                () -> assertEquals("Epic Games Store", plataforma.getNombre())
+                () -> assertEquals("Nintendo", plataforma.getNombre())
         );
 
         // Verify

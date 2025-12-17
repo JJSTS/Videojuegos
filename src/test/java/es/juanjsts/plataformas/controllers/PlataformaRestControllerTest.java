@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -17,6 +20,7 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -50,8 +54,10 @@ class PlataformaRestControllerTest {
     @Test
     void getAll() {
         // Arrange
-        var plataformaes = List.of(plataforma1, plataforma2);
-        when(plataformaService.findAll(null)).thenReturn(plataformaes);
+        var plataformas = List.of(plataforma1, plataforma2);
+        var pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        var page = new PageImpl<>(plataformas);
+        when(plataformaService.findAll(Optional.empty(),Optional.empty(), pageable)).thenReturn(page);
 
         // Act. Consultar el endpoint
         var result = mockMvcTester.get()
@@ -63,23 +69,27 @@ class PlataformaRestControllerTest {
         assertThat(result)
                 .hasStatusOk()
                 .bodyJson().satisfies(json -> {
-                    assertThat(json).extractingPath("$.length()").isEqualTo(plataformaes.size());
-                    assertThat(json).extractingPath("$[0]")
+                    assertThat(json).extractingPath("$.content.length()").isEqualTo(plataformas.size());
+                    assertThat(json).extractingPath("$.content[0]")
                             .convertTo(Plataforma.class).usingRecursiveComparison().isEqualTo(plataforma1);
-                    assertThat(json).extractingPath("$[1]")
+                    assertThat(json).extractingPath("$.content[1]")
                             .convertTo(Plataforma.class).usingRecursiveComparison().isEqualTo(plataforma2);
                 });
 
         // Verify
-        verify(plataformaService, times(1)).findAll(null);
+        verify(plataformaService, times(1))
+                .findAll(Optional.empty(), Optional.empty(), pageable);
     }
 
     @Test
     void getAllByNombre() {
         // Arrange
-        var plataformaes = List.of(plataforma2);
+        var plataformas = List.of(plataforma2);
         String queryString = "?nombre=" + plataforma2.getNombre();
-        when(plataformaService.findAll(anyString())).thenReturn(plataformaes);
+        Optional<String> nombre = Optional.of(plataforma2.getNombre());
+        var pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
+        var page = new PageImpl<>(plataformas);
+        when(plataformaService.findAll(nombre, Optional.empty(), pageable)).thenReturn(page);
 
         // Act
         var result = mockMvcTester.get()
@@ -91,13 +101,14 @@ class PlataformaRestControllerTest {
         assertThat(result)
                 .hasStatusOk()
                 .bodyJson().satisfies(json -> {
-                    assertThat(json).extractingPath("$.length()").isEqualTo(plataformaes.size());
-                    assertThat(json).extractingPath("$[0]")
+                    assertThat(json).extractingPath("$.content.length()").isEqualTo(plataformas.size());
+                    assertThat(json).extractingPath("$.content[0]")
                             .convertTo(Plataforma.class).usingRecursiveComparison().isEqualTo(plataforma2);
                 });
 
         // Verify
-        verify(plataformaService, times(1)).findAll(anyString());
+        verify(plataformaService, times(1))
+                .findAll(nombre, Optional.empty(), pageable);
     }
 
     @Test
@@ -235,7 +246,7 @@ class PlataformaRestControllerTest {
         // Assert
         assertThat(result)
                 .hasStatus(HttpStatus.CONFLICT)
-                // throws PlataformaesConflictEsception
+                // throws plataformasConflictEsception
                 .hasFailed().failure()
                 .isInstanceOf(PlataformaConflictException.class)
                 .hasMessageContaining("Ya existe un plataforma");
@@ -360,7 +371,7 @@ class PlataformaRestControllerTest {
         // Assert
         assertThat(result)
                 .hasStatus(HttpStatus.CONFLICT)
-                // throws PlataformaesConflictEsception
+                // throws plataformasConflictEsception
                 .hasFailed().failure()
                 .isInstanceOf(PlataformaConflictException.class)
                 .hasMessageContaining("Ya existe un plataforma");
