@@ -9,6 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +28,8 @@ import java.util.List;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+
+
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity(jsr250Enabled = true)
@@ -44,6 +47,11 @@ public class SecurityConfig {
         http
                 .securityMatcher(apiPaths)
                 .csrf(AbstractHttpConfigurer::disable)
+                // Activamos CORS
+                .cors(Customizer.withDefaults())
+                // CORS opciones definidas en Bean: no hace falta especificar en SpringBoot
+                // porque detecta el Bean automáticamente
+                //.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(
                         manager -> manager.sessionCreationPolicy(STATELESS))
                 .authorizeHttpRequests(request -> request

@@ -1,0 +1,7 @@
+### getAll
+GET https://localhost:3000/api/v1/videojuegos
+Origin: http://mifrontend.es
+
+### getAll
+GET http://localhost:3000/api/v1/videojuegos
+Origin: http://otrodominio.es
