@@ -1,8 +1,9 @@
 package es.juanjsts.plataformas.mappers;
 
-import es.juanjsts.plataformas.dto.PlataformaCreatedDto;
-import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
-import es.juanjsts.plataformas.models.Plataforma;
+import es.juanjsts.rest.plataformas.dto.PlataformaCreatedDto;
+import es.juanjsts.rest.plataformas.dto.PlataformaUpdateDto;
+import es.juanjsts.rest.plataformas.mappers.PlataformaMapper;
+import es.juanjsts.rest.plataformas.models.Plataforma;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

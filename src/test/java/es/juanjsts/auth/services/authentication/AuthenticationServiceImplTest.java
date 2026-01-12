@@ -1,14 +1,15 @@
 package es.juanjsts.auth.services.authentication;
 
-import es.juanjsts.auth.dto.JwtAuthResponse;
-import es.juanjsts.auth.dto.UserSignInRequest;
-import es.juanjsts.auth.dto.UserSignUpRequest;
-import es.juanjsts.auth.exceptions.AuthDifferentPasswords;
-import es.juanjsts.auth.exceptions.AuthExistingUsernameOrEmail;
-import es.juanjsts.auth.exceptions.AuthSignInNotValid;
-import es.juanjsts.auth.repositories.AuthUsersRepository;
-import es.juanjsts.auth.services.jwt.JwtService;
-import es.juanjsts.users.models.User;
+import es.juanjsts.rest.auth.dto.JwtAuthResponse;
+import es.juanjsts.rest.auth.dto.UserSignInRequest;
+import es.juanjsts.rest.auth.dto.UserSignUpRequest;
+import es.juanjsts.rest.auth.exceptions.AuthDifferentPasswords;
+import es.juanjsts.rest.auth.exceptions.AuthExistingUsernameOrEmail;
+import es.juanjsts.rest.auth.exceptions.AuthSignInNotValid;
+import es.juanjsts.rest.auth.repositories.AuthUsersRepository;
+import es.juanjsts.rest.auth.services.authentication.AuthenticationServiceImpl;
+import es.juanjsts.rest.auth.services.jwt.JwtService;
+import es.juanjsts.rest.users.models.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

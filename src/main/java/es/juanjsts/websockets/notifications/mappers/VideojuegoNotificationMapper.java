@@ -1,6 +1,6 @@
 package es.juanjsts.websockets.notifications.mappers;
 
-import es.juanjsts.videojuegos.models.Videojuego;
+import es.juanjsts.rest.videojuegos.models.Videojuego;
 import es.juanjsts.websockets.notifications.dto.VideojuegoNotificationResponse;
 import org.springframework.stereotype.Component;
 

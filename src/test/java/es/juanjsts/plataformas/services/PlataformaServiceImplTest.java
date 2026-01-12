@@ -1,11 +1,12 @@
 package es.juanjsts.plataformas.services;
 
-import es.juanjsts.plataformas.dto.PlataformaCreatedDto;
-import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
-import es.juanjsts.plataformas.exceptions.PlataformaConflictException;
-import es.juanjsts.plataformas.mappers.PlataformaMapper;
-import es.juanjsts.plataformas.models.Plataforma;
-import es.juanjsts.plataformas.repositories.PlataformaRepository;
+import es.juanjsts.rest.plataformas.dto.PlataformaCreatedDto;
+import es.juanjsts.rest.plataformas.dto.PlataformaUpdateDto;
+import es.juanjsts.rest.plataformas.exceptions.PlataformaConflictException;
+import es.juanjsts.rest.plataformas.mappers.PlataformaMapper;
+import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.plataformas.repositories.PlataformaRepository;
+import es.juanjsts.rest.plataformas.services.PlataformaServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

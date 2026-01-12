@@ -1,14 +1,15 @@
 package es.juanjsts.users.services;
 
-import es.juanjsts.users.dto.UserInfoResponse;
-import es.juanjsts.users.dto.UserRequest;
-import es.juanjsts.users.dto.UserResponse;
-import es.juanjsts.users.exceptions.UserNameOrEmailExists;
-import es.juanjsts.users.exceptions.UserNotFound;
-import es.juanjsts.users.mappers.UsersMapper;
-import es.juanjsts.users.models.User;
-import es.juanjsts.users.repositories.UsersRepository;
-import es.juanjsts.videojuegos.repositories.VideojuegosRepository;
+import es.juanjsts.rest.users.dto.UserInfoResponse;
+import es.juanjsts.rest.users.dto.UserRequest;
+import es.juanjsts.rest.users.dto.UserResponse;
+import es.juanjsts.rest.users.exceptions.UserNameOrEmailExists;
+import es.juanjsts.rest.users.exceptions.UserNotFound;
+import es.juanjsts.rest.users.mappers.UsersMapper;
+import es.juanjsts.rest.users.models.User;
+import es.juanjsts.rest.users.repositories.UsersRepository;
+import es.juanjsts.rest.users.services.UsersServiceImpl;
+import es.juanjsts.rest.videojuegos.repositories.VideojuegosRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

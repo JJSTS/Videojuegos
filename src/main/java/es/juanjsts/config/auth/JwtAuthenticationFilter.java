@@ -1,7 +1,7 @@
 package es.juanjsts.config.auth;
 
-import es.juanjsts.auth.services.jwt.JwtService;
-import es.juanjsts.auth.services.users.AuthUsersService;
+import es.juanjsts.rest.auth.services.jwt.JwtService;
+import es.juanjsts.rest.auth.services.users.AuthUsersService;
 import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

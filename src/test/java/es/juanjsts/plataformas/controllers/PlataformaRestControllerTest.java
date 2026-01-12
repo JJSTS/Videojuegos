@@ -1,11 +1,11 @@
 package es.juanjsts.plataformas.controllers;
 
-import es.juanjsts.plataformas.dto.PlataformaCreatedDto;
-import es.juanjsts.plataformas.dto.PlataformaUpdateDto;
-import es.juanjsts.plataformas.exceptions.PlataformaConflictException;
-import es.juanjsts.plataformas.exceptions.PlataformaNotFoundException;
-import es.juanjsts.plataformas.models.Plataforma;
-import es.juanjsts.plataformas.services.PlataformaService;
+import es.juanjsts.rest.plataformas.dto.PlataformaCreatedDto;
+import es.juanjsts.rest.plataformas.dto.PlataformaUpdateDto;
+import es.juanjsts.rest.plataformas.exceptions.PlataformaConflictException;
+import es.juanjsts.rest.plataformas.exceptions.PlataformaNotFoundException;
+import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.plataformas.services.PlataformaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

@@ -1,10 +1,10 @@
 package es.juanjsts.videojuegos.controllers;
 
-import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
-import es.juanjsts.videojuegos.dto.VideojuegoResponseDto;
-import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
-import es.juanjsts.videojuegos.exceptions.VideojuegoNotFoundException;
-import es.juanjsts.videojuegos.services.VideojuegosService;
+import es.juanjsts.rest.videojuegos.dto.VideojuegoCreateDto;
+import es.juanjsts.rest.videojuegos.dto.VideojuegoResponseDto;
+import es.juanjsts.rest.videojuegos.dto.VideojuegoUpdateDto;
+import es.juanjsts.rest.videojuegos.exceptions.VideojuegoNotFoundException;
+import es.juanjsts.rest.videojuegos.services.VideojuegosService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

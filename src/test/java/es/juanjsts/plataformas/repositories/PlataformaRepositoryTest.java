@@ -1,6 +1,7 @@
 package es.juanjsts.plataformas.repositories;
 
-import es.juanjsts.plataformas.models.Plataforma;
+import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.plataformas.repositories.PlataformaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

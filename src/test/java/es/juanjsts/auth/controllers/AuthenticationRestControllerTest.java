@@ -1,12 +1,12 @@
 package es.juanjsts.auth.controllers;
 
-import es.juanjsts.auth.dto.JwtAuthResponse;
-import es.juanjsts.auth.dto.UserSignInRequest;
-import es.juanjsts.auth.dto.UserSignUpRequest;
-import es.juanjsts.auth.exceptions.AuthDifferentPasswords;
-import es.juanjsts.auth.exceptions.AuthExistingUsernameOrEmail;
-import es.juanjsts.auth.exceptions.AuthSignInNotValid;
-import es.juanjsts.auth.services.authentication.AuthenticationService;
+import es.juanjsts.rest.auth.dto.JwtAuthResponse;
+import es.juanjsts.rest.auth.dto.UserSignInRequest;
+import es.juanjsts.rest.auth.dto.UserSignUpRequest;
+import es.juanjsts.rest.auth.exceptions.AuthDifferentPasswords;
+import es.juanjsts.rest.auth.exceptions.AuthExistingUsernameOrEmail;
+import es.juanjsts.rest.auth.exceptions.AuthSignInNotValid;
+import es.juanjsts.rest.auth.services.authentication.AuthenticationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

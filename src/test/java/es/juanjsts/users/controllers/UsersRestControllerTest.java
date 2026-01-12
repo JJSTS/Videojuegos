@@ -1,10 +1,10 @@
 package es.juanjsts.users.controllers;
 
-import es.juanjsts.users.dto.UserInfoResponse;
-import es.juanjsts.users.dto.UserRequest;
-import es.juanjsts.users.dto.UserResponse;
-import es.juanjsts.users.exceptions.UserNotFound;
-import es.juanjsts.users.services.UsersService;
+import es.juanjsts.rest.users.dto.UserInfoResponse;
+import es.juanjsts.rest.users.dto.UserRequest;
+import es.juanjsts.rest.users.dto.UserResponse;
+import es.juanjsts.rest.users.exceptions.UserNotFound;
+import es.juanjsts.rest.users.services.UsersService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

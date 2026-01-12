@@ -1,9 +1,10 @@
 package es.juanjsts.videojuegos.mappers;
 
-import es.juanjsts.plataformas.models.Plataforma;
-import es.juanjsts.videojuegos.dto.VideojuegoCreateDto;
-import es.juanjsts.videojuegos.dto.VideojuegoUpdateDto;
-import es.juanjsts.videojuegos.models.Videojuego;
+import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.videojuegos.dto.VideojuegoCreateDto;
+import es.juanjsts.rest.videojuegos.dto.VideojuegoUpdateDto;
+import es.juanjsts.rest.videojuegos.mappers.VideojuegoMapper;
+import es.juanjsts.rest.videojuegos.models.Videojuego;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
