@@ -1,5 +1,6 @@
 package es.juanjsts.rest.videojuegos.repositories;
 
+import es.juanjsts.rest.plataformas.models.Plataforma;
 import es.juanjsts.rest.videojuegos.models.Videojuego;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,4 +36,6 @@ public interface VideojuegosRepository extends JpaRepository<Videojuego, Long>, 
 
     @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Videojuego v WHERE v.plataforma.usuario.id = :id")
     Boolean existsByUsuarioId(Long id);
+
+    List<Videojuego> findByPlataforma(Plataforma plataforma);
 }

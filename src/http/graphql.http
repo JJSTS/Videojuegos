@@ -1,0 +1,62 @@
+### Todos los Videojuegos
+GRAPHQL http://localhost:3000/graphql
+
+query {
+    videojuegos {
+        id
+        nombre
+        genero
+        fechaDeCreacion
+        costo
+        plataforma {
+            id
+            nombre
+        }
+    }
+}
+
+### Videojuego por Id
+GRAPHQL http://localhost:3000/graphql
+
+query {
+    videojuegoById(id: "1") {
+        nombre
+        genero
+        fechaDeCreacion
+        costo
+        plataforma {
+            nombre
+        }
+    }
+}
+
+### Todas las plataformas
+GRAPHQL http://localhost:3000/graphql
+
+query {
+    plataformaById(id: "2") {
+        nombre
+        videojuegos {
+            id
+            nombre
+            genero
+            fechaDeCreacion
+            costo
+        }
+    }
+}
+
+
+### Solo datos principales de videojuego y plataforma
+GRAPHQL http://localhost:3000/graphql
+
+query {
+    videojuegos {
+        nombre
+        genero
+        fechaDeCreacion
+        plataforma {
+            nombre
+        }
+    }
+}

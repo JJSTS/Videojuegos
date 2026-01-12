@@ -43,7 +43,7 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        String[] apiPaths = {"/api/**", "/error/**", "/ws/**"};
+        String[] apiPaths = {"/api/**", "/error/**", "/ws/**", "/graphql","/graphiql","/graphiql/**"};
         http
                 .securityMatcher(apiPaths)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -58,6 +58,7 @@ public class SecurityConfig {
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/api/" + apiVersion +"/**").permitAll()
+                        .requestMatchers("/graphql", "/graphiql", "/graphiql/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
                   jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
