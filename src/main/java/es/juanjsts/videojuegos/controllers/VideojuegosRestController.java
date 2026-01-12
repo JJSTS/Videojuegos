@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Tag(name = "Videojuegos", description = "Endpoint de Videojuegos de nuestra api")
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("api/${api.version}/videojuegos")
@@ -55,6 +57,10 @@ public class VideojuegosRestController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Página de Videojuegos")
     })
+
+    // Podemos activar CORS en SecurityConfig de manera centralizada
+    // o por método de esta manera
+    //@CrossOrigin(origins = "http://mifrontend.es")
     @GetMapping()
     public ResponseEntity<PageResponse<VideojuegoResponseDto>> getAll(
             @RequestParam(required = false) Optional<String> nombre,

@@ -169,7 +169,7 @@ class PlataformaRestControllerTest {
 
         var plataformaSaved = Plataforma.builder()
                 .id(1L)
-                .nombre("manuela")
+                .nombre("Manuela")
                 .build();
 
         when(plataformaService.save(any(PlataformaCreatedDto.class))).thenReturn(plataformaSaved);
