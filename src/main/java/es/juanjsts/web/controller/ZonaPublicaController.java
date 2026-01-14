@@ -5,13 +5,13 @@ import es.juanjsts.rest.videojuegos.services.VideojuegosService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.awt.print.Pageable;
 import java.util.Optional;
 
 @RequiredArgsConstructor
