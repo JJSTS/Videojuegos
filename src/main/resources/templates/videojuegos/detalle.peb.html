@@ -1,0 +1,21 @@
+{% extends "fragments/layout" %}
+
+{% block body %}
+
+    <!-- Lista de Tarjetas -->
+    {% if videojuego is empty %}
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle"></i> {{ message('label.videojuego.empty') }}
+    </div>
+    {% else %}
+    <h2> {{ message('label.videojuego.detalle') }} {{ videojuego.id }}</h2>
+    <ul>
+        <li> {{ message('label.videojuego.nombre') }}: {{ videojuego.nombre }}</li>
+        <li> {{ message('label.videojuego.genero') }}: {{ videojuego.genero }}</li>
+        <li> {{ message('label.videojuego.almacenamiento') }}: {{ videojuego.almacenamiento }}</li>
+        <li> {{ message('label.videojuego.fechacreacion') }}: {{ videojuego.fechacreacion }}</li>
+        <li> {{ message('label.videojuego.plataforma') }}: {{ videojuego.plataforma }}</li>
+        <li> {{ message('label.videojuego.costo') }}: {{ videojuego.costo }}</li>
+    </ul>
+    {% endif %}
+{% endblock %}

@@ -16,8 +16,16 @@ public class GlobalControllerAdvice {
         return appName;
     }
 
+    @Value("${application.title}")
+    private String appDescription;
+
     @ModelAttribute("currentYear")
     public int getCurrentYear() {
         return LocalDate.now().getYear();
+    }
+
+    @ModelAttribute("appDescription")
+    public String getAppDescription() {
+        return appDescription;
     }
 }

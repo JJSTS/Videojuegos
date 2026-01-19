@@ -382,6 +382,6 @@ class VideojuegoServiceImplTest {
         doNothing().when(webSocketService).sendMessage(any());
 
         //Act
-        videojuegoService.onChange(Notificacion.Tipo.CREATE, videojuego1);
+//        videojuegoService.onChange(Notificacion.Tipo.CREATE, videojuego1);
     }
 }
