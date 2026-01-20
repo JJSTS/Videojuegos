@@ -1,26 +1,26 @@
-{% macro inputField(forName, label, inputName, type, inputValue, _context) %}
+{% macro inputField(formName, label, inputName, type, inputValue, _context) %}
 
-    {% set valid = not hasFieldErros(forName, inputName) %}
+{% set valid = not hasFieldErrors(formName, inputName) %}
 
-    <div class="form-group {{ valid ? ``: 'has-error' }}">
+    <div class="form-group {{ valid ? '': 'has-error' }}">
         <label class="col-sm-2 control-label">{{ label }}</label>
         <div class="col-sm-10">
             <div>
                 {% if type == "text" %}
-                <input type="text" class="form-control" name="{{ inputName }}" value="{{ inputValue }}">
+                <input class="form-control" type="text" name="{{ inputName }}" value="{{ inputValue }}" id="{{ inputName }}">
                 {% elseif type == "date" %}
-                <input type="date" class="form-control" name="{{ inputName }}" value="{{ inputValue }}">
+                <input class="form-control" type="date" name="{{ inputName }}" value="{{ inputValue }}" id="{{ inputName }}">
                 {% elseif type == "number" %}
-                <input type="number" class="form-control" name="{{ inputName }}" value="{{ inputValue }}">
+                <input class="form-control" type="number" name="{{ inputName }}" value="{{ inputValue }}" id="{{ inputName }}">
                 {% endif %}
             </div>
             {% if valid %}
-            <span class="bi bi-check form-control-feedback" aria-hidden="true"></span>
+                <span class="bi bi-check form-control-feedback" aria-hidden="true"></span>
             {% else %}
-            <span class="bi bi-x form-control-feedback" aria-hidden="true"></span> %}
-            {% for err in getFieldErrors(forName, inputName) %}
-            <span class="help-inline">{{ err }}</span>
-            {% endfor %}
+                <span class="bi bi-x form-control-feedback" aria-hidden="true"></span>
+                {% for err in getFieldErrors(forName, inputName) %}
+                    <span class="help-inline">{{ err }}<br></span>
+                {% endfor %}
             {% endif %}
         </div>
     </div>

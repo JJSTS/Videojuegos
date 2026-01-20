@@ -17,11 +17,11 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/public")
+@RequestMapping("/lista")
 public class ZonaPublicaController {
     private final VideojuegosService videojuegosService;
 
-    @GetMapping({"","/","/index"})
+    @GetMapping({"","/","/lista"})
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "0") int page,
                         @RequestParam(name = "size", defaultValue = "4") int size){
@@ -29,6 +29,6 @@ public class ZonaPublicaController {
         Page<VideojuegoResponseDto> videojuegoPage = videojuegosService.findAll(
                 Optional.empty(), Optional.empty(),Optional.empty(), pageable);
         model.addAttribute("page", videojuegoPage);
-        return "index";
+        return "videojuegos/lista";
     }
 }

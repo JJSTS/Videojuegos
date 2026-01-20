@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
-@Data
 @ToString
 @Getter
 @Setter

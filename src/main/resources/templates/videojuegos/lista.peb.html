@@ -16,7 +16,7 @@
             <th>Fecha de creación</th>
             <th>Plataforma</th>
             <th>Costo</th>
-            <th>Ver detalles</th>
+            <th>Datos</th>
         </tr>
         {% for videojuego in page.content %}
         <tr>
@@ -27,7 +27,15 @@
             <td>{{ videojuego.fechaDeCreacion }}</td>
             <td>{{ videojuego.plataforma }}</td>
             <td>{{ videojuego.costo }}</td>
-            <td><a href="videojuegos/detalle">Ver detalle</a></td>
+            <td>
+                <a href="videojuegos/{{ videojuego.id }}">
+                    <i class="bi bi-eye"></i>Ver datos
+                </a>
+
+                <a href="videojuegos/{{ videojuego.id }}/edit">
+                    <i class="bi bi-pencil"></i>Editar
+                </a>
+            </td>
         </tr>
         {% endfor %}
     </table>

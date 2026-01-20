@@ -169,10 +169,12 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
         var videojuegoActual = videojuegoRepository.findById(id)
                 .orElseThrow(()-> new VideojuegoNotFoundException(id));
 
-        Videojuego videojuegoActualizado = videojuegoMapper.toVideojuego(videojuegoupdateDto, videojuegoActual);
+        Videojuego videojuegoActualizado = videojuegoRepository.save(
+                videojuegoMapper.toVideojuego(videojuegoupdateDto, videojuegoActual)
+        );
 
         onChange(Notificacion.Tipo.UPDATE, videojuegoActualizado);
-        return videojuegoMapper.toVideojuegoResponseDto(videojuegoRepository.save(videojuegoActualizado));
+        return videojuegoMapper.toVideojuegoResponseDto(videojuegoActualizado);
     }
 
     @CachePut(key = "#result.id")
