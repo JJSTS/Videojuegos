@@ -11,10 +11,10 @@ action="{% if videojuego.id is not empty %}/videojuegos/edit{% else %}/videojueg
         <input type="hidden" id="id" name="id" value="{{ videojuego.id | default(0) }}">
         {{ inputField('videojuego', 'Nombre', 'nombre', "text", videojuego.nombre, __context) }}
         {{ inputField('videojuego', 'Género', 'genero', "text", videojuego.genero, __context) }}
-        {{ inputField('videojuego', 'Fecha de creación',"date', fechaDeCreación', videojuego.fechaDeCreacion, __context) }}
-        {{ inputField('videojuego', 'Almacenamiento', "text",'almacenamiento', videojuego.almacenamiento, __context) }}
+        {{ inputField('videojuego', 'Fecha de creación', fechaDeCreación',"date', videojuego.fechaDeCreacion, __context) }}
+        {{ inputField('videojuego', 'Almacenamiento', 'almacenamiento', "text", videojuego.almacenamiento, __context) }}
         {{ inputField('videojuego', 'Plataforma', "text", 'plataforma', videojuego.plataforma, __context) }}
-        {{ inputField('videojuego', 'Costo', 'costo', "costo", videojuego.costo, __context) }}
+        {{ inputField('videojuego', 'Costo', 'costo', "number", videojuego.costo, __context) }}
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">

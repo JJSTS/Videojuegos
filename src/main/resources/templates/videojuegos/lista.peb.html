@@ -22,11 +22,12 @@
         <tr>
             <td>{{ videojuego.id }}</td>
             <td>{{ videojuego.nombre }}</td>
+            <td>{{ videojuego.genero }}</td>
             <td>{{ videojuego.almacenamiento }}</td>
             <td>{{ videojuego.fechaDeCreacion }}</td>
             <td>{{ videojuego.plataforma }}</td>
             <td>{{ videojuego.costo }}</td>
-            <td><a href="videojuegos/{{ videojuego.id }}">Ver detalle</a></td>
+            <td><a href="videojuegos/detalle">Ver detalle</a></td>
         </tr>
         {% endfor %}
     </table>
