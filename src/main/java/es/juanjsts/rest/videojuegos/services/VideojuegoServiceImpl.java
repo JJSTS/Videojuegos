@@ -141,10 +141,11 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
     @Override
     public VideojuegoResponseDto save(VideojuegoCreateDto videojuegocreateDto) {
         log.info("Guardando videojuego: {}", videojuegocreateDto);
-        var plataforma = plataformaService.findByNombre(videojuegocreateDto.getPlataforma());
-        Videojuego nuevoVideojuego = videojuegoMapper.toVideojuego(videojuegocreateDto, plataforma);
+        Plataforma plataforma = checkPlataforma(videojuegocreateDto.getPlataforma());
+        Videojuego nuevoVideojuego = videojuegoRepository.save(
+                videojuegoMapper.toVideojuego(videojuegocreateDto, plataforma));
         onChange(Notificacion.Tipo.CREATE, nuevoVideojuego);
-        return videojuegoMapper.toVideojuegoResponseDto(videojuegoRepository.save(nuevoVideojuego));
+        return videojuegoMapper.toVideojuegoResponseDto(nuevoVideojuego);
     }
 
     @CachePut(key = "#result.id")

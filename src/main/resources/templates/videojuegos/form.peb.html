@@ -8,10 +8,9 @@
 <form class="form-horizontal" id="add-videojuego-form" method="post"
       action="{% if modoEditar %}/videojuegos/{{videojuegoId}}/edit{% else %}/videojuegos/new{% endif %}">
     <div class="form-group has-feedback">
-        <input type="hidden" id="id" name="id" value="{{ videojuego.id | default(0) }}">
         {{ inputField("videojuego", "Nombre", "nombre", "text", videojuego.nombre, _context) }}
         {{ inputField("videojuego", "Género", "genero", "text", videojuego.genero, _context) }}
-        {{ inputField("videojuego", "Fecha de creación", "fechaDeCreación","date", videojuego.fechaDeCreacion, _context) }}
+        {{ inputField("videojuego", "Fecha de creación", "fechaDeCreacion","date", videojuego.fechaDeCreacion, _context) }}
         {{ inputField("videojuego", "Almacenamiento", "almacenamiento", "text", videojuego.almacenamiento, _context) }}
         {{ inputField("videojuego", "Costo", "costo", "number", videojuego.costo, _context) }}
         {% if not modoEditar %}

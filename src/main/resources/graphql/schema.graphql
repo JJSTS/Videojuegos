@@ -1,0 +1,35 @@
+type Query {
+    videojuegos: [Videojuego!]!
+    videojuegoById(id: ID!): Videojuego
+
+    plataformas: [Plataforma!]!
+    plataformaById(id: ID!): Plataforma
+
+    plataformaByNombre(nombre: String!): [Plataforma!]!
+}
+
+type Videojuego{
+    id: ID!
+    nombre: String!
+    genero: String!
+    fechaDeCreacion: String!
+    almacenamiento: String!
+    costo: Float!
+    uuid: String!
+    createdAt: String!
+    updated: String!
+    isDeleted: Boolean!
+    plataforma: Plataforma!
+}
+
+type Plataforma{
+    id: ID!
+    nombre: String!
+    fabricante: String!
+    tipo: String!
+    fechaDeLanzamiento: String!
+    createdAt: String!
+    updatedAt: String!
+    isDeleted: Boolean!
+    videojuegos: [Videojuego!]!
+}

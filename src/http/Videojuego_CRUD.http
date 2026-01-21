@@ -17,7 +17,7 @@ Content-Type: application/json
 {
   "nombre" : "Mario Bros",
   "genero" :"Supervivencia",
-  "plataforma": "Riot Client",
+  "plataforma": "Steam",
   "almacenamiento" : "25.0 GB",
   "fechaDeCreacion": "2016-12-31",
   "costo": 0.00

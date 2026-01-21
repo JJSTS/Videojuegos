@@ -18,10 +18,10 @@ public class VideojuegoResponseDto {
 
     private String nombre;
     private String genero;
-    private String almacenamiento;
-    private String plataforma;
     private LocalDate fechaDeCreacion;
+    private String almacenamiento;
     private Double costo;
+    private String plataforma;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

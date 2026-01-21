@@ -53,6 +53,8 @@ public class VideojuegosController {
 
     @PostMapping("/new")
     public String nuevoVideojuegoSubmit(@Valid @ModelAttribute("videojuego") VideojuegoCreateDto videojuego, BindingResult bindingResult){
+
+        log.info("Datos recibidos del formulario: {}", videojuego);
         if (bindingResult.hasErrors()){
             log.info("Hay errores en la validación");
             return "/videojuegos/form";
@@ -83,20 +85,22 @@ public class VideojuegosController {
     }
 
     @PostMapping("/{id}/edit")
-    public String editarVideojuegoSubmit(@PathVariable Long id,
+    public String editarVideojuegoSubmit(@PathVariable("id") Long id,
                                          @Valid @ModelAttribute("videojuego") VideojuegoUpdateDto videojuego,
                                          BindingResult bindingResult,
                                          Model model,
                                          RedirectAttributes redirectAttribute){
         if (bindingResult.hasErrors()){
-            redirectAttribute.addFlashAttribute("error", "Ha ocurrido un error al actualizar el videojuego");
+            redirectAttribute.addFlashAttribute("error",
+                    "Ha ocurrido un error al actualizar el videojuego");
             model.addAttribute("videojuegoId", id);
             model.addAttribute("modoEditar", true);
             return "/videojuegos/form";
         }
 
         videojuegosService.update(id, videojuego);
-        redirectAttribute.addFlashAttribute("message", "Videojuego actualizado correctamente");
+        redirectAttribute.addFlashAttribute("message",
+                "Videojuego actualizado correctamente");
         return "redirect:/videojuegos/{id}";
 
     }
