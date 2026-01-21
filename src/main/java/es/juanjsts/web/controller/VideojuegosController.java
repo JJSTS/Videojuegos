@@ -104,4 +104,10 @@ public class VideojuegosController {
         return "redirect:/videojuegos/{id}";
 
     }
+
+    @GetMapping("/{id}/delete")
+    public String borrarVideojuego(@PathVariable Long id){
+        videojuegosService.deleteById(id);
+        return "redirect:/videojuegos/lista";
+    }
 }
