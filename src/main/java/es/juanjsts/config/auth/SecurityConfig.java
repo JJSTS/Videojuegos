@@ -93,10 +93,10 @@ public class SecurityConfig {
     @Order(4)
     public SecurityFilterChain fromLoginFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+//                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/lista", "/lista/", "/lista/**").permitAll()
-                        .requestMatchers("/","/auth/**","/webjars/**").permitAll()
+                        .requestMatchers("/","/auth/**","/webjars/**","/css/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/auth/login")
@@ -105,7 +105,7 @@ public class SecurityConfig {
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/public")
+                        .logoutSuccessUrl("/lista")
                         .permitAll());
         return http.build();
     }

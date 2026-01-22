@@ -112,4 +112,8 @@ public class UsersServiceImpl implements UsersService {
         log.info("Buscando todos los usuarios");
         return usersRepository.findAllByIsDeletedFalse();
     }
+
+    public Optional<User> findByUsername(String username) {
+        return usersRepository.findByUsername(username);
+    }
 }
