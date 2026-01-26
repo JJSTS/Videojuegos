@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {
@@ -46,7 +47,7 @@ public class GlobalControllerAdvice {
                 && !(authentication.getPrincipal() instanceof String);
     }
 
-    /*
+
 
     // ⭐ AÑADIR MÉTODO HELPER PARA ADMIN ⭐
     @ModelAttribute("isAdmin")
@@ -54,12 +55,13 @@ public class GlobalControllerAdvice {
         if (authentication != null && authentication.isAuthenticated()
                 && !(authentication.getPrincipal() instanceof String)) {
             User user = (User) authentication.getPrincipal();
-            return "ADMIN".equals(user.getRol());
+            return user.getRoles().stream()
+              .anyMatch(role -> role.toString().equals("ADMIN"));
         }
         return false;
     }
 
-     */
+
 
     @ModelAttribute("username")
     public String getUsername(Authentication authentication) {
@@ -71,17 +73,17 @@ public class GlobalControllerAdvice {
         return null;
     }
 
-    /*
+
     @ModelAttribute("userRole")
     public String getUserRole(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()
                 && !(authentication.getPrincipal() instanceof String)) {
             User user = (User) authentication.getPrincipal();
-            return user.getRol();
+            return user.getRoles().stream().map(Object::toString)
+              .collect(Collectors.joining(","));
         }
         return null;
     }
-*/
 
     @ModelAttribute("csrfToken")
     public String getCsrfToken(HttpServletRequest request) {
@@ -115,7 +117,7 @@ public class GlobalControllerAdvice {
     public String getCurrentMonth() {
         return LocalDate.now().getMonth().getDisplayName(
                 TextStyle.FULL,
-                new Locale("es","ES")
+                Locale.of("es","ES")
         );
     }
 }

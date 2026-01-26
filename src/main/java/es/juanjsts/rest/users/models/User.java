@@ -3,7 +3,7 @@ package es.juanjsts.rest.users.models;
 import es.juanjsts.rest.plataformas.models.Plataforma;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,21 +27,16 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "nombre no puede estar vacío")
     @Column(nullable = false)
     private String nombre;
-    @NotBlank(message = "apellidos no puede estar vacío")
     @Column(nullable = false)
     private String apellidos;
     @Column(nullable = false)
-    @NotBlank(message = "Username no puede estar vacío")
     private String username;
     @Column(nullable = false)
     @Email(regexp = ".*@.*\\..*", message = "Email debe ser válido")
-    @NotBlank(message = "Email no puede estar vacío")
     private String email;
     @Column(nullable = false)
-    @NotBlank(message = "Password no puede estar vacío")
     @Length(min = 5, message = "Password debe tener al menos 5 caracteres")
     private String password;
 
