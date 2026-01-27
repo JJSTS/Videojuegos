@@ -95,17 +95,17 @@ public class SecurityConfig {
         http
 //                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/lista", "/lista/", "/lista/**").permitAll()
+                        .requestMatchers("/publi", "/public/", "/public/**").permitAll()
                         .requestMatchers("/","/auth/**","/webjars/**","/css/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/auth/login")
-                        .defaultSuccessUrl("/lista",true)
+                        .defaultSuccessUrl("/public",true)
                         .loginProcessingUrl("/auth/login-post")
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
-                        .logoutSuccessUrl("/lista")
+                        .logoutSuccessUrl("/public")
                         .permitAll());
         return http.build();
     }

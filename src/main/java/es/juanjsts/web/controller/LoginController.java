@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller
 @RequiredArgsConstructor
+@Controller
 public class LoginController {
     private final UsersServiceImpl usersService;
 

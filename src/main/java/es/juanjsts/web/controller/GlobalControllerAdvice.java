@@ -16,108 +16,104 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalControllerAdvice {
-    @Value("${spring.application.name}")
-    private String appName;
 
-    @ModelAttribute("appName")
-    public String getAppName() {
-        return appName;
+  @Value("${spring.application.name}")
+  private String appName;
+
+  @ModelAttribute("appName")
+  public String getAppName() {
+    return appName;
+  }
+
+  @Value("${application.title}")
+  private String appDescription;
+
+  @ModelAttribute("appDescription")
+  public String getAppDescription() {
+    return appDescription;
+  }
+
+  @ModelAttribute("currentUser")
+  public User getCurrentUser(Authentication authentication) {
+    if (authentication != null && authentication.isAuthenticated()
+      && !(authentication.getPrincipal() instanceof String)) {
+      return (User) authentication.getPrincipal();
     }
+    return null;
+  }
 
-    @Value("${application.title}")
-    private String appDescription;
+  @ModelAttribute("isAuthenticated")
+  public boolean isAuthenticated(Authentication authentication) {
+    return authentication != null && authentication.isAuthenticated()
+      && !(authentication.getPrincipal() instanceof String);
+  }
 
-    @ModelAttribute("appDescription")
-    public String getAppDescription() {
-        return appDescription;
+  // ⭐ AÑADIR MÉTODO HELPER PARA ADMIN ⭐
+  @ModelAttribute("isAdmin")
+  public boolean isAdmin(Authentication authentication) {
+    if (authentication != null && authentication.isAuthenticated()
+      && !(authentication.getPrincipal() instanceof String)) {
+      User user = (User) authentication.getPrincipal();
+      return user.getRoles().stream()
+        .anyMatch(role -> role.toString().equals("ADMIN"));
     }
+    return false;
+  }
 
-    @ModelAttribute("currenUser")
-    public User getCurrentUser(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()
-        && !(authentication.getPrincipal() instanceof String)) {
-            return (User) authentication.getPrincipal();
-        }
-        return null;
+  @ModelAttribute("username")
+  public String getUsername(Authentication authentication) {
+    if (authentication != null && authentication.isAuthenticated()
+      && !(authentication.getPrincipal() instanceof String)) {
+      User user = (User) authentication.getPrincipal();
+      return user.getNombre() + " " + user.getApellidos();
     }
+    return null;
+  }
 
-    @ModelAttribute("isAuthenticated")
-    public boolean isAuthenticated(Authentication authentication) {
-        return authentication != null && authentication.isAuthenticated()
-                && !(authentication.getPrincipal() instanceof String);
+
+  @ModelAttribute("userRoles")
+  public String getUserRoles(Authentication authentication) {
+    if (authentication != null && authentication.isAuthenticated()
+      && !(authentication.getPrincipal() instanceof String)) {
+      User user = (User) authentication.getPrincipal();
+      return user.getRoles().stream().map(Object::toString)
+        .collect(Collectors.joining(","));
     }
+    return null;
+  }
 
+  @ModelAttribute("csrfToken")
+  public String getCsrfToken(HttpServletRequest request) {
+    CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+    return csrfToken != null ? csrfToken.getToken() : "";
+  }
 
+  @ModelAttribute("csrfParamName")
+  public String getCsrfParamName(HttpServletRequest request) {
+    CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+    return csrfToken != null ? csrfToken.getParameterName() : "_csrf";
+  }
 
-    // ⭐ AÑADIR MÉTODO HELPER PARA ADMIN ⭐
-    @ModelAttribute("isAdmin")
-    public boolean isAdmin(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()
-                && !(authentication.getPrincipal() instanceof String)) {
-            User user = (User) authentication.getPrincipal();
-            return user.getRoles().stream()
-              .anyMatch(role -> role.toString().equals("ADMIN"));
-        }
-        return false;
-    }
+  @ModelAttribute("csrfHeaderName")
+  public String getCsrfHeaderName(HttpServletRequest request) {
+    CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+    return csrfToken != null ? csrfToken.getHeaderName() : "X-CSRF-TOKEN";
+  }
 
+  @ModelAttribute("currentDateTime")
+  public LocalDateTime getCurrentDateTime() {
+    return LocalDateTime.now();
+  }
 
+  @ModelAttribute("currentYear")
+  public int getCurrentYear() {
+    return LocalDate.now().getYear();
+  }
 
-    @ModelAttribute("username")
-    public String getUsername(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()
-                && !(authentication.getPrincipal() instanceof String)) {
-            User user = (User) authentication.getPrincipal();
-            return user.getUsername() + " " + user.getApellidos();
-        }
-        return null;
-    }
+  @ModelAttribute("currentMonth")
+  public String getCurrentMonth() {
+    return LocalDate.now().getMonth()
+      .getDisplayName(TextStyle.FULL, Locale.of("es", "ES"));
+  }
 
-
-    @ModelAttribute("userRole")
-    public String getUserRole(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()
-                && !(authentication.getPrincipal() instanceof String)) {
-            User user = (User) authentication.getPrincipal();
-            return user.getRoles().stream().map(Object::toString)
-              .collect(Collectors.joining(","));
-        }
-        return null;
-    }
-
-    @ModelAttribute("csrfToken")
-    public String getCsrfToken(HttpServletRequest request) {
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        return csrfToken != null ? csrfToken.getToken() : "";
-    }
-
-    @ModelAttribute("csrfParamName")
-    public String getCsrfParamName(HttpServletRequest request) {
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        return csrfToken != null ? csrfToken.getParameterName() : "_csrf";
-    }
-
-    @ModelAttribute("csrfHeaderName")
-    public String getCsrfHeaderName(HttpServletRequest request) {
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        return csrfToken != null ? csrfToken.getHeaderName() : "X-CSRF-TOKEN";
-    }
-
-    @ModelAttribute("currentDateTime")
-    public LocalDateTime getCurrentDateTime() {
-        return LocalDateTime.now();
-    }
-
-    @ModelAttribute("currenYear")
-    public int getCurrentYear() {
-        return LocalDate.now().getYear();
-    }
-
-    @ModelAttribute("currentMonth")
-    public String getCurrentMonth() {
-        return LocalDate.now().getMonth().getDisplayName(
-                TextStyle.FULL,
-                Locale.of("es","ES")
-        );
-    }
 }

@@ -1,19 +1,21 @@
 {% extends "fragments/layout" %}
 
 {% block body %}
-    <div class="container">
-      <div class="p-5 mb-4 bg-light rounded-3">
-        <h1 class="display-5 fw-bold">Gestión de Videojuegos</h1>
-        <p class="col-md-8 fs-4">Una aplicación de ejemplo de Spring MVC con Pebble.</p>
-        {% if isAuthenticated %}
-        <h1 class="display-4"> Saludos, {{ username | default('usuario') }}</h1>
-        {% else %}
-        <h1 class="display-4">Saludos, visitante</h1>
-        {% endif %}
-        <p class="text-center">
-          <a class="btn btn-lg btn-success" href="/videojuegos/lista">Comenzar</a>
-        </p>
-      </div>
-    </div>
+
+<div class="container">
+  <div class="p-5 mb-4 bg-light rounded-3">
+    <h1 class="display-5 fw-bold">Gestión de Videojuegos</h1>
+    <p class="col-md-8 fs-4">Una aplicación de ejemplo de Spring MVC con Pebble.</p>
+    {% if isAuthenticated %}
+    <h1 class="display-4">Saludos, {{ username | default('Usuario') }} </h1>
+    {% else %}
+    <h1 class="display-4">Saludos, visitante</h1>
+    {% endif %}
+    <p class="text-center">
+      <a class="btn btn-lg btn-success" href="/videojuegos/lista">Comenzar</a>
+    </p>
+  </div>
+</div>
 
 {% endblock %}
+

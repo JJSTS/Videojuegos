@@ -35,6 +35,7 @@
                       <span class="badge bg-{% if rol == 'ADMIN' %}danger{% elseif rol == 'MODERATOR' %}warning{% else %}secondary{% endif %}">
                             {{ rol }}
                         </span>
+                      {% endfor %}
                     </div>
 
                     <!-- Formulario editable -->
@@ -75,8 +76,8 @@
             </div>
         </div>
 
-        <!-- COLUMNA 2: ESTADÍSTICAS VENDEDOR -->
-      {% if usuario.plataforma != null &}
+        <!-- COLUMNA 2: ESTADÍSTICAS PLATAFORMA -->
+      {% if usuario.plataforma != null %}
         <div class="col-lg-4">
             <div class="card shadow border-primary">
                 <div class="card-header bg-primary text-white">
@@ -92,10 +93,10 @@
                              style="object-fit: cover;">
                     </div>
 
-                    <!-- Nombre titular -->
+                    <!-- Nombre PLATAFORMA -->
                     <h5 class="fw-bold text-primary mb-1">{{ usuario.plataforma.nombre }}</h5>
                     <p class="text-muted mb-4">
-                        Titular desde {{ usuario.plataforma.createdAt | formatMonth }} {{ currentYear }}
+                        Plataforma desde {{ usuario.plataforma.createdAt | formatMonth }} {{ currentYear }}
                     </p>
 
                     <!-- Valoración Plataforma -->
@@ -128,5 +129,8 @@
                 </div>
             </div>
         </div>
+      {% endif %}
     </div>
 </div>
+
+{% endblock %}
