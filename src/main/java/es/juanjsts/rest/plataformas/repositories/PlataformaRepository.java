@@ -24,7 +24,7 @@ public interface  PlataformaRepository extends JpaRepository<Plataforma, Long>, 
     void updateIsDeletedToTrueById(Long id);
 
     //Obtiene si existe un videojuego con el id de la plataforma
-    @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Videojuego v WHERE v.plataforma.id = :id")
+    @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Jugador v WHERE v.plataforma.id = :id")
     boolean existsVideojuegoById(Long id);
 
 

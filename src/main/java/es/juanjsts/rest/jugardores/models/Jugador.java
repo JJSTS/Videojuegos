@@ -1,13 +1,12 @@
-package es.juanjsts.rest.videojuegos.models;
+package es.juanjsts.rest.jugardores.models;
 
-import es.juanjsts.rest.jugardores.models.Jugador;
 import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.videojuegos.models.Videojuego;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -17,24 +16,18 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "VIDEOJUEGOS")
-public class Videojuego {
+@Table(name = "JUGADORES")
+public class Jugador {
     //ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     //Atributos
-    @Column(nullable = false, length = 50)
-    private String nombre;
-    @Column(nullable = false, length = 50)
-    private String genero;
-    @Column(nullable = false, length = 8)
-    private String almacenamiento;
-    @Column(nullable = false)
-    private LocalDate fechaDeCreacion;
-    @Column(nullable = false)
-    private Double costo;
+    @Column(nullable = false, length = 30)
+    private String usuario;
+    @Column(nullable = false, length = 30)
+    private String email;
 
     //Atributos de la tabla
     @Column(updatable = false, nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -54,9 +47,6 @@ public class Videojuego {
 
     //Relacion y atributo
     @ManyToOne
-    @JoinColumn(name = "plataforma_id")
-    private Plataforma plataforma;
-
-    @OneToMany(mappedBy = "videojuego")
-    private List<Jugador> jugadores;
+    @JoinColumn(name = "videojuego_id")
+    private Videojuego videojuego;
 }
