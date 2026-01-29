@@ -33,6 +33,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -250,5 +251,15 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
         } catch (JsonProcessingException e){
             log.error("Error al convertir la notificación a JSON", e);
         }
+    }
+
+    @Override
+    public List<Videojuego> buscarPorUsuarioId(Long usuarioId) {
+      return videojuegoRepository.findByUsuarioId(usuarioId);
+    }
+
+    @Override
+    public Optional<Videojuego> buscarPorId(Long id) {
+      return videojuegoRepository.findById(id);
     }
 }

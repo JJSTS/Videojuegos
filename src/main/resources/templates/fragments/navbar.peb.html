@@ -14,10 +14,12 @@
                     <a class="nav-link active" href="/public">
                         <i class="bi bi-house-door"></i> {{ message('nav.home') }}</a>
                 </li>
+              {% if isAdmin %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/videojuegos/new">
+                    <a class="nav-link" href="/admin/videojuegos/new">
                         <i class="bi bi-controller"></i> {{ message('nav.new.videojuegos') }}</a>
                 </li>
+              {% endif %}
             </ul>
 
             <form action="/lista" class="d-flex me-3" method="get" role="search">

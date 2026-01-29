@@ -3,9 +3,11 @@ package es.juanjsts.rest.videojuegos.services;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoUpdateDto;
+import es.juanjsts.rest.videojuegos.models.Videojuego;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface VideojuegosService {
@@ -26,4 +28,7 @@ public interface VideojuegosService {
 
     void deleteById(Long id);
     void deleteById(Long id, Long usuarioId);
+
+    List<Videojuego> buscarPorUsuarioId(Long usuarioId);
+    Optional<Videojuego> buscarPorId(Long id);
 }

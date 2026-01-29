@@ -6,7 +6,7 @@
 
 <h2>{% if not modoEditar %}Nuevo {% endif %} Videojuego </h2>
 <form class="form-horizontal" id="add-videojuego-form" method="post"
-      action="{% if modoEditar %}/videojuegos/{{videojuegoId}}/edit{% else %}/videojuegos/new{% endif %}">
+      action="{% if modoEditar %}/admin/videojuegos/{{videojuegoId}}/edit{% else %}/admin/videojuegos/new{% endif %}">
     <input name="{{ csrfParamName }}" type="hidden" value="{{ csrfToken }}">
     <div class="form-group has-feedback">
         {{ inputField("videojuego", "Nombre", "nombre", "text", videojuego.nombre, _context) }}
