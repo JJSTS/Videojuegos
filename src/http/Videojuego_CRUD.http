@@ -17,7 +17,7 @@ Content-Type: application/json
 {
   "nombre" : "Mario Bros",
   "genero" :"Supervivencia",
-  "plataforma": "Steam",
+  "jugador": "Steam",
   "almacenamiento" : "25.0 GB",
   "fechaDeCreacion": "2016-12-31",
   "costo": 0.00
@@ -51,8 +51,8 @@ Content-Type: application/json
 DELETE localhost:3000/api/v1/videojuegos/6
 
 ### Paginación y odenación
-GET http://localhost:3000/api/v1/videojuegos?sortBy=plataforma&direction=desc
+GET http://localhost:3000/api/v1/videojuegos?sortBy=jugador&direction=desc
 ###
-GET http://localhost:3000/api/v1/videojuegos?sortBy=plataforma&direction=desc&size=1
+GET http://localhost:3000/api/v1/videojuegos?sortBy=jugador&direction=desc&size=1
 ###
-GET http://localhost:3000/api/v1/videojuegos?sortBy=plataforma&direction=desc&size=1&page=0
+GET http://localhost:3000/api/v1/videojuegos?sortBy=jugador&direction=desc&size=1&page=0

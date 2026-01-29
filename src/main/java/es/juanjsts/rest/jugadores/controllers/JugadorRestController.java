@@ -1,9 +1,9 @@
-package es.juanjsts.rest.plataformas.controllers;
+package es.juanjsts.rest.jugadores.controllers;
 
-import es.juanjsts.rest.plataformas.dto.PlataformaCreatedDto;
-import es.juanjsts.rest.plataformas.dto.PlataformaUpdateDto;
-import es.juanjsts.rest.plataformas.models.Plataforma;
-import es.juanjsts.rest.plataformas.services.PlataformaService;
+import es.juanjsts.rest.jugadores.dto.JugadorCreatedDto;
+import es.juanjsts.rest.jugadores.dto.JugadorUpdateDto;
+import es.juanjsts.rest.jugadores.models.Jugador;
+import es.juanjsts.rest.jugadores.services.JugadorService;
 import es.juanjsts.utils.pagination.PageResponse;
 import es.juanjsts.utils.pagination.PaginationLinksUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,14 +29,14 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("api/${api.version}/plataformas")
+@RequestMapping("api/${api.version}/jugadores")
 @RestController
-public class PlataformaRestController {
-    private final PlataformaService plataformaService;
+public class JugadorRestController {
+    private final JugadorService jugadorService;
     private final PaginationLinksUtils paginationLinksUtils;
 
     @GetMapping
-    public ResponseEntity<PageResponse<Plataforma>> getAll(
+    public ResponseEntity<PageResponse<Jugador>> getAll(
             @RequestParam(required = false) Optional<String> nombre,
             @RequestParam(required = false) Optional<Boolean> isDeleted,
             @RequestParam(defaultValue = "0") int page,
@@ -49,35 +49,35 @@ public class PlataformaRestController {
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(request.getRequestURI().toString());
-        Page<Plataforma> pageResult = plataformaService.findAll(nombre, isDeleted, pageable);
+        Page<Jugador> pageResult = jugadorService.findAll(nombre, isDeleted, pageable);
         return ResponseEntity.ok()
                 .header("link", paginationLinksUtils.createLinkHeader(pageResult, uriBuilder))
                 .body(PageResponse.of(pageResult, sortBy,direction));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Plataforma> getById(@PathVariable Long id){
-        log.info("Buscando Plataforma con id: {}", id);
-        return ResponseEntity.ok(plataformaService.findById(id));
+    public ResponseEntity<Jugador> getById(@PathVariable Long id){
+        log.info("Buscando Jugador con id: {}", id);
+        return ResponseEntity.ok(jugadorService.findById(id));
     }
 
     @PostMapping()
-    public ResponseEntity<Plataforma> create(@Valid @RequestBody PlataformaCreatedDto plataformaCreatedDto){
-        log.info("Creando plataforma: {}", plataformaCreatedDto);
-        var saved = plataformaService.save(plataformaCreatedDto);
+    public ResponseEntity<Jugador> create(@Valid @RequestBody JugadorCreatedDto jugadorCreatedDto){
+        log.info("Creando jugador: {}", jugadorCreatedDto);
+        var saved = jugadorService.save(jugadorCreatedDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Plataforma> update(@PathVariable Long id, @Valid @RequestBody PlataformaUpdateDto plataformaUpdateDto) {
-        log.info("Actualizando plataforma con id: {} con plataforma: {}", id,plataformaUpdateDto);
-        return ResponseEntity.ok(plataformaService.update(id, plataformaUpdateDto));
+    public ResponseEntity<Jugador> update(@PathVariable Long id, @Valid @RequestBody JugadorUpdateDto jugadorUpdateDto) {
+        log.info("Actualizando jugador con id: {} con jugador: {}", id, jugadorUpdateDto);
+        return ResponseEntity.ok(jugadorService.update(id, jugadorUpdateDto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        log.info("Borrando plataforma por id: {}", id);
-        plataformaService.deleteById(id);
+        log.info("Borrando jugador por id: {}", id);
+        jugadorService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

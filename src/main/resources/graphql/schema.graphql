@@ -19,7 +19,7 @@ type Videojuego{
     createdAt: String!
     updated: String!
     isDeleted: Boolean!
-    plataforma: Plataforma!
+    jugador: Plataforma!
 }
 
 type Plataforma{

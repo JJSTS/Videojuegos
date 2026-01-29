@@ -1,11 +1,11 @@
-package es.juanjsts.rest.plataformas.exceptions;
+package es.juanjsts.rest.jugadores.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
-public class PlataformaConflictException extends PlataformaException {
-    public PlataformaConflictException(String message) {
+public class JugadorConflictException extends JugadorException {
+    public JugadorConflictException(String message) {
         super(message);
     }
 }

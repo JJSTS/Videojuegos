@@ -3,8 +3,8 @@ package es.juanjsts.videojuegos.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.juanjsts.config.websockets.WebSocketConfig;
 import es.juanjsts.config.websockets.WebSocketHandler;
-import es.juanjsts.rest.plataformas.models.Plataforma;
-import es.juanjsts.rest.plataformas.services.PlataformaService;
+import es.juanjsts.rest.jugadores.models.Jugador;
+import es.juanjsts.rest.jugadores.services.JugadorService;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoUpdateDto;
@@ -15,7 +15,6 @@ import es.juanjsts.rest.videojuegos.models.Videojuego;
 import es.juanjsts.rest.videojuegos.repositories.VideojuegosRepository;
 import es.juanjsts.rest.videojuegos.services.VideojuegoServiceImpl;
 import es.juanjsts.websockets.notifications.mappers.VideojuegoNotificationMapper;
-import es.juanjsts.websockets.notifications.models.Notificacion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +34,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class VideojuegoServiceImplTest {
-    private final Plataforma plataforma = Plataforma.builder().nombre("Nintendo").build();
+    private final Jugador jugador = Jugador.builder().nombre("Nintendo").build();
 
     private final Videojuego videojuego1 = Videojuego.builder()
             .id(1L)
@@ -44,7 +43,7 @@ class VideojuegoServiceImplTest {
             .almacenamiento("3.0 GB")
             .fechaDeCreacion(LocalDate.of(2018,8,8))
             .costo(2.99)
-            .plataforma(plataforma)
+            .jugador(jugador)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.fromString("57727bc2-0c1c-494e-bbaf-e952a778e478"))
@@ -57,7 +56,7 @@ class VideojuegoServiceImplTest {
             .almacenamiento("15.0 GB")
             .fechaDeCreacion(LocalDate.of(2019,10,14))
             .costo(0.00)
-            .plataforma(plataforma)
+            .jugador(jugador)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.fromString("b36835eb-e56a-4023-b058-52bfa600fee5"))
@@ -69,7 +68,7 @@ class VideojuegoServiceImplTest {
     private VideojuegosRepository videojuegosRepository;
 
     @Mock
-    private PlataformaService plataformaService;
+    private JugadorService jugadorService;
 
     @Spy
     private VideojuegoMapper videojuegoMapper;
@@ -270,14 +269,14 @@ class VideojuegoServiceImplTest {
                 .genero("tower defense")
                 .almacenamiento("25 GB")
                 .costo(20.99)
-                .plataforma(plataforma)
+                .jugador(jugador)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .uuid(UUID.randomUUID())
                 .build();
 
         VideojuegoResponseDto expectedVideojuegoResponse = videojuegoMapper.toVideojuegoResponseDto(expectedVideojuego);
-        when(plataformaService.findByNombre(videojuegoCreateDto.getPlataforma())).thenReturn(plataforma);
+        when(jugadorService.findByNombre(videojuegoCreateDto.getPlataforma())).thenReturn(jugador);
         when(videojuegosRepository.save(any(Videojuego.class))).thenReturn(expectedVideojuego);
         doNothing().when(webSocketService).sendMessage(any());
 

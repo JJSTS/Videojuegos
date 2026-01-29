@@ -1,6 +1,6 @@
 package es.juanjsts.rest.videojuegos.repositories;
 
-import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.jugadores.models.Jugador;
 import es.juanjsts.rest.videojuegos.models.Videojuego;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,18 +24,18 @@ public interface VideojuegosRepository extends JpaRepository<Videojuego, Long>, 
 
     // Actualizar la tarjeta con isDeleted a true
     @Modifying // Para indicar que es una consulta de actualización
-    @Query("UPDATE Jugador v SET v.isDeleted = true WHERE v.id = :id")
+    @Query("UPDATE Videojuego v SET v.isDeleted = true WHERE v.id = :id")
     // Consulta de actualización
     void updateIsDeletedToTrueById(Long id);
 
-    @Query("SELECT v FROM Jugador v WHERE v.plataforma.usuario.id = :usuarioId")
+    @Query("SELECT v FROM Videojuego v WHERE v.jugador.usuario.id = :usuarioId")
     Page<Videojuego> findByUsuarioId(Long usuarioId, Pageable pageable);
 
-    @Query("SELECT v FROM Jugador v WHERE v.plataforma.usuario.id = :usuarioId")
+    @Query("SELECT v FROM Videojuego v WHERE v.jugador.usuario.id = :usuarioId")
     List<Videojuego> findByUsuarioId(Long usuarioId);
 
-    @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Jugador v WHERE v.plataforma.usuario.id = :id")
+    @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Videojuego v WHERE v.jugador.usuario.id = :id")
     Boolean existsByUsuarioId(Long id);
 
-    List<Videojuego> findByPlataforma(Plataforma plataforma);
+    List<Videojuego> findByJugador(Jugador jugador);
 }

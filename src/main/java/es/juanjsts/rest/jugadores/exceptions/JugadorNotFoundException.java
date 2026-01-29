@@ -1,17 +1,15 @@
-package es.juanjsts.rest.jugardores.exceptions;
+package es.juanjsts.rest.jugadores.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.UUID;
-
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class JugadorNotFoundException extends JugadorException {
     public JugadorNotFoundException(Long id) {
-        super("Videojuego con id: " + id + " no encontrado");
+        super("Jugador con id: " + id + " no encontrada");
     }
 
-    public JugadorNotFoundException(UUID uuid) {
-        super("Videojuego con uuid: " + uuid + " no encontrado");
+    public JugadorNotFoundException(String nombre) {
+        super("Jugador con nombre: " + nombre + " no encontrada");
     }
 }

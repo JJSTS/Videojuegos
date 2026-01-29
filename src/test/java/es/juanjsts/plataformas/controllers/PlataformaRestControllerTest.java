@@ -1,11 +1,11 @@
 package es.juanjsts.plataformas.controllers;
 
-import es.juanjsts.rest.plataformas.dto.PlataformaCreatedDto;
-import es.juanjsts.rest.plataformas.dto.PlataformaUpdateDto;
-import es.juanjsts.rest.plataformas.exceptions.PlataformaConflictException;
-import es.juanjsts.rest.plataformas.exceptions.PlataformaNotFoundException;
-import es.juanjsts.rest.plataformas.models.Plataforma;
-import es.juanjsts.rest.plataformas.services.PlataformaService;
+import es.juanjsts.rest.jugadores.dto.JugadorCreatedDto;
+import es.juanjsts.rest.jugadores.dto.JugadorUpdateDto;
+import es.juanjsts.rest.jugadores.exceptions.JugadorConflictException;
+import es.juanjsts.rest.jugadores.exceptions.JugadorNotFoundException;
+import es.juanjsts.rest.jugadores.models.Jugador;
+import es.juanjsts.rest.jugadores.services.JugadorService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,27 +28,21 @@ import static org.mockito.Mockito.*;
 @AutoConfigureMockMvc
 class PlataformaRestControllerTest {
     private final String ENDPOINT = "/api/v1/plataformas";
-    
-    private final Plataforma plataforma1 = Plataforma.builder()
+
+    private final Jugador plataforma1 = Jugador.builder()
             .id(1L)
             .nombre("Nintendo")
-            .fabricante("Nintendo")
-            .tipo("PC")
-            .fechaDeLanzamiento(LocalDate.of(1985, 1, 1))
             .build();
-    private final Plataforma plataforma2 = Plataforma.builder()
+    private final Jugador plataforma2 = Jugador.builder()
             .id(2L)
             .nombre("PlayStation")
-            .fabricante("Sony")
-            .tipo("Consolas")
-            .fechaDeLanzamiento(LocalDate.of(1995, 1, 1))
             .build();
-    
+
     @Autowired
     private MockMvcTester mockMvcTester;
 
     @MockitoBean
-    private PlataformaService plataformaService;
+    private JugadorService jugadorService;
 
     @Test
     void getAll() {
@@ -57,7 +50,7 @@ class PlataformaRestControllerTest {
         var plataformas = List.of(plataforma1, plataforma2);
         var pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         var page = new PageImpl<>(plataformas);
-        when(plataformaService.findAll(Optional.empty(),Optional.empty(), pageable)).thenReturn(page);
+        when(jugadorService.findAll(Optional.empty(),Optional.empty(), pageable)).thenReturn(page);
 
         // Act. Consultar el endpoint
         var result = mockMvcTester.get()
@@ -71,13 +64,13 @@ class PlataformaRestControllerTest {
                 .bodyJson().satisfies(json -> {
                     assertThat(json).extractingPath("$.content.length()").isEqualTo(plataformas.size());
                     assertThat(json).extractingPath("$.content[0]")
-                            .convertTo(Plataforma.class).usingRecursiveComparison().isEqualTo(plataforma1);
+                            .convertTo(Jugador.class).usingRecursiveComparison().isEqualTo(plataforma1);
                     assertThat(json).extractingPath("$.content[1]")
-                            .convertTo(Plataforma.class).usingRecursiveComparison().isEqualTo(plataforma2);
+                            .convertTo(Jugador.class).usingRecursiveComparison().isEqualTo(plataforma2);
                 });
 
         // Verify
-        verify(plataformaService, times(1))
+        verify(jugadorService, times(1))
                 .findAll(Optional.empty(), Optional.empty(), pageable);
     }
 
@@ -89,7 +82,7 @@ class PlataformaRestControllerTest {
         Optional<String> nombre = Optional.of(plataforma2.getNombre());
         var pageable = PageRequest.of(0, 10, Sort.by("id").ascending());
         var page = new PageImpl<>(plataformas);
-        when(plataformaService.findAll(nombre, Optional.empty(), pageable)).thenReturn(page);
+        when(jugadorService.findAll(nombre, Optional.empty(), pageable)).thenReturn(page);
 
         // Act
         var result = mockMvcTester.get()
@@ -103,11 +96,11 @@ class PlataformaRestControllerTest {
                 .bodyJson().satisfies(json -> {
                     assertThat(json).extractingPath("$.content.length()").isEqualTo(plataformas.size());
                     assertThat(json).extractingPath("$.content[0]")
-                            .convertTo(Plataforma.class).usingRecursiveComparison().isEqualTo(plataforma2);
+                            .convertTo(Jugador.class).usingRecursiveComparison().isEqualTo(plataforma2);
                 });
 
         // Verify
-        verify(plataformaService, times(1))
+        verify(jugadorService, times(1))
                 .findAll(nombre, Optional.empty(), pageable);
     }
 
@@ -115,7 +108,7 @@ class PlataformaRestControllerTest {
     void getById() {
         // Arrange
         Long id = plataforma1.getId();
-        when(plataformaService.findById(id)).thenReturn(plataforma1);
+        when(jugadorService.findById(id)).thenReturn(plataforma1);
 
         // Act
         var result = mockMvcTester.get()
@@ -127,10 +120,10 @@ class PlataformaRestControllerTest {
         assertThat(result)
                 .hasStatusOk()
                 .bodyJson()
-                .convertTo(Plataforma.class).usingRecursiveComparison().isEqualTo(plataforma1);
+                .convertTo(Jugador.class).usingRecursiveComparison().isEqualTo(plataforma1);
 
         // Verify
-        verify(plataformaService, only()).findById(anyLong());
+        verify(jugadorService, only()).findById(anyLong());
 
     }
 
@@ -138,7 +131,7 @@ class PlataformaRestControllerTest {
     void getById_shouldThrowPlataformaNotFound_whenInvalidIdProvided() {
         // Arrange
         Long id = 3L;
-        when(plataformaService.findById(anyLong())).thenThrow(new PlataformaNotFoundException(id));
+        when(jugadorService.findById(anyLong())).thenThrow(new JugadorNotFoundException(id));
 
         // Act
         var result = mockMvcTester.get()
@@ -150,11 +143,11 @@ class PlataformaRestControllerTest {
                 .hasStatus4xxClientError()
                 // throws TarjetaNotFoundException
                 .hasFailed().failure()
-                .isInstanceOf(PlataformaNotFoundException.class)
+                .isInstanceOf(JugadorNotFoundException.class)
                 .hasMessageContaining("Plataforma con id: " + id + " no encontrada");
 
         // Verify
-        verify(plataformaService, only()).findById(anyLong());
+        verify(jugadorService, only()).findById(anyLong());
 
     }
 
@@ -167,12 +160,12 @@ class PlataformaRestControllerTest {
            }
            """;
 
-        var plataformaSaved = Plataforma.builder()
+        var plataformaSaved = Jugador.builder()
                 .id(1L)
                 .nombre("Manuela")
                 .build();
 
-        when(plataformaService.save(any(PlataformaCreatedDto.class))).thenReturn(plataformaSaved);
+        when(jugadorService.save(any(JugadorCreatedDto.class))).thenReturn(plataformaSaved);
 
         // Act
         var result = mockMvcTester.post()
@@ -185,11 +178,11 @@ class PlataformaRestControllerTest {
         assertThat(result)
                 .hasStatus(HttpStatus.CREATED)
                 .bodyJson()
-                .convertTo(Plataforma.class)
+                .convertTo(Jugador.class)
                 .usingRecursiveComparison()
                 .isEqualTo(plataformaSaved);
 
-        verify(plataformaService, only()).save(any(PlataformaCreatedDto.class));
+        verify(jugadorService, only()).save(any(JugadorCreatedDto.class));
 
 
     }
@@ -219,7 +212,7 @@ class PlataformaRestControllerTest {
                         assertThat(path).hasFieldOrProperty("nombre"));
 
 
-        verify(plataformaService, never()).save(any(PlataformaCreatedDto.class));
+        verify(jugadorService, never()).save(any(JugadorCreatedDto.class));
 
     }
 
@@ -232,8 +225,8 @@ class PlataformaRestControllerTest {
            }
            """;
 
-        when(plataformaService.save(any(PlataformaCreatedDto.class)))
-                .thenThrow(new PlataformaConflictException("Ya existe un plataforma con el nombre Jose"));
+        when(jugadorService.save(any(JugadorCreatedDto.class)))
+                .thenThrow(new JugadorConflictException("Ya existe un plataforma con el nombre Jose"));
 
 
         // Act
@@ -248,11 +241,11 @@ class PlataformaRestControllerTest {
                 .hasStatus(HttpStatus.CONFLICT)
                 // throws plataformasConflictEsception
                 .hasFailed().failure()
-                .isInstanceOf(PlataformaConflictException.class)
+                .isInstanceOf(JugadorConflictException.class)
                 .hasMessageContaining("Ya existe un plataforma");
 
 
-        verify(plataformaService, only()).save(any(PlataformaCreatedDto.class));
+        verify(jugadorService, only()).save(any(JugadorCreatedDto.class));
     }
 
     @Test
@@ -265,12 +258,12 @@ class PlataformaRestControllerTest {
            }
            """;
 
-        var plataformaSaved = Plataforma.builder()
+        var plataformaSaved = Jugador.builder()
                 .id(1L)
                 .nombre("JOSE")
                 .build();
 
-        when(plataformaService.update(anyLong(), any(PlataformaUpdateDto.class))).thenReturn(plataformaSaved);
+        when(jugadorService.update(anyLong(), any(JugadorUpdateDto.class))).thenReturn(plataformaSaved);
 
         // Act
         var result = mockMvcTester.put()
@@ -283,11 +276,11 @@ class PlataformaRestControllerTest {
         assertThat(result)
                 .hasStatusOk()
                 .bodyJson()
-                .convertTo(Plataforma.class)
+                .convertTo(Jugador.class)
                 .usingRecursiveComparison()
                 .isEqualTo(plataformaSaved);
 
-        verify(plataformaService, only()).update(anyLong(), any(PlataformaUpdateDto.class));
+        verify(jugadorService, only()).update(anyLong(), any(JugadorUpdateDto.class));
     }
 
     @Test
@@ -299,7 +292,7 @@ class PlataformaRestControllerTest {
               "nombre": "Mario"
            }
            """;
-        when(plataformaService.update(anyLong(), any(PlataformaUpdateDto.class))).thenThrow(new PlataformaNotFoundException(id));
+        when(jugadorService.update(anyLong(), any(JugadorUpdateDto.class))).thenThrow(new JugadorNotFoundException(id));
 
         // Act
         var result = mockMvcTester.put()
@@ -312,11 +305,11 @@ class PlataformaRestControllerTest {
                 .hasStatus(HttpStatus.NOT_FOUND)
                 // throws TarjetaNotFoundException
                 .hasFailed().failure()
-                .isInstanceOf(PlataformaNotFoundException.class)
+                .isInstanceOf(JugadorNotFoundException.class)
                 .hasMessageContaining("Plataforma con id: " + id + " no encontrada");
 
         // Verify
-        verify(plataformaService, only()).update(anyLong(), any());
+        verify(jugadorService, only()).update(anyLong(), any());
     }
 
     @Test
@@ -344,7 +337,7 @@ class PlataformaRestControllerTest {
                         assertThat(path).hasFieldOrProperty("nombre"));
 
 
-        verify(plataformaService, never()).update(anyLong(), any(PlataformaUpdateDto.class));
+        verify(jugadorService, never()).update(anyLong(), any(JugadorUpdateDto.class));
     }
 
     @Test
@@ -357,8 +350,8 @@ class PlataformaRestControllerTest {
            }
            """;
 
-        when(plataformaService.update(anyLong(), any(PlataformaUpdateDto.class)))
-                .thenThrow(new PlataformaConflictException("Ya existe un plataforma con el nombre Jose"));
+        when(jugadorService.update(anyLong(), any(JugadorUpdateDto.class)))
+                .thenThrow(new JugadorConflictException("Ya existe un plataforma con el nombre Jose"));
 
 
         // Act
@@ -373,17 +366,17 @@ class PlataformaRestControllerTest {
                 .hasStatus(HttpStatus.CONFLICT)
                 // throws plataformasConflictEsception
                 .hasFailed().failure()
-                .isInstanceOf(PlataformaConflictException.class)
+                .isInstanceOf(JugadorConflictException.class)
                 .hasMessageContaining("Ya existe un plataforma");
 
-        verify(plataformaService, only()).update(anyLong(), any(PlataformaUpdateDto.class));
+        verify(jugadorService, only()).update(anyLong(), any(JugadorUpdateDto.class));
     }
 
     @Test
     void delete() {
         // Arrange
         Long id = 1L;
-        doNothing().when(plataformaService).deleteById(anyLong());
+        doNothing().when(jugadorService).deleteById(anyLong());
         // Act
         var result = mockMvcTester.delete()
                 .uri(ENDPOINT+ "/" + id)
@@ -392,14 +385,14 @@ class PlataformaRestControllerTest {
         assertThat(result)
                 .hasStatus(HttpStatus.NO_CONTENT);
 
-        verify(plataformaService, only()).deleteById(anyLong());
+        verify(jugadorService, only()).deleteById(anyLong());
     }
 
     @Test
     void delete_shouldThrowPlataformaaNotFound() {
         // Arrange
         Long id = 1L;
-        doThrow(new PlataformaNotFoundException(id)).when(plataformaService).deleteById(anyLong());
+        doThrow(new JugadorNotFoundException(id)).when(jugadorService).deleteById(anyLong());
         // Act
         var result = mockMvcTester.delete()
                 .uri(ENDPOINT+ "/" + id)
@@ -408,7 +401,7 @@ class PlataformaRestControllerTest {
         assertThat(result)
                 .hasStatus(HttpStatus.NOT_FOUND);
 
-        verify(plataformaService, only()).deleteById(anyLong());
+        verify(jugadorService, only()).deleteById(anyLong());
     }
 
 

@@ -46,8 +46,8 @@ public class VideojuegosRestController {
 
     @Operation(summary = "Obtiene todos los videojuegos", description = "Obtiene una lista de Videojuegos")
     @Parameters({
-            @Parameter(name = "nombre", description = "Nombre del videojuego", example = ""),
-            @Parameter(name = "plataforma", description = "Plataforma del videojuego", example = ""),
+            @Parameter(name = "nombre", description = "Nombre del videojuego", example = "Dragon Ball Kakarot"),
+            @Parameter(name = "jugador", description = "Jugador del videojuego", example = "JJSTS"),
             @Parameter(name = "isDeleted", description = "Si está borrada o no", example = "false"),
             @Parameter(name = "page", description = "Número de página", example = "0"),
             @Parameter(name = "size", description = "Tamaño de la página", example = "10"),

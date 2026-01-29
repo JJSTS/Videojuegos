@@ -1,7 +1,7 @@
 package es.juanjsts.graphql.controllers;
 
-import es.juanjsts.rest.plataformas.models.Plataforma;
-import es.juanjsts.rest.plataformas.repositories.PlataformaRepository;
+import es.juanjsts.rest.jugadores.models.Jugador;
+import es.juanjsts.rest.jugadores.repositories.JugadorRepository;
 import es.juanjsts.rest.videojuegos.models.Videojuego;
 import es.juanjsts.rest.videojuegos.repositories.VideojuegosRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @Controller
 public class VideojuegoPlataformaGraphQLController {
     private final VideojuegosRepository videojuegoRepository;
-    private final PlataformaRepository plataformaRepository;
+    private final JugadorRepository jugadorRepository;
 
     // --QUERIES--
     @QueryMapping
@@ -32,28 +32,28 @@ public class VideojuegoPlataformaGraphQLController {
     }
 
     @QueryMapping
-    public List<Plataforma> plataformas() {
-        return plataformaRepository.findAll();
+    public List<Jugador> plataformas() {
+        return jugadorRepository.findAll();
     }
 
 
     @QueryMapping
-    public Plataforma plataformaById(@Argument Long id) {
-        return plataformaRepository.findById(id).orElse(null);
+    public Jugador plataformaById(@Argument Long id) {
+        return jugadorRepository.findById(id).orElse(null);
     }
 
     @QueryMapping
-    public List<Plataforma> plataformaByNombre(@Argument String nombre){
-        return plataformaRepository.findByNombreContainingIgnoreCase(nombre);
+    public List<Jugador> plataformaByNombre(@Argument String nombre){
+        return jugadorRepository.findByNombreContainingIgnoreCase(nombre);
     }
 
     @SchemaMapping(typeName = "Videojuego", field = "plataforma")
-    public Plataforma plataforma (Videojuego videojuego){
-        return videojuego.getPlataforma();
+    public Jugador plataforma (Videojuego videojuego){
+        return videojuego.getJugador();
     }
 
-    @SchemaMapping(typeName = "Plataforma", field = "videojuego")
-    public List<Videojuego> videojuegos (Plataforma plataforma){
-        return videojuegoRepository.findByPlataforma(plataforma);
+    @SchemaMapping(typeName = "Jugador", field = "videojuego")
+    public List<Videojuego> videojuegos (Jugador jugador){
+        return videojuegoRepository.findByJugador(jugador);
     }
 }

@@ -1,13 +1,11 @@
 package es.juanjsts.rest.videojuegos.models;
 
-import es.juanjsts.rest.jugardores.models.Jugador;
-import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.jugadores.models.Jugador;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -54,9 +52,6 @@ public class Videojuego {
 
     //Relacion y atributo
     @ManyToOne
-    @JoinColumn(name = "plataforma_id")
-    private Plataforma plataforma;
-
-    @OneToMany(mappedBy = "videojuego")
-    private List<Jugador> jugadores;
+    @JoinColumn(name = "jugador_id")
+    private Jugador jugador;
 }

@@ -1,6 +1,6 @@
 package es.juanjsts.videojuegos.repositories;
 
-import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.jugadores.models.Jugador;
 import es.juanjsts.rest.videojuegos.models.Videojuego;
 import es.juanjsts.rest.videojuegos.repositories.VideojuegosRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class VideojuegosRepositoryTest {
 
-    private final Plataforma plataforma1 = Plataforma.builder()
+    private final Jugador plataforma1 = Jugador.builder()
             .nombre("Epic Games Store")
             .fabricante("Epic Games")
             .tipo("PC")
             .fechaDeLanzamiento(LocalDate.of(2024,12,24))
             .build();
-    private final Plataforma plataforma2 = Plataforma.builder()
+    private final Jugador plataforma2 = Jugador.builder()
             .nombre("PlayStation")
             .fabricante("PlayStation")
             .tipo("Consolas")
@@ -41,7 +41,7 @@ class VideojuegosRepositoryTest {
             .almacenamiento("3.0 GB")
             .fechaDeCreacion(LocalDate.of(2018,8,8))
             .costo(2.99)
-            .plataforma(plataforma1)
+            .jugador(plataforma1)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.randomUUID())
@@ -52,7 +52,7 @@ class VideojuegosRepositoryTest {
             .almacenamiento("15.0 GB")
             .fechaDeCreacion(LocalDate.of(2019,10,14))
             .costo(0.00)
-            .plataforma(plataforma2)
+            .jugador(plataforma2)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.randomUUID())
@@ -64,7 +64,7 @@ class VideojuegosRepositoryTest {
             .almacenamiento("25.0 GB")
             .fechaDeCreacion(LocalDate.of(2015,11,15))
             .costo(0.00)
-            .plataforma(plataforma1)
+            .jugador(plataforma1)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
             .uuid(UUID.randomUUID())
@@ -84,7 +84,7 @@ class VideojuegosRepositoryTest {
         entityManager.persist(videojuego1);
         entityManager.persist(videojuego2);
         entityManager.persist(videojuego3);
-        
+
         entityManager.flush();
     }
 
@@ -188,7 +188,7 @@ class VideojuegosRepositoryTest {
                 .almacenamiento("10.0 GB")
                 .fechaDeCreacion(LocalDate.of(2020,12,12))
                 .costo(1.99)
-                .plataforma(plataforma2)
+                .jugador(plataforma2)
                 .build();
 
         Videojuego savedVideojuego = repositorio.save(videojuego);
@@ -211,7 +211,7 @@ class VideojuegosRepositoryTest {
                 .almacenamiento("10.0 GB")
                 .fechaDeCreacion(LocalDate.of(2020,12,12))
                 .costo(1.99)
-                .plataforma(plataforma2)
+                .jugador(plataforma2)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .uuid(UUID.randomUUID())

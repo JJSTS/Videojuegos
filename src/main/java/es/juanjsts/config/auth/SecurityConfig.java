@@ -69,11 +69,11 @@ public class SecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain openapiFilterChain(HttpSecurity http) throws Exception {
+      String[] swaggerPaths = {"/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html/"};
         http
-                .securityMatcher("/swagger-ui/**")
-                .securityMatcher("/v3/api-docs/**")
+                .securityMatcher(swaggerPaths)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**", "v3/api-docs/**").permitAll());
+                        .requestMatchers(swaggerPaths).permitAll());
         return http.build();
     }
 

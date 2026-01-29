@@ -21,7 +21,7 @@ public class VideojuegoResponseDto {
     private LocalDate fechaDeCreacion;
     private String almacenamiento;
     private Double costo;
-    private String plataforma;
+    private String jugador;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

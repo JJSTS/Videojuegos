@@ -1,4 +1,4 @@
-package es.juanjsts.rest.plataformas.models;
+package es.juanjsts.rest.jugadores.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import es.juanjsts.rest.users.models.User;
@@ -6,7 +6,6 @@ import es.juanjsts.rest.videojuegos.models.Videojuego;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,8 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "PLATAFORMAS")
-public class Plataforma {
+@Table(name = "JUGADORES")
+public class Jugador {
     //Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,18 +28,9 @@ public class Plataforma {
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable = false, length = 50)
-    private String fabricante;
-
-    @Column(nullable = false, length = 20)
-    private String tipo;
-
-    @Column(nullable = false)
-    private LocalDate fechaDeLanzamiento;
-
     //Relacion y atributo
-    @JsonIgnoreProperties("plataforma")
-    @OneToMany(mappedBy = "plataforma")
+    @JsonIgnoreProperties("jugador")
+    @OneToMany(mappedBy = "jugador")
     private List<Videojuego> videojuegos;
 
     //Atributos de la tabla
@@ -56,6 +46,6 @@ public class Plataforma {
     @Builder.Default
     private Boolean isDeleted = false;
 
-    @OneToOne(mappedBy = "plataforma")
+    @OneToOne(mappedBy = "jugador")
     private User usuario;
 }

@@ -12,7 +12,7 @@ public class VideojuegoNotificationMapper {
                 videojuego.getNombre(),
                 videojuego.getGenero(),
                 videojuego.getAlmacenamiento(),
-                videojuego.getPlataforma().getNombre(),
+                videojuego.getJugador().getNombre(),
                 videojuego.getFechaDeCreacion().toString(),
                 videojuego.getCosto(),
                 videojuego.getCreatedAt().toString(),

@@ -1,6 +1,6 @@
 package es.juanjsts.rest.users.models;
 
-import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.jugadores.models.Jugador;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
@@ -57,8 +57,8 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     @OneToOne
-    @JoinColumn(name = "plataforma_id")
-    private Plataforma plataforma;
+    @JoinColumn(name = "jugador_id")
+    private Jugador jugador;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

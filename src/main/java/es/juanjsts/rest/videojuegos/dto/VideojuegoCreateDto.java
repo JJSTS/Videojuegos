@@ -34,6 +34,6 @@ public class VideojuegoCreateDto {
 
     @Schema(description = "Plataforma del videojuego", example = "Nintendo")
     @Size(min = 1, max = 20, message = "La plataforma debe tener entre 1 y 20 caracteres")
-    private final String plataforma;
+    private final String jugador;
 
 }

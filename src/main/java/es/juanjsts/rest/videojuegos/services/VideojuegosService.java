@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface VideojuegosService {
-    Page<VideojuegoResponseDto> findAll(Optional<String> nombre, Optional<String> plataforma, Optional<Boolean> isDeleted, Pageable pageable);
+    Page<VideojuegoResponseDto> findAll(Optional<String> nombre, Optional<String> jugador, Optional<Boolean> isDeleted, Pageable pageable);
 
     VideojuegoResponseDto findById(Long id);
 

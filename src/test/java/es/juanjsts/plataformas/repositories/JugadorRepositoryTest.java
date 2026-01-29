@@ -1,7 +1,7 @@
 package es.juanjsts.plataformas.repositories;
 
-import es.juanjsts.rest.plataformas.models.Plataforma;
-import es.juanjsts.rest.plataformas.repositories.PlataformaRepository;
+import es.juanjsts.rest.jugadores.models.Jugador;
+import es.juanjsts.rest.jugadores.repositories.JugadorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 // Reseteamos la base de datos para partir de una situación conocida
 @Sql(value = {"/reset.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @DataJpaTest
-class PlataformaRepositoryTest {
+class JugadorRepositoryTest {
 
-    private final Plataforma plataforma = Plataforma.builder()
+    private final Jugador plataforma = Jugador.builder()
             .nombre("Nintendo")
             .fabricante("Nintendo")
             .tipo("PC")
@@ -27,7 +27,7 @@ class PlataformaRepositoryTest {
             .build();
 
     @Autowired
-    private PlataformaRepository repositorio;
+    private JugadorRepository repositorio;
     @Autowired
     private TestEntityManager entityManager; // EntityManager para hacer las pruebas
 
@@ -42,53 +42,53 @@ class PlataformaRepositoryTest {
     @Test
     void findAll() {
         // Act
-        List<Plataforma> plataforma = repositorio.findAll();
+        List<Jugador> jugador = repositorio.findAll();
 
         // Assert
         assertAll("findAll",
-                () -> assertNotNull(plataforma),
-                () -> assertFalse(plataforma.isEmpty())
+                () -> assertNotNull(jugador),
+                () -> assertFalse(jugador.isEmpty())
         );
     }
 
     @Test
     void findByNombre() {
         // Act
-        List<Plataforma> plataforma = repositorio.findByNombreContainingIgnoreCase("Nintendo");
+        List<Jugador> jugador = repositorio.findByNombreContainingIgnoreCase("Nintendo");
 
         // Assert
         assertAll("findAllByNombre",
-                () -> assertNotNull(plataforma),
-                () -> assertFalse(plataforma.isEmpty()),
-                () -> assertEquals("Nintendo", plataforma.getFirst().getNombre())
+                () -> assertNotNull(jugador),
+                () -> assertFalse(jugador.isEmpty()),
+                () -> assertEquals("Nintendo", jugador.getFirst().getNombre())
         );
     }
 
     @Test
     void findById() {
         // Act
-        Plataforma plataforma = repositorio.findById(1L).orElse(null);
+        Jugador jugador = repositorio.findById(1L).orElse(null);
 
         // Assert
         assertAll("findById",
-                () -> assertNotNull(plataforma),
-                () -> assertEquals("Nintendo", plataforma.getNombre())
+                () -> assertNotNull(jugador),
+                () -> assertEquals("Nintendo", jugador.getNombre())
         );
     }
 
     @Test
     void findByIdNotFound() {
         // Act
-        Plataforma plataforma = repositorio.findById(100L).orElse(null);
+        Jugador jugador = repositorio.findById(100L).orElse(null);
 
         // Assert
-        assertNull(plataforma);
+        assertNull(jugador);
     }
 
     @Test
     void save() {
         // Act
-        Plataforma plataforma = repositorio.save(Plataforma.builder()
+        Jugador jugador = repositorio.save(Jugador.builder()
                 .nombre("Epic Games Store")
                 .fabricante("Epic Games")
                 .tipo("PC")
@@ -97,11 +97,11 @@ class PlataformaRepositoryTest {
 
         // Assert
         assertAll("save",
-                () -> assertNotNull(plataforma),
-                () -> assertEquals("Epic Games Store", plataforma.getNombre()),
-                () -> assertEquals("Epic Games", plataforma.getFabricante()),
-                () -> assertEquals("PC", plataforma.getTipo()),
-                () -> assertEquals(LocalDate.of(1985, 1, 1), plataforma.getFechaDeLanzamiento())
+                () -> assertNotNull(jugador),
+                () -> assertEquals("Epic Games Store", jugador.getNombre()),
+                () -> assertEquals("Epic Games", jugador.getFabricante()),
+                () -> assertEquals("PC", jugador.getTipo()),
+                () -> assertEquals(LocalDate.of(1985, 1, 1), jugador.getFechaDeLanzamiento())
         );
     }
 
@@ -109,15 +109,15 @@ class PlataformaRepositoryTest {
     void update() {
         // Act
         var plataformaExistente = repositorio.findById(1L).orElse(null);
-        Plataforma plataformaActualizar = Plataforma.builder()
+        Jugador jugadorActualizar = Jugador.builder()
                 .id(plataformaExistente.getId())
                 .nombre("Pepe").build();
-        Plataforma plataformaActualizado = repositorio.save(plataformaActualizar);
+        Jugador jugadorActualizado = repositorio.save(jugadorActualizar);
 
         // Assert
         assertAll("update",
-                () -> assertNotNull(plataformaActualizado),
-                () -> assertEquals("Pepe", plataformaActualizado.getNombre())
+                () -> assertNotNull(jugadorActualizado),
+                () -> assertEquals("Pepe", jugadorActualizado.getNombre())
         );
     }
 
@@ -126,10 +126,10 @@ class PlataformaRepositoryTest {
         // Act
         var plataformaBorrar = repositorio.findById(1L).orElse(null);
         repositorio.delete(plataformaBorrar);
-        Plataforma plataformaBorrado = repositorio.findById(1L).orElse(null);
+        Jugador jugadorBorrado = repositorio.findById(1L).orElse(null);
 
         // Assert
-        assertNull(plataformaBorrado);
+        assertNull(jugadorBorrado);
     }
 
     // Para comprobar la diferencia entre usar FetchType.EAGER o LAZY en la relación de plataforma con tarjetas
@@ -141,8 +141,8 @@ class PlataformaRepositoryTest {
         // las consultas a la BD en la consola
         entityManager.clear();
 
-        Plataforma plataforma = repositorio.findById(1L).orElse(null);
-        assertNotNull(plataforma);
+        Jugador jugador = repositorio.findById(1L).orElse(null);
+        assertNotNull(jugador);
     }
 
 }

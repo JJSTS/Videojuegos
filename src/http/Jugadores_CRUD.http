@@ -8,14 +8,11 @@ GET http://localhost:3000/api/v1/plataformas/1
 
 GET http://localhost:3000/api/v1/plataformas/3
 
-### Nueva plataforma
+### Nuevo jugador
 POST http://localhost:3000/api/v1/plataformas
 Content-Type: application/json
 
 {
-  "nombre" : "Riot Client",
-  "fabricante" :"Riot Games",
-  "tipo": "PC",
-  "fechaDeLanzamiento": "2019-12-31",
+  "nombre" : "TY | JJSTS",
   "isDeleted": false
 }

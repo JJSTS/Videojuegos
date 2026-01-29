@@ -1,9 +1,9 @@
 package es.juanjsts.plataformas.mappers;
 
-import es.juanjsts.rest.plataformas.dto.PlataformaCreatedDto;
-import es.juanjsts.rest.plataformas.dto.PlataformaUpdateDto;
-import es.juanjsts.rest.plataformas.mappers.PlataformaMapper;
-import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.jugadores.dto.JugadorCreatedDto;
+import es.juanjsts.rest.jugadores.dto.JugadorUpdateDto;
+import es.juanjsts.rest.jugadores.mappers.JugadorMapper;
+import es.juanjsts.rest.jugadores.models.Jugador;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -11,9 +11,9 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlataformaMapperTest {
-    private final PlataformaMapper plataformaMapper = new PlataformaMapper();
+    private final JugadorMapper jugadorMapper = new JugadorMapper();
 
-    private final Plataforma plataforma = Plataforma.builder()
+    private final Jugador jugador = Jugador.builder()
             .id(1L)
             .nombre("Nintendo")
             .fabricante("Nintendo")
@@ -21,14 +21,14 @@ class PlataformaMapperTest {
             .fechaDeLanzamiento(LocalDate.of(1985, 1, 1))
             .build();
 
-    private final PlataformaCreatedDto plataformaCreatedDto = PlataformaCreatedDto.builder()
+    private final JugadorCreatedDto jugadorCreatedDto = JugadorCreatedDto.builder()
             .nombre("NINTENDO")
             .fabricante("Nintendo")
             .tipo("PC")
             .fechaDeLanzamiento(LocalDate.of(1985, 1, 1))
             .build();
 
-    private final PlataformaUpdateDto plataformaUpdateDto = PlataformaUpdateDto.builder()
+    private final JugadorUpdateDto jugadorUpdateDto = JugadorUpdateDto.builder()
             .nombre("NINTENDO")
             .fabricante("PANINI")
             .tipo("NOSE")
@@ -37,17 +37,17 @@ class PlataformaMapperTest {
 
     @Test
     public void toPlataformaCreatedDto() {
-        Plataforma mappedPlataforma = plataformaMapper.toPlataforma(plataformaCreatedDto);
+        Jugador mappedJugador = jugadorMapper.toPlataforma(jugadorCreatedDto);
 
         assertAll("whenToPlataforma_thenReturnPlataforma",
-                () -> assertEquals(plataformaCreatedDto.getNombre(), mappedPlataforma.getNombre()));
+                () -> assertEquals(jugadorCreatedDto.getNombre(), mappedJugador.getNombre()));
     }
 
     @Test
     public void whenToPlataformaWithExistingPlataforma_thenReturnUpdatedPlataforma() {
-        Plataforma updatePlataforma = plataformaMapper.toPlataforma(plataformaUpdateDto, plataforma);
+        Jugador updateJugador = jugadorMapper.toPlataforma(jugadorUpdateDto, jugador);
 
         assertAll("whenToPlataformaWithExistingPlataforma_thenReturnUpdatedPlataforma",
-                () -> assertEquals(plataformaCreatedDto.getNombre(), updatePlataforma.getNombre()));
+                () -> assertEquals(jugadorCreatedDto.getNombre(), updateJugador.getNombre()));
     }
 }

@@ -1,6 +1,6 @@
-package es.juanjsts.rest.plataformas.repositories;
+package es.juanjsts.rest.jugadores.repositories;
 
-import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.jugadores.models.Jugador;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,20 +11,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface  PlataformaRepository extends JpaRepository<Plataforma, Long>, JpaSpecificationExecutor<Plataforma> {
+public interface JugadorRepository extends JpaRepository<Jugador, Long>, JpaSpecificationExecutor<Jugador> {
     // Encuentra por nombre exacto
-    Optional<Plataforma> findByNombreEqualsIgnoreCase(String nombre);
+    Optional<Jugador> findByNombreEqualsIgnoreCase(String nombre);
 
     //Plataforma por nombre
-    List<Plataforma> findByNombreContainingIgnoreCase(String nombre);
+    List<Jugador> findByNombreContainingIgnoreCase(String nombre);
 
     //Actualizar la plataforma con isDeleted a true
     @Modifying //Para indicar que es una consulta de actualización
-    @Query("UPDATE Plataforma pla SET pla.isDeleted = true WHERE pla.id = :id")
+    @Query("UPDATE Jugador j SET j.isDeleted = true WHERE j.id = :id")
     void updateIsDeletedToTrueById(Long id);
 
     //Obtiene si existe un videojuego con el id de la plataforma
-    @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Jugador v WHERE v.plataforma.id = :id")
+    @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Videojuego v WHERE v.jugador.id = :id")
     boolean existsVideojuegoById(Long id);
 
 

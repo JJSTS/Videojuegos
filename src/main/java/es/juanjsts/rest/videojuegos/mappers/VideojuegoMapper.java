@@ -1,6 +1,6 @@
 package es.juanjsts.rest.videojuegos.mappers;
 
-import es.juanjsts.rest.plataformas.models.Plataforma;
+import es.juanjsts.rest.jugadores.models.Jugador;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoUpdateDto;
@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Component
 public class VideojuegoMapper {
-    public Videojuego toVideojuego(VideojuegoCreateDto videojuegoCreateDto, Plataforma plataforma) {
+    public Videojuego toVideojuego(VideojuegoCreateDto videojuegoCreateDto, Jugador jugador) {
         return Videojuego.builder()
                 .id(null)
                 .nombre(videojuegoCreateDto.getNombre())
@@ -22,7 +22,7 @@ public class VideojuegoMapper {
                 .fechaDeCreacion(videojuegoCreateDto.getFechaDeCreacion())
                 .almacenamiento(videojuegoCreateDto.getAlmacenamiento())
                 .costo(videojuegoCreateDto.getCosto())
-                .plataforma(plataforma)
+                .jugador(jugador)
                 .uuid(UUID.randomUUID())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -37,7 +37,7 @@ public class VideojuegoMapper {
                 .fechaDeCreacion(videojuegoUpdateDto.getFechaDeCreacion() != null ? videojuegoUpdateDto.getFechaDeCreacion() : videojuegoActual.getFechaDeCreacion())
                 .almacenamiento(videojuegoUpdateDto.getAlmacenamiento() != null ? videojuegoUpdateDto.getAlmacenamiento() : videojuegoActual.getAlmacenamiento())
                 .costo(videojuegoUpdateDto.getCosto() != null ? videojuegoUpdateDto.getCosto() : videojuegoActual.getCosto())
-                .plataforma(videojuegoActual.getPlataforma())
+                .jugador(videojuegoActual.getJugador())
                 .createdAt(videojuegoActual.getCreatedAt())
                 .uuid(videojuegoActual.getUuid())
                 .build();
@@ -51,7 +51,7 @@ public class VideojuegoMapper {
                 .fechaDeCreacion(videojuego.getFechaDeCreacion())
                 .almacenamiento(videojuego.getAlmacenamiento())
                 .costo(videojuego.getCosto())
-                .plataforma(videojuego.getPlataforma().getNombre())
+                .jugador(videojuego.getJugador().getNombre())
                 .createdAt(videojuego.getCreatedAt())
                 .updatedAt(videojuego.getUpdatedAt())
                 .uuid(videojuego.getUuid())
