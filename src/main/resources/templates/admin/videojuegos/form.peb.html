@@ -15,13 +15,13 @@
         {{ inputField("videojuego", "Almacenamiento", "almacenamiento", "text", videojuego.almacenamiento, _context) }}
         {{ inputField("videojuego", "Costo", "costo", "number", videojuego.costo, _context) }}
         {% if not modoEditar %}
-            {{ inputField('videojuego', 'Jugador', 'jugador', "text", videojuego.jugador, _context) }}
+        {{ inputField('videojuego', 'Jugador', 'jugador', "text", videojuego.jugador, _context) }}
         {% endif %}
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <button
-                    class="btn btn-primary" type="submit">{{ modoEditar ? 'Actualizar Videojuego' : 'Añadir Videojuego' }}
+              class="btn btn-primary" type="submit">{{ modoEditar ? 'Actualizar Videojuego' : 'Añadir Videojuego' }}
             </button>
         </div>
     </div>

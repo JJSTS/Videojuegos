@@ -74,15 +74,6 @@ class VideojuegoServiceImplTest {
     private VideojuegoMapper videojuegoMapper;
 
     @Mock
-    private WebSocketConfig webSocketConfig;
-
-    @Mock
-    private VideojuegoNotificationMapper videojuegoNotificationMapper;
-
-    @Mock
-    private ObjectMapper objectMapper;
-
-    @Mock
     private WebSocketHandler webSocketService;
 
     @InjectMocks
@@ -260,7 +251,7 @@ class VideojuegoServiceImplTest {
                 .genero("tower defense")
                 .almacenamiento("25 GB")
                 .costo(20.99)
-                .plataforma("Nintendo")
+                .jugador("Nintendo")
                 .build();
 
         Videojuego expectedVideojuego = Videojuego.builder()
@@ -276,7 +267,7 @@ class VideojuegoServiceImplTest {
                 .build();
 
         VideojuegoResponseDto expectedVideojuegoResponse = videojuegoMapper.toVideojuegoResponseDto(expectedVideojuego);
-        when(jugadorService.findByNombre(videojuegoCreateDto.getPlataforma())).thenReturn(jugador);
+        when(jugadorService.findByNombre(videojuegoCreateDto.getJugador())).thenReturn(jugador);
         when(videojuegosRepository.save(any(Videojuego.class))).thenReturn(expectedVideojuego);
         doNothing().when(webSocketService).sendMessage(any());
 

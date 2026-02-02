@@ -2,13 +2,30 @@
 
 {% block body %}
 
-    <!-- Lista de Tarjetas -->
-    {% if videojuego is empty %}
-    <div class="alert alert-info text-center">
-        <i class="bi bi-info-circle"></i> {{ message('label.videojuego.empty') }}
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>
+        <i class="bi bi-credit-card-2-front"></i> {{ message('label.videojuego.detalle') }} {{ videojuego.id }}
+      </h1>
+      <a href="/admin/videojuegos" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Volver
+      </a>
     </div>
-    {% else %}
-    <h2> {{ message('label.videojuego.detalle') }} {{ videojuego.id }}</h2>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    {% include "fragments/messages" %}
+  </div>
+</div>
+
+{% if videojuego is empty %}
+<div class="alert alert-info text-center">
+  <i class="bi bi-info-circle"></i> {{ message('label.videojuego.empty') }}
+</div>
+{% else %}
     <ul>
         <li> {{ message('label.videojuego.nombre') }}: {{ videojuego.nombre }}</li>
         <li> {{ message('label.videojuego.genero') }}: {{ videojuego.genero }}</li>
@@ -17,10 +34,6 @@
         <li> Jugador : {{ videojuego.jugador }}</li>
         <li> {{ message('label.videojuego.costo') }}: {{ videojuego.costo }}</li>
     </ul>
-    {% endif %}
-
-  <p class="text-center">
-    <a class="btn btn-lg btn-success" href="/videojuegos/lista">Volver</a>
-  </p>
+% endif %}
 
 {% endblock %}
