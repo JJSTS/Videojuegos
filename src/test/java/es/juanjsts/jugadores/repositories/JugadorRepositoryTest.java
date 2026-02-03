@@ -1,4 +1,4 @@
-package es.juanjsts.plataformas.repositories;
+package es.juanjsts.jugadores.repositories;
 
 import es.juanjsts.rest.jugadores.models.Jugador;
 import es.juanjsts.rest.jugadores.repositories.JugadorRepository;

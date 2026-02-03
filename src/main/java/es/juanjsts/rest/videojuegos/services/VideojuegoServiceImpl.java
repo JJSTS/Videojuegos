@@ -69,10 +69,10 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); //Si no hay nombre, no filtramos
 
         //Criterio de búsqueda por jugador
-        Specification<Videojuego> specPlataformaVideojuego = (root, query, criteriaBuilder) ->
+        Specification<Videojuego> specJugadorVideojuego = (root, query, criteriaBuilder) ->
                 jugador.map(p -> {
-                    Join<Videojuego, Jugador> plataformaJoin = root.join("jugador");
-                    return criteriaBuilder.like(criteriaBuilder.lower(plataformaJoin.get("nombre")), "%" + p.toLowerCase() + "%");
+                    Join<Videojuego, Jugador> JugadorJoin = root.join("jugador");
+                    return criteriaBuilder.like(criteriaBuilder.lower(JugadorJoin.get("nombre")), "%" + p.toLowerCase() + "%");
 
                 }).orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true))); //Si no hay jugador, no filtramos
 
@@ -82,7 +82,7 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
 
         //Combinamos las especificaciones
-        Specification<Videojuego> criterio = Specification.allOf(specNombreVideojuego, specPlataformaVideojuego, specIsDeleted);
+        Specification<Videojuego> criterio = Specification.allOf(specNombreVideojuego, specJugadorVideojuego, specIsDeleted);
 
         return videojuegoRepository.findAll(criterio, pageable)
                 .map(videojuegoMapper::toVideojuegoResponseDto);
@@ -129,11 +129,11 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
         return videojuegoMapper.toVideojuegoResponseDto(videojuegoEncontrado);
     }
 
-    private Jugador checkPlataforma(String nombrePlataforma){
-        log.info("Buscando videojuego por nombre: {}", nombrePlataforma);
-        var jugador = jugadorRepository.findByNombreEqualsIgnoreCase(nombrePlataforma);
+    private Jugador checkJugador(String nombreJugador){
+        log.info("Buscando videojuego por nombre: {}", nombreJugador);
+        var jugador = jugadorRepository.findByNombreEqualsIgnoreCase(nombreJugador);
         if (jugador.isEmpty() || jugador.get().getIsDeleted()){
-            throw new VideojuegoBadRequestException("La jugador " + nombrePlataforma + " no existe o está borrado");
+            throw new VideojuegoBadRequestException("La jugador " + nombreJugador + " no existe o está borrado");
         }
         return jugador.get();
     }
@@ -142,7 +142,7 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
     @Override
     public VideojuegoResponseDto save(VideojuegoCreateDto videojuegocreateDto) {
         log.info("Guardando videojuego: {}", videojuegocreateDto);
-        Jugador jugador = checkPlataforma(videojuegocreateDto.getJugador());
+        Jugador jugador = checkJugador(videojuegocreateDto.getJugador());
         Videojuego nuevoVideojuego = videojuegoRepository.save(
                 videojuegoMapper.toVideojuego(videojuegocreateDto, jugador));
         onChange(Notificacion.Tipo.CREATE, nuevoVideojuego);
@@ -153,7 +153,7 @@ public class VideojuegoServiceImpl implements VideojuegosService, InitializingBe
     @Override
     public VideojuegoResponseDto save(VideojuegoCreateDto videojuegoCreateDto, Long usuarioId){
         log.info("Guardando videojuego: {} de usuarioId: {}", videojuegoCreateDto, usuarioId);
-        Jugador jugador = checkPlataforma(videojuegoCreateDto.getJugador());
+        Jugador jugador = checkJugador(videojuegoCreateDto.getJugador());
         var usuario = jugador.getUsuario();
         if ((usuario != null) && (!usuario.getId().equals(usuarioId))){
             throw new VideojuegoBadRequestException("La usuario no se corresponde con la jugador");

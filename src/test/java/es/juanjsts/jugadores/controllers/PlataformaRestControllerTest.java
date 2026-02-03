@@ -1,4 +1,4 @@
-package es.juanjsts.plataformas.controllers;
+package es.juanjsts.jugadores.controllers;
 
 import es.juanjsts.rest.jugadores.dto.JugadorCreatedDto;
 import es.juanjsts.rest.jugadores.dto.JugadorUpdateDto;

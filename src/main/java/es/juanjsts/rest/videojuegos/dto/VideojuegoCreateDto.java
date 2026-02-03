@@ -32,8 +32,8 @@ public class VideojuegoCreateDto {
     @PositiveOrZero(message = "El costo debe ser positivo o cero")
     private final Double costo;
 
-    @Schema(description = "Plataforma del videojuego", example = "Nintendo")
-    @Size(min = 1, max = 20, message = "La plataforma debe tener entre 1 y 20 caracteres")
+    @Schema(description = "Jugador del videojuego", example = "Nintendo")
+    @Size(min = 1, max = 20, message = "El jugador debe tener entre 1 y 20 caracteres")
     private final String jugador;
 
 }

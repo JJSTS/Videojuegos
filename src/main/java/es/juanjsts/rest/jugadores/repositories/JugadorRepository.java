@@ -15,15 +15,15 @@ public interface JugadorRepository extends JpaRepository<Jugador, Long>, JpaSpec
     // Encuentra por nombre exacto
     Optional<Jugador> findByNombreEqualsIgnoreCase(String nombre);
 
-    //Plataforma por nombre
+    //Jugador por nombre
     List<Jugador> findByNombreContainingIgnoreCase(String nombre);
 
-    //Actualizar la plataforma con isDeleted a true
+    //Actualizar el jugador con isDeleted a true
     @Modifying //Para indicar que es una consulta de actualización
     @Query("UPDATE Jugador j SET j.isDeleted = true WHERE j.id = :id")
     void updateIsDeletedToTrueById(Long id);
 
-    //Obtiene si existe un videojuego con el id de la plataforma
+    //Obtiene si existe un videojuego con el id del jugador
     @Query("SELECT CASE WHEN COUNT(v) > 0 THEN true ELSE false END FROM Videojuego v WHERE v.jugador.id = :id")
     boolean existsVideojuegoById(Long id);
 

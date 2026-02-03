@@ -30,11 +30,11 @@ query {
     }
 }
 
-### Todas las plataformas
+### Todos los jugadores
 GRAPHQL http://localhost:3000/graphql
 
 query {
-    plataformaById(id: "2") {
+    jugadorById(id: "2") {
         nombre
         videojuegos {
             id

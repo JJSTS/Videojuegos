@@ -45,10 +45,10 @@ public class JugadorRestController {
             @RequestParam(defaultValue = "asc") String direction,
             HttpServletRequest request
     ) {
-        log.info("Buscando plataformas por nombre: {}, isDeleted {}", nombre, isDeleted);
+        log.info("Buscando jugadores por nombre: {}, isDeleted {}", nombre, isDeleted);
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(request.getRequestURI().toString());
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(request.getRequestURL().toString());
         Page<Jugador> pageResult = jugadorService.findAll(nombre, isDeleted, pageable);
         return ResponseEntity.ok()
                 .header("link", paginationLinksUtils.createLinkHeader(pageResult, uriBuilder))

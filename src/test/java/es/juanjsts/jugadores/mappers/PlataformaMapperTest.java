@@ -1,4 +1,4 @@
-package es.juanjsts.plataformas.mappers;
+package es.juanjsts.jugadores.mappers;
 
 import es.juanjsts.rest.jugadores.dto.JugadorCreatedDto;
 import es.juanjsts.rest.jugadores.dto.JugadorUpdateDto;
@@ -37,7 +37,7 @@ class PlataformaMapperTest {
 
     @Test
     public void toPlataformaCreatedDto() {
-        Jugador mappedJugador = jugadorMapper.toPlataforma(jugadorCreatedDto);
+        Jugador mappedJugador = jugadorMapper.toJugador(jugadorCreatedDto);
 
         assertAll("whenToPlataforma_thenReturnPlataforma",
                 () -> assertEquals(jugadorCreatedDto.getNombre(), mappedJugador.getNombre()));
@@ -45,7 +45,7 @@ class PlataformaMapperTest {
 
     @Test
     public void whenToPlataformaWithExistingPlataforma_thenReturnUpdatedPlataforma() {
-        Jugador updateJugador = jugadorMapper.toPlataforma(jugadorUpdateDto, jugador);
+        Jugador updateJugador = jugadorMapper.toJugador(jugadorUpdateDto, jugador);
 
         assertAll("whenToPlataformaWithExistingPlataforma_thenReturnUpdatedPlataforma",
                 () -> assertEquals(jugadorCreatedDto.getNombre(), updateJugador.getNombre()));

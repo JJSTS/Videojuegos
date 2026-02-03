@@ -47,5 +47,6 @@ public class Jugador {
     private Boolean isDeleted = false;
 
     @OneToOne(mappedBy = "jugador")
+    @JsonIgnoreProperties("jugador")
     private User usuario;
 }

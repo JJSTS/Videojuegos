@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JugadorMapper {
-    public Jugador toPlataforma(JugadorCreatedDto jugadorCreatedDto) {
+    public Jugador toJugador(JugadorCreatedDto jugadorCreatedDto) {
         return Jugador.builder()
                 .id(null)
                 .nombre(jugadorCreatedDto.getNombre())
                 .build();
     }
 
-    public Jugador toPlataforma(JugadorUpdateDto jugadorUpdateDto, Jugador jugadorActual) {
+    public Jugador toJugador(JugadorUpdateDto jugadorUpdateDto, Jugador jugadorActual) {
         return Jugador.builder()
                 .id(jugadorActual.getId())
                 .nombre(jugadorUpdateDto.getNombre() != null ? jugadorUpdateDto.getNombre() : jugadorActual.getNombre())

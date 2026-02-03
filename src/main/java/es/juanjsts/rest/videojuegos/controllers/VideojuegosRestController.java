@@ -64,18 +64,18 @@ public class VideojuegosRestController {
     @GetMapping()
     public ResponseEntity<PageResponse<VideojuegoResponseDto>> getAll(
             @RequestParam(required = false) Optional<String> nombre,
-            @RequestParam(required = false) Optional<String> plataforma,
+            @RequestParam(required = false) Optional<String> jugador,
             @RequestParam(required = false) Optional<Boolean> isDeleted,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction,
             HttpServletRequest request) {
-        log.info("Buscando videojuegos por nombre: {}, plataforma: {}, isDeleted: {}", nombre, plataforma, isDeleted);
+        log.info("Buscando videojuegos por nombre: {}, jugador: {}, isDeleted: {}", nombre, jugador, isDeleted);
         Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(request.getRequestURI().toString());
-        Page<VideojuegoResponseDto> pageResult = videojuegosService.findAll(nombre, plataforma, isDeleted, pageable);
+        Page<VideojuegoResponseDto> pageResult = videojuegosService.findAll(nombre, jugador, isDeleted, pageable);
         return ResponseEntity.ok()
                 .header("link", paginationLinksUtils.createLinkHeader(pageResult,uriBuilder))
                 .body(PageResponse.of(pageResult, sortBy,direction));

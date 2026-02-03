@@ -43,8 +43,7 @@ create table usuarios (
 
 */
 INSERT INTO JUGADORES (nombre)
-VALUES ('Francock'),
-       ('Juanjsts');
+VALUES ('Francock'), ('Juanjsts');
 
 INSERT INTO VIDEOJUEGOS (nombre, genero, almacenamiento, fecha_de_creacion, costo, jugador_id, uuid)
 VALUES ('Pepsiman', 'Estrategia', '10 TB', '1994-12-23', 100.0, 1, UUID()),
@@ -61,23 +60,16 @@ values ('Admin', 'Admin Fernandez', 'admin','admin@prueba.es','$2a$12$RUq2ScW1Ki
 insert into USER_ROLES (user_id, roles)
 values (1, 'ADMIN');
 
--- Contraseña admin: luisitocomunica
-insert into USUARIOS (nombre, apellidos, username, email, password, jugador_id)
-values ('Martin', 'Martinez Fernandez', 'martin','martin@prueba.es','luisitocomunica',1);
-
-insert into USER_ROLES (user_id, roles)
-values (2, 'USER');
-
 -- Contraseña: Test1
 insert into USUARIOS (nombre, apellidos, username, email, password, jugador_id)
 values ('JJSTS', 'Team Yuca', 'jjsts', 'yuquita@prueba.net',
         '$2a$10$Pd1yyq2NowcsDf4Cpf/ZXObYFkcycswqHAqBndE1wWJvYwRxlb.Pu', 2);
 insert into USER_ROLES (user_id, roles)
-values (3, 'USER');
+values (2, 'USER');
 
 -- Contraseña: Otro1
-insert into USUARIOS (nombre, apellidos, username, email, password)
+insert into USUARIOS (nombre, apellidos, username, email, password, jugador_id)
 values ('Francock', 'Team Yuca', 'francock', 'franco@prueba.net',
-        '$2a$12$3Q4.UZbvBMBEvIwwjGEjae/zrIr6S50NusUlBcCNmBd2382eyU0bS');
+        '$2a$12$3Q4.UZbvBMBEvIwwjGEjae/zrIr6S50NusUlBcCNmBd2382eyU0bS', 1);
 insert into USER_ROLES (user_id, roles)
-values (4, 'USER');
+values (1, 'USER');

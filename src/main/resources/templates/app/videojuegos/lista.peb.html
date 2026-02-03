@@ -2,7 +2,7 @@
 
 {% block body %}
 
-{% if page is empty %}
+{% if videojuegos is empty %}
 <div class="alert alert-info text-center">
   <i class="bi bi-info-circle"></i> No se han encontrado videojuegos
 </div>
@@ -16,7 +16,7 @@
     <th>Fecha de creación</th>
     <th>Costo</th>
   </tr>
-  {% for videojuego in page.content %}
+  {% for videojuego in videojuegos %}
   <tr>
     <td>{{ videojuego.id }}</td>
     <td><a href="/app/misvideojuegos/{{ videojuego.id }}">{{ videojuego.nombre }}</a></td>

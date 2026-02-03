@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-@CacheConfig(cacheNames = {"plataformas"})
+@CacheConfig(cacheNames = {"jugadores"})
 @Service
 public class JugadorServiceImpl implements JugadorService {
     private final JugadorRepository jugadorRepository;
@@ -31,15 +31,15 @@ public class JugadorServiceImpl implements JugadorService {
 
     @Override
     public Page<Jugador> findAll(Optional<String> nombre, Optional<Boolean> isDeleted, Pageable pageable) {
-        log.info("Buscando todas las plataformas por nombre: {}, isDeleted {}", nombre, isDeleted);
-        Specification<Jugador> specNombrePlataforma = (root, query, criteriaBuilder) ->
+        log.info("Buscando todas las jugadores por nombre: {}, isDeleted {}", nombre, isDeleted);
+        Specification<Jugador> specNombreJugador = (root, query, criteriaBuilder) ->
                 nombre.map(n -> criteriaBuilder.like(criteriaBuilder.lower(root.get("nombre")), "%" + n.toLowerCase() + "%"))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
 
         Specification<Jugador> specIsDeleted = (root, query, criteriaBuilder) ->
                 isDeleted.map(d -> criteriaBuilder.equal(root.get("isDeleted"), d))
                         .orElseGet(() -> criteriaBuilder.isTrue(criteriaBuilder.literal(true)));
-        Specification<Jugador> criterio = Specification.allOf(specNombrePlataforma, specIsDeleted);
+        Specification<Jugador> criterio = Specification.allOf(specNombreJugador, specIsDeleted);
         return jugadorRepository.findAll(criterio, pageable);
     }
 
@@ -63,9 +63,9 @@ public class JugadorServiceImpl implements JugadorService {
     public Jugador save(JugadorCreatedDto jugador) {
         log.info("Guardando jugador: {}", jugador);
         jugadorRepository.findByNombreEqualsIgnoreCase(jugador.getNombre()).ifPresent(tit -> {
-            throw new JugadorConflictException("Ya existe una jugador con el nombre: " + jugador.getNombre());
+            throw new JugadorConflictException("Ya existe un jugador con el nombre: " + jugador.getNombre());
         });
-        return jugadorRepository.save(jugadorMapper.toPlataforma(jugador));
+        return jugadorRepository.save(jugadorMapper.toJugador(jugador));
     }
 
     @Override
@@ -74,10 +74,10 @@ public class JugadorServiceImpl implements JugadorService {
         Jugador jugadorActual = findById(id);
         jugadorRepository.findByNombreEqualsIgnoreCase(jugador.getNombre()).ifPresent(tit -> {
             if (!tit.getId().equals(id)){
-                throw new JugadorConflictException("Ya existe una jugador con el nombre: " + jugador.getNombre());
+                throw new JugadorConflictException("Ya existe un jugador con el nombre: " + jugador.getNombre());
             }
         });
-        return jugadorRepository.save(jugadorMapper.toPlataforma(jugador, jugadorActual));
+        return jugadorRepository.save(jugadorMapper.toJugador(jugador, jugadorActual));
     }
 
     @Override

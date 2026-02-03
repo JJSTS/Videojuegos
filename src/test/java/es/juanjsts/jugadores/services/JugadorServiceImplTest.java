@@ -1,4 +1,4 @@
-package es.juanjsts.plataformas.services;
+package es.juanjsts.jugadores.services;
 
 import es.juanjsts.rest.jugadores.dto.JugadorCreatedDto;
 import es.juanjsts.rest.jugadores.dto.JugadorUpdateDto;
@@ -31,23 +31,14 @@ class JugadorServiceImplTest {
     private final Jugador jugador = Jugador.builder()
             .id(1L)
             .nombre("Nintendo")
-            .fabricante("Nintendo")
-            .tipo("PC")
-            .fechaDeLanzamiento(LocalDate.of(1985, 1, 1))
             .build();
 
     private final JugadorCreatedDto jugadorCreatedDto = JugadorCreatedDto.builder()
             .nombre("Epic Games Store")
-            .fabricante("Epic Games")
-            .tipo("PC")
-            .fechaDeLanzamiento(LocalDate.of(1985, 1, 1))
             .build();
 
     private final JugadorUpdateDto jugadorUpdateDto = JugadorUpdateDto.builder()
             .nombre("PlayStation")
-            .fabricante("Sony")
-            .tipo("Consolas")
-            .fechaDeLanzamiento(LocalDate.of(1995, 1, 1))
             .build();
 
     @Mock
@@ -58,7 +49,7 @@ class JugadorServiceImplTest {
 
     // Es la clase que se testea y a la que se inyectan los mocks y espías automáticamente
     @InjectMocks
-    private JugadorServiceImpl plataformaService;
+    private JugadorServiceImpl jugadorService;
 
     @Test
     public void testFindAll() {
@@ -68,7 +59,7 @@ class JugadorServiceImplTest {
         when(jugadorRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(page);
 
         // Act
-        var res = plataformaService.findAll(Optional.empty(), Optional.empty(), pageable);
+        var res = jugadorService.findAll(Optional.empty(), Optional.empty(), pageable);
 
         // Assert
         assertAll("findAll",
@@ -86,7 +77,7 @@ class JugadorServiceImplTest {
         when(jugadorRepository.findByNombreEqualsIgnoreCase(anyString())).thenReturn(Optional.of(jugador));
 
         // Act
-        var res = plataformaService.findByNombre("Nintendo");
+        var res = jugadorService.findByNombre("Nintendo");
 
         // Assert
         assertAll("findByNombre",
@@ -104,7 +95,7 @@ class JugadorServiceImplTest {
         when(jugadorRepository.findById(anyLong())).thenReturn(Optional.of(jugador));
 
         // Act
-        var res = plataformaService.findById(1L);
+        var res = jugadorService.findById(1L);
 
         // Assert
         assertAll("findById",
@@ -123,7 +114,7 @@ class JugadorServiceImplTest {
         when(jugadorRepository.save(any(Jugador.class))).thenReturn(jugador);
 
         // Act
-        plataformaService.save(jugadorCreatedDto);
+        jugadorService.save(jugadorCreatedDto);
 
         // Assert
         assertAll("save",
@@ -143,12 +134,12 @@ class JugadorServiceImplTest {
 
         // Act
         var res = assertThrows(JugadorConflictException.class,
-                () -> plataformaService.save(jugadorCreatedDto));
+                () -> jugadorService.save(jugadorCreatedDto));
 
         // Assert
         assertAll("saveConflict",
                 () -> assertNotNull(res),
-                () -> assertEquals("Ya existe una plataforma con el nombre: Epic Games Store", res.getMessage())
+                () -> assertEquals("Ya existe una jugador con el nombre: Epic Games Store", res.getMessage())
         );
 
         // Verify
@@ -164,7 +155,7 @@ class JugadorServiceImplTest {
         when(jugadorRepository.save(any(Jugador.class))).thenReturn(jugador);
 
         // Act
-        plataformaService.update(1L, jugadorUpdateDto);
+        jugadorService.update(1L, jugadorUpdateDto);
 
         // Assert
         assertAll("update",
@@ -187,12 +178,12 @@ class JugadorServiceImplTest {
 
         // Act, el id no debe ser igual, no se puede actualizar, porqe ya existe
         var res = assertThrows(JugadorConflictException.class,
-                () -> plataformaService.update(2L, jugadorUpdateDto));
+                () -> jugadorService.update(2L, jugadorUpdateDto));
 
         // Assert
         assertAll("updateConflict",
                 () -> assertNotNull(res),
-                () -> assertEquals("Ya existe una plataforma con el nombre: PlayStation", res.getMessage())
+                () -> assertEquals("Ya existe una jugador con el nombre: PlayStation", res.getMessage())
         );
 
         // Verify
@@ -208,7 +199,7 @@ class JugadorServiceImplTest {
         when(jugadorRepository.existsVideojuegoById(anyLong())).thenReturn(false);
 
         // Act
-        plataformaService.deleteById(1L);
+        jugadorService.deleteById(1L);
 
         // Assert
         assertAll("deleteById",

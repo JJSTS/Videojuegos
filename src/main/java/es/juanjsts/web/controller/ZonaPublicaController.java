@@ -21,14 +21,15 @@ import java.util.Optional;
 public class ZonaPublicaController {
     private final VideojuegosService videojuegosService;
 
-    @GetMapping({"","/","/index"})
-    public String index(Model model,
-                        @RequestParam(name = "page", defaultValue = "0") int page,
-                        @RequestParam(name = "size", defaultValue = "4") int size){
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-        Page<VideojuegoResponseDto> videojuegoPage = videojuegosService.findAll(
-                Optional.empty(), Optional.empty(),Optional.empty(), pageable);
-        model.addAttribute("page", videojuegoPage);
-        return "index";
-    }
+  @GetMapping({"", "/", "/index"})
+  public String index(Model model,
+                      @RequestParam(name = "page", defaultValue = "0") int page,
+                      @RequestParam(name = "size", defaultValue = "4") int size){
+    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+    Page<VideojuegoResponseDto> videojuegosPage = videojuegosService.findAll(
+      Optional.empty(), Optional.empty(), Optional.empty(), pageable);
+
+    model.addAttribute("page", videojuegosPage);
+    return "index";
+  }
 }

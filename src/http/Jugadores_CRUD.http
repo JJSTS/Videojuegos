@@ -1,15 +1,15 @@
 
-GET http://localhost:3000/api/v1/plataformas
+GET http://localhost:3000/api/v1/jugadores
 
 ###
 
-GET http://localhost:3000/api/v1/plataformas/1
+GET http://localhost:3000/api/v1/jugadores/1
 ###
 
-GET http://localhost:3000/api/v1/plataformas/3
+GET http://localhost:3000/api/v1/jugadores/3
 
 ### Nuevo jugador
-POST http://localhost:3000/api/v1/plataformas
+POST http://localhost:3000/api/v1/jugadores
 Content-Type: application/json
 
 {

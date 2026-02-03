@@ -97,7 +97,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/publi", "/public/", "/public/**").permitAll()
                         .requestMatchers("/","/auth/**","/webjars/**","/css/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                  .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .defaultSuccessUrl("/public",true)

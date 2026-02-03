@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
-public class VideojuegoPlataformaGraphQLController {
+public class VideojuegoJugadorGraphQLController {
     private final VideojuegosRepository videojuegoRepository;
     private final JugadorRepository jugadorRepository;
 
@@ -32,27 +32,27 @@ public class VideojuegoPlataformaGraphQLController {
     }
 
     @QueryMapping
-    public List<Jugador> plataformas() {
+    public List<Jugador> jugadores() {
         return jugadorRepository.findAll();
     }
 
 
     @QueryMapping
-    public Jugador plataformaById(@Argument Long id) {
+    public Jugador jugadorById(@Argument Long id) {
         return jugadorRepository.findById(id).orElse(null);
     }
 
     @QueryMapping
-    public List<Jugador> plataformaByNombre(@Argument String nombre){
+    public List<Jugador> jugadorByNombre(@Argument String nombre){
         return jugadorRepository.findByNombreContainingIgnoreCase(nombre);
     }
 
-    @SchemaMapping(typeName = "Videojuego", field = "plataforma")
-    public Jugador plataforma (Videojuego videojuego){
+    @SchemaMapping(typeName = "Videojuego", field = "jugador")
+    public Jugador jugador (Videojuego videojuego){
         return videojuego.getJugador();
     }
 
-    @SchemaMapping(typeName = "Jugador", field = "videojuego")
+    @SchemaMapping(typeName = "Jugador", field = "videojuegos")
     public List<Videojuego> videojuegos (Jugador jugador){
         return videojuegoRepository.findByJugador(jugador);
     }

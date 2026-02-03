@@ -5,7 +5,7 @@ public record VideojuegoNotificationResponse (
     String nombre,
     String genero,
     String almacenamiento,
-    String plataforma,
+    String Jugador,
     String fechaDeCreacion,
     Double costo,
 

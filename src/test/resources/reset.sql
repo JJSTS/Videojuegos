@@ -47,7 +47,7 @@ create table USUARIOS(
 
 
 alter table if exists videojuegos
-    add constraint FK_VIDEOJUEGOS_PLATAFORMAS_JUGADOR_ID
+    add constraint FK_VIDEOJUEGOS_JUGADORES_JUGADOR_ID
     foreign key (jugador_id)
     references jugadores(id);
 
@@ -57,6 +57,6 @@ alter table if exists user_roles
     references usuarios(id);
 
 alter table if exists usuarios
-    add constraint fk_usuarios_plataformas_jugador_id
+    add constraint fk_usuarios_jugadores_jugador_id
     foreign key (jugador_id)
     references jugadores(id):
