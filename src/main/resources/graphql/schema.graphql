@@ -2,10 +2,10 @@ type Query {
     videojuegos: [Videojuego!]!
     videojuegoById(id: ID!): Videojuego
 
-    plataformas: [Plataforma!]!
-    plataformaById(id: ID!): Plataforma
+    jugadores: [Jugador!]!
+    jugadorById(id: ID!): Jugador
 
-    plataformaByNombre(nombre: String!): [Plataforma!]!
+    jugadorByNombre(nombre: String!): [Jugador!]!
 }
 
 type Videojuego{
@@ -19,15 +19,12 @@ type Videojuego{
     createdAt: String!
     updated: String!
     isDeleted: Boolean!
-    jugador: Plataforma!
+    jugador: Jugador!
 }
 
-type Plataforma{
+type Jugador{
     id: ID!
     nombre: String!
-    fabricante: String!
-    tipo: String!
-    fechaDeLanzamiento: String!
     createdAt: String!
     updatedAt: String!
     isDeleted: Boolean!

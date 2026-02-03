@@ -4,7 +4,10 @@ import es.juanjsts.rest.videojuegos.dto.VideojuegoCreateDto;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoResponseDto;
 import es.juanjsts.rest.videojuegos.dto.VideojuegoUpdateDto;
 import es.juanjsts.rest.videojuegos.models.Videojuego;
+import es.juanjsts.rest.videojuegos.repositories.VideojuegosRepository;
 import es.juanjsts.rest.videojuegos.services.VideojuegosService;
+import es.juanjsts.web.services.I18nService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +33,7 @@ import java.util.Optional;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
   private final VideojuegosService videojuegosService;
+  private final I18nService i18nService;
 
   @GetMapping("/videojuegos")
   public String videojuegos(Model model,
@@ -39,6 +44,19 @@ public class AdminController {
       Optional.empty(), Optional.empty(),Optional.empty(), pageable);
     model.addAttribute("page", videojuegoPage);
     return "admin/videojuegos/lista";
+  }
+
+  @GetMapping("/videojuegos/filter")
+  public String tarjetasFiltrar(Model model,
+                                @RequestParam(required = false) Optional<String> numero,
+                                @RequestParam(name = "page", defaultValue = "0") int page,
+                                @RequestParam(name = "size", defaultValue = "4") int size){
+    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+    Page<VideojuegoResponseDto> tarjetasPage = videojuegosService.findAll(
+      numero, Optional.empty(), Optional.empty(), pageable);
+
+    model.addAttribute("page", tarjetasPage);
+    return "fragments/listaVideojuegos";
   }
 
   @GetMapping("/videojuegos/{id}")
@@ -108,9 +126,48 @@ public class AdminController {
     return "redirect:/admin/videojuegos/{id}";
   }
 
-  @GetMapping("/videojuegos/{id}/delete")
-  public String borrarVideojuego(@PathVariable Long id){
+  @PostMapping("/videojuegos/{id}/delete")
+  public String borrarTarjeta(@PathVariable Long id,
+                              @RequestParam("deleteToken") String deleteToken,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes) {
+    String sessionKey = "deleteToken_" + id;
+    String tokenInSession = (String) session.getAttribute(sessionKey);
+
+    if (tokenInSession == null || !tokenInSession.equals(deleteToken)) {
+      redirectAttributes.addFlashAttribute("error", "Confirmación inválida o caducada.");
+      return "redirect:/admin/videojuegos";
+    }
+
+    // invalidar token y proceder al borrado
+    session.removeAttribute(sessionKey);
     videojuegosService.deleteById(id);
+    redirectAttributes.addFlashAttribute("success", "Tarjeta borrada correctamente.");
     return "redirect:/admin/videojuegos";
+  }
+
+  @GetMapping("/videojuegos/{id}/delete/confirm")
+  public String showModalBorrar(@PathVariable("id") Long id, Model model, HttpSession session) {
+    Optional<Videojuego> videojuego = videojuegosService.buscarPorId(id);
+    String deleteMessage;
+    if (videojuego.isPresent()) {
+      deleteMessage = i18nService.getMessage("videojuegos.borrar.mensaje",
+        new Object[]{videojuego.get().getNombre()} );
+    } else {
+      return "redirect:/videojuegos/?error=true";
+    }
+
+    // generar token de un solo uso y guardarlo en sesión
+    String token = UUID.randomUUID().toString();
+    String sessionKey = "deleteToken_" + id;
+    session.setAttribute(sessionKey, token);
+
+    model.addAttribute("deleteUrl", "/admin/videojuegos/" + id + "/delete");
+    model.addAttribute("deleteToken", token);
+    model.addAttribute("deleteTitle",
+      i18nService.getMessage("videojuegos.borrar.titulo")
+    );
+    model.addAttribute("deleteMessage", deleteMessage);
+    return "fragments/deleteModal";
   }
 }
