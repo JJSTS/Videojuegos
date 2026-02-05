@@ -17,15 +17,22 @@
               {% if isAdmin %}
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/videojuegos/new">
-                        <i class="bi bi-controller"></i> {{ message('nav.new.videojuegos') }}</a>
+                      <i class="bi bi-controller"></i> {{ message('nav.new.videojuegos') }}</a>
                 </li>
               {% endif %}
             </ul>
 
-            <form action="#" class="d-flex me-3" method="get" role="search">
-                <input class="form-control" name="q" placeholder="{{ message('videojuegos.search') }}" type="search"
-                       id="buscador" name="titulo">
-            </form>
+          {# ### Obtener el nombre de la plantilla actual sin la ruta completa #}
+          {% set plantilla = template.name | split('/') | last %}
+          {# ### Otra manera es usar templateName filter si está definido en PebbleConfig #}
+          {# ### set plantilla = template.name | templateName #}
+
+          {% if isAdmin and  plantilla == 'lista' %}
+          <form action="#" class="d-flex me-3" method="get" role="search">
+            <input class="form-control" name="q" placeholder="{{ message('videojuegos.search') }}" type="search"
+                   id="buscador" name="titulo">
+          </form>
+          {% endif %}
 
             <ul class="navbar-nav">
                 <!-- Language Switcher -->
@@ -70,7 +77,7 @@
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">
+                            <a class="dropdown-item" id="logoutLink">
                                 <i class="bi bi-box-arrow-right"></i> {{ message('nav.logout') }}
                             </a>
                         </li>

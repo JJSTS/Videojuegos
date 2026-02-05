@@ -1,9 +1,12 @@
 package es.juanjsts.config.pebble;
 
 import io.pebbletemplates.boot.autoconfigure.PebbleAutoConfiguration;
+import io.pebbletemplates.pebble.error.PebbleException;
 import io.pebbletemplates.pebble.extension.AbstractExtension;
 import io.pebbletemplates.pebble.extension.Extension;
 import io.pebbletemplates.pebble.extension.Filter;
+import io.pebbletemplates.pebble.template.EvaluationContext;
+import io.pebbletemplates.pebble.template.PebbleTemplate;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -154,6 +157,28 @@ public class PebbleConfig {
         return df.format(price);
       } catch (Exception e) {
         return input + " €";
+      }
+    }
+
+    @Override
+    public List<String> getArgumentNames() {
+      return null;
+    }
+  }
+
+  private static class TemplateNameFilter implements Filter {
+    @Override
+    public Object apply(Object input, Map<String, Object> args, PebbleTemplate self,
+                        EvaluationContext context, int lineNumber) throws PebbleException {
+      if (input == null) {
+        return "";
+      }
+      String fullPath = input.toString();
+      try {
+        String[] parts = fullPath.split("/");
+        return parts[parts.length - 1];
+      } catch (Exception e) {
+        return fullPath;
       }
     }
 

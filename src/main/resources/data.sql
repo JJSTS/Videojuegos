@@ -54,8 +54,9 @@ VALUES ('Pepsiman', 'Estrategia', '10 TB', '1994-12-23', 100.0, 1, UUID()),
 
 --No está asociado a ningun jugador
 
+-- Contraseña: Admin1
 insert into USUARIOS (nombre, apellidos, username, email, password)
-values ('Admin', 'Admin Fernandez', 'admin','admin@prueba.es','$2a$12$RUq2ScW1Kiizu5K4gKoK4OTz80.DWaruhdyfi2lZCB.KeuXTBh0S.');
+values ('Admin', 'Admin Fernandez', 'admin','admin@prueba.es','$2a$10$vPaqZvZkz6jhb7U7k/V/v.5vprfNdOnh4sxi/qpPRkYTzPmFlI9p2');
 
 insert into USER_ROLES (user_id, roles)
 values (1, 'ADMIN');

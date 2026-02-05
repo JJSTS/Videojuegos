@@ -48,12 +48,12 @@ public class AdminController {
 
   @GetMapping("/videojuegos/filter")
   public String tarjetasFiltrar(Model model,
-                                @RequestParam(required = false) Optional<String> numero,
+                                @RequestParam(required = false) Optional<String> nombre,
                                 @RequestParam(name = "page", defaultValue = "0") int page,
                                 @RequestParam(name = "size", defaultValue = "4") int size){
     Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
     Page<VideojuegoResponseDto> tarjetasPage = videojuegosService.findAll(
-      numero, Optional.empty(), Optional.empty(), pageable);
+      nombre, Optional.empty(), Optional.empty(), pageable);
 
     model.addAttribute("page", tarjetasPage);
     return "fragments/listaVideojuegos";
