@@ -32,6 +32,7 @@ public class PebbleConfig {
         filters.put("formatPrice", new FormatPriceFilter());
         filters.put("formatMonth", new FormatMonthFilter());
         filters.put("formatDateTime", new FormatDateTimeFilter());
+        filters.put("templateName", new TemplateNameFilter());
         return filters;
       }
     };

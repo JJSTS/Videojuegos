@@ -37,6 +37,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final LoginSuccessHandler loginSuccessHandler;
 
     @Value("${api.version}")
     private String apiVersion;
@@ -98,10 +99,10 @@ public class SecurityConfig {
                         .requestMatchers("/publi", "/public/", "/public/**").permitAll()
                         .requestMatchers("/","/auth/**","/webjars/**","/css/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                  .anyRequest().authenticated())
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/auth/login")
-                        .defaultSuccessUrl("/public",true)
+                        .successHandler(loginSuccessHandler)
                         .loginProcessingUrl("/auth/login-post")
                         .permitAll())
                 .logout(logout -> logout
