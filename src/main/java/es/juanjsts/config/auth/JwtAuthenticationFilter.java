@@ -48,15 +48,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("Se ha encontrado cabecera de autenticación, se procesa");
         jwt = authHeader.substring(7);
 
-        try {
-            userName = jwtService.extractUsername(jwt);
-        } catch (Exception e) {
-            log.info("Token no válido");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token no autorizado o no válido0");
-            return;
-        }
+      try {
+        userName = jwtService.extractUsername(jwt);
+      } catch (Exception e) {
+        log.info("Token no válido");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token no autorizado o no válido");
+        return;
+      }
 
-        log.info("Usuario autenticado: {}", userName);
+
+      log.info("Usuario autenticado: {}", userName);
         if (StringUtils.hasText(userName)
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             log.info("Comprobando usuario y token");
@@ -67,7 +68,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Usuario no autorizado");
                 return;
             }
-            authUsersService.loadUserByUsername(userName);
             log.info("Usuario encontrado: {}", userName);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 log.info("JWT valido");
