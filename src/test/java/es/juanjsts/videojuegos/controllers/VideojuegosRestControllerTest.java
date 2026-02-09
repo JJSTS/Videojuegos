@@ -35,7 +35,7 @@ class VideojuegosRestControllerTest {
             .id(1L)
             .nombre("Marvel Rivals")
             .genero("Hero shooter")
-            .plataforma("Nintendo")
+            .jugador("Nintendo")
             .almacenamiento("15 GB")
             .fechaDeCreacion(LocalDate.of(2024, 12, 6))
             .costo(0.0)
@@ -46,7 +46,7 @@ class VideojuegosRestControllerTest {
             .nombre("Clash Royale")
             .genero("Estrategia")
             .almacenamiento("250 MB")
-            .plataforma("Nintendo")
+            .jugador("Nintendo")
             .fechaDeCreacion(LocalDate.of(2016, 3,2))
             .costo(0.0)
             .build();
@@ -124,11 +124,11 @@ class VideojuegosRestControllerTest {
     void getAllByPlataforma() {
         //Arrange
         var  videojuegoResponses = List.of(videojuegoResponseDto2);
-        String queryString = "?plataforma=" + videojuegoResponseDto2.getPlataforma();
-        Optional<String> plataforma = Optional.of(videojuegoResponseDto2.getPlataforma());
+        String queryString = "?jugador=" + videojuegoResponseDto2.getJugador();
+        Optional<String> jugador = Optional.of(videojuegoResponseDto2.getJugador());
         var pageable =  PageRequest.of(0, 10, Sort.by("id").ascending());
         var page = new PageImpl<>(videojuegoResponses);
-        when(videojuegosService.findAll(Optional.empty(), plataforma, Optional.empty(), pageable))
+        when(videojuegosService.findAll(Optional.empty(), jugador, Optional.empty(), pageable))
                 .thenReturn(page);
 
         //Act
@@ -147,7 +147,7 @@ class VideojuegosRestControllerTest {
                 });
         //Verify
         verify(videojuegosService, only())
-                .findAll(Optional.empty(), plataforma, Optional.empty(), pageable);
+                .findAll(Optional.empty(), jugador, Optional.empty(), pageable);
 
     }
 
@@ -155,12 +155,12 @@ class VideojuegosRestControllerTest {
     void getAllByNombreAndPlataforma() {
         //Arrange
         var  videojuegoResponses = List.of(videojuegoResponseDto2);
-        String queryString = "?nombre=" + videojuegoResponseDto2.getNombre() + "&plataforma=" + videojuegoResponseDto2.getPlataforma();
+        String queryString = "?nombre=" + videojuegoResponseDto2.getNombre() + "&jugador=" + videojuegoResponseDto2.getJugador();
         Optional<String> nombre = Optional.of(videojuegoResponseDto2.getNombre());
-        Optional<String> plataforma = Optional.of(videojuegoResponseDto2.getPlataforma());
+        Optional<String> jugador = Optional.of(videojuegoResponseDto2.getJugador());
         var pageable =  PageRequest.of(0, 10, Sort.by("id").ascending());
         var page = new PageImpl<>(videojuegoResponses);
-        when(videojuegosService.findAll(nombre, plataforma, Optional.empty(), pageable))
+        when(videojuegosService.findAll(nombre, jugador, Optional.empty(), pageable))
                 .thenReturn(page);
 
         //Act
@@ -179,7 +179,7 @@ class VideojuegosRestControllerTest {
 
         //Verify
         verify(videojuegosService, only())
-                .findAll(nombre, plataforma, Optional.empty(), pageable);
+                .findAll(nombre, jugador, Optional.empty(), pageable);
     }
 
     @Test

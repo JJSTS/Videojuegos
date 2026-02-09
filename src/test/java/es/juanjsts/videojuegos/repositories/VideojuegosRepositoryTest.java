@@ -24,15 +24,9 @@ class VideojuegosRepositoryTest {
 
     private final Jugador plataforma1 = Jugador.builder()
             .nombre("Epic Games Store")
-            .fabricante("Epic Games")
-            .tipo("PC")
-            .fechaDeLanzamiento(LocalDate.of(2024,12,24))
             .build();
     private final Jugador plataforma2 = Jugador.builder()
             .nombre("PlayStation")
-            .fabricante("PlayStation")
-            .tipo("Consolas")
-            .fechaDeLanzamiento(LocalDate.of(1987,12,12))
             .build();
 
     private final Videojuego videojuego1 = Videojuego.builder()
