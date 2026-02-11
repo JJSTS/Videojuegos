@@ -25,9 +25,11 @@ create table JUGADORES(
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP not null
 );
 
+create type user_role_enum as enum ('ADMIN','USER')
+
 create table USER_ROLES(
                          user_id bigint not null,
-                         roles enum('ADMIN','USER')
+                         roles user_role_enum
 );
 
 
@@ -65,15 +67,15 @@ INSERT INTO JUGADORES (nombre)
 VALUES ('Francock'), ('Juanjsts');
 
 INSERT INTO VIDEOJUEGOS (nombre, genero, almacenamiento, fecha_de_creacion, costo, jugador_id, uuid)
-VALUES ('Pepsiman', 'Estrategia', '10 TB', '1994-12-23', 100.0, 1, UUID()),
-       ('Adan y Eva', 'Battle Royale', '9 MB', '2024-12-24', 200.0, 2, UUID()),
-       ('The Witcher 3: Wild Hunt', 'RPG', '100 GB', '2024-12-24', 300.0, 2, UUID()),
-       ('The Last of Us Part II', 'RPG', '100 GB', '2024-12-24', 400.0, 1, UUID()),
-       ('The Witcher 3: Wild Hunt', 'RPG', '100 GB', '2024-12-24', 300.0, 2, UUID()),
-       ('Las flipantes aventuras de Manuel', 'RPG', '100 GB', '2024-12-24', 400.0, 1, UUID()),
-       ('Super Mario Odyssey', 'Plataformas', '6 GB', '2017-10-27', 59.90, 1, UUID()),
-       ('Elden Ring', 'RPG', '60 GB', '2022-02-25', 69.90, 2, UUID()),
-       ('Hollow Knight', 'Metroidvania', '9 GB', '2017-02-24', 14.99, 1, UUID());
+VALUES ('Pepsiman', 'Estrategia', '10 TB', '1994-12-23', 100.0, 1, UUIDv4()),
+       ('Adan y Eva', 'Battle Royale', '9 MB', '2024-12-24', 200.0, 2, UUIDv4()),
+       ('The Witcher 3: Wild Hunt', 'RPG', '100 GB', '2024-12-24', 300.0, 2, UUIDv4()),
+       ('The Last of Us Part II', 'RPG', '100 GB', '2024-12-24', 400.0, 1, UUIDv4()),
+       ('The Witcher 3: Wild Hunt', 'RPG', '100 GB', '2024-12-24', 300.0, 2, UUIDv4()),
+       ('Las flipantes aventuras de Manuel', 'RPG', '100 GB', '2024-12-24', 400.0, 1, UUIDv4()),
+       ('Super Mario Odyssey', 'Plataformas', '6 GB', '2017-10-27', 59.90, 1, UUIDv4()),
+       ('Elden Ring', 'RPG', '60 GB', '2022-02-25', 69.90, 2, UUIDv4()),
+       ('Hollow Knight', 'Metroidvania', '9 GB', '2017-02-24', 14.99, 1, UUIDv4());
 
 
 --No está asociado a ningun jugador

@@ -140,9 +140,15 @@
     <profiles>
       <profile>
         <id>dev</id>
+        <!--
         <activation>
           <activeByDefault>true</activeByDefault>
         </activation>
+        -->
+        <properties>
+          <spring.profiles.active>dev</spring.profiles.active>
+          <activateProperties>dev</activateProperties>
+        </properties>
         <dependencies>
           <dependency>
             <groupId>com.h2database</groupId>
@@ -153,6 +159,13 @@
       </profile>
       <profile>
         <id>prod</id>
+        <properties>
+          <spring.profiles.active>prod</spring.profiles.active>
+          <activateProperties>prod</activateProperties>
+        </properties>
+        <activation>
+          <activeByDefault>true</activeByDefault>
+        </activation>
         <dependencies>
           <dependency>
             <groupId>org.postgresql</groupId>
