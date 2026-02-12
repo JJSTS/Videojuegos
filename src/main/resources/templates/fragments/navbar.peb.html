@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
         <!--
         <a class="navbar-brand" href="/public">
@@ -8,7 +8,7 @@
         <button class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse text-white" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link active" href="/public">
@@ -33,6 +33,13 @@
                    id="buscador" name="titulo">
           </form>
           {% endif %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="darkModeToggle">
+              <i class="bi bi-moon-fill"></i>{{ message('nav.mode') }}
+            </a>
+          </li>
+
 
             <ul class="navbar-nav">
                 <!-- Language Switcher -->
@@ -75,6 +82,14 @@
                         </li>
                         <li>
                             <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                          <a href="#" id="darkModeToggle" class="dropdown-item">
+                            <i class="bi bi-moon"></i>  {{ message('nav.mode') }}
+                          </a>
+                        </li>
+                        <li>
+                          <hr class="dropdown-divider">
                         </li>
                         <li>
                             <a class="dropdown-item" id="logoutLink">

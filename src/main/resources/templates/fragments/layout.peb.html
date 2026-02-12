@@ -3,15 +3,16 @@
 {% include "fragments/head" %}
 
 <body class="d-flex flex-column min-vh-100">
-    {% include "fragments/navbar" %}
-    <div class="container mb-5">
-        {% block body %}{% endblock %}
-    </div>
+{% include "fragments/navbar" %}
+<div class="container mb-5">
+  {% block body %}{% endblock %}
+</div>
 
-    {% include "fragments/footer" %}
+{% include "fragments/footer" %}
 
 <script src="{{ href('/webjars/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ href('/js/app.js') }}"></script>
+<script src="{{ href('/js/app-modoOscuro.js') }}"></script>
 <!-- Scripts adicionales -->
 {% block scripts %}{% endblock %}
 </body>
