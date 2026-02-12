@@ -2,6 +2,8 @@ package es.juanjsts.web.controller;
 
 import es.juanjsts.rest.users.models.User;
 import es.juanjsts.rest.users.services.UsersService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +15,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/app/perfil")
@@ -20,10 +26,37 @@ public class PerfilController {
     private final UsersService usersService;
 
     @GetMapping
-    public String showProfile(Model model){
+    public String showProfile(Model model, HttpServletRequest request){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = usersService.findByUsername(username).orElse(null);
         model.addAttribute("usuario", user);
+
+        //Cookie de última conexión
+        String penultimaConexion = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("penultimaConexion".equals(cookie.getName())) {
+                    penultimaConexion = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (penultimaConexion != null) {
+            try {
+                LocalDateTime fechaHora = LocalDateTime.parse(penultimaConexion, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                String fechaFormateada = fechaHora.format(formateador);
+                model.addAttribute("ultimaConexion", fechaFormateada);
+            } catch (DateTimeParseException e) {
+                // Si hay error al parsear, ignorar
+                model.addAttribute("ultimaConexion", null);
+            }
+        } else {
+            model.addAttribute("ultimaConexion", null);
+        }
+
         return "app/perfil";
     }
 

@@ -65,6 +65,13 @@
                                    value="{{ usuario.createdAt | formatDateTime }}" disabled>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label">Última Conexión</label>
+                            <input type="text" class="form-control"
+                                   value="{% if ultimaConexion %}{{ ultimaConexion }}{% else %}Primera conexión{% endif %}" disabled>
+                            <small class="text-muted">Fecha y hora de tu conexión anterior</small>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-save"></i> Actualizar Perfil
                         </button>
