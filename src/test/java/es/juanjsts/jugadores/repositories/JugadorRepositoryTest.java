@@ -21,9 +21,6 @@ class JugadorRepositoryTest {
 
     private final Jugador plataforma = Jugador.builder()
             .nombre("Nintendo")
-            .fabricante("Nintendo")
-            .tipo("PC")
-            .fechaDeLanzamiento(LocalDate.of(1985, 1, 1))
             .build();
 
     @Autowired
@@ -90,19 +87,12 @@ class JugadorRepositoryTest {
         // Act
         Jugador jugador = repositorio.save(Jugador.builder()
                 .nombre("Epic Games Store")
-                .fabricante("Epic Games")
-                .tipo("PC")
-                .fechaDeLanzamiento(LocalDate.of(1985, 1, 1))
                 .build());
 
         // Assert
         assertAll("save",
                 () -> assertNotNull(jugador),
-                () -> assertEquals("Epic Games Store", jugador.getNombre()),
-                () -> assertEquals("Epic Games", jugador.getFabricante()),
-                () -> assertEquals("PC", jugador.getTipo()),
-                () -> assertEquals(LocalDate.of(1985, 1, 1), jugador.getFechaDeLanzamiento())
-        );
+                () -> assertEquals("Epic Games Store", jugador.getNombre()));
     }
 
     @Test

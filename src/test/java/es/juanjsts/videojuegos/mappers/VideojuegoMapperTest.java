@@ -28,7 +28,7 @@ class VideojuegoMapperTest {
                 .nombre("Marvel Rivals")
                 .genero("Hero shooter")
                 .almacenamiento("15 GB")
-                .plataforma("Nintendo")
+                .jugador("Nintendo")
                 .fechaDeCreacion(LocalDate.of(2024, 12, 6))
                 .costo(0.0)
                 .build();
@@ -41,7 +41,7 @@ class VideojuegoMapperTest {
                 () -> assertEquals(videojuegoCreateDto.getAlmacenamiento(), res.getAlmacenamiento()),
                 () -> assertEquals(videojuegoCreateDto.getCosto(), res.getCosto()),
                 () -> assertEquals(videojuegoCreateDto.getFechaDeCreacion(), res.getFechaDeCreacion()),
-                () -> assertEquals(videojuegoCreateDto.getPlataforma(), res.getJugador().getNombre()),
+                () -> assertEquals(videojuegoCreateDto.getJugador(), res.getJugador().getNombre()),
                 () -> assertEquals(videojuegoCreateDto.getCosto(), res.getCosto())
         );
     }
