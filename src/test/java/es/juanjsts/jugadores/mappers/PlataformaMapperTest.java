@@ -16,23 +16,14 @@ class PlataformaMapperTest {
     private final Jugador jugador = Jugador.builder()
             .id(1L)
             .nombre("Nintendo")
-            .fabricante("Nintendo")
-            .tipo("PC")
-            .fechaDeLanzamiento(LocalDate.of(1985, 1, 1))
             .build();
 
     private final JugadorCreatedDto jugadorCreatedDto = JugadorCreatedDto.builder()
             .nombre("NINTENDO")
-            .fabricante("Nintendo")
-            .tipo("PC")
-            .fechaDeLanzamiento(LocalDate.of(1985, 1, 1))
             .build();
 
     private final JugadorUpdateDto jugadorUpdateDto = JugadorUpdateDto.builder()
             .nombre("NINTENDO")
-            .fabricante("PANINI")
-            .tipo("NOSE")
-            .fechaDeLanzamiento(LocalDate.of(9999, 1, 1))
             .build();
 
     @Test
