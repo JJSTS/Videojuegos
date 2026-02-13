@@ -46,11 +46,18 @@ INSERT INTO JUGADORES (nombre)
 VALUES ('Francock'), ('Juanjsts');
 
 INSERT INTO VIDEOJUEGOS (nombre, genero, almacenamiento, fecha_de_creacion, costo, jugador_id, uuid)
-VALUES ('Pepsiman', 'Estrategia', '10 TB', '1994-12-23', 100.0, 1, UUID()),
-       ('Adan y Eva', 'Battle Royale', '9 MB', '2024-12-24', 200.0, 2, UUID()),
-       ('The Witcher 3: Wild Hunt', 'RPG', '100 GB', '2024-12-24', 300.0, 2, UUID()),
-       ('The Last of Us Part II', 'RPG', '100 GB', '2024-12-24', 400.0, 1, UUID());
-
+VALUES 
+    -- Juegos Clásicos y Populares
+    ('Minecraft', 'Sandbox', '1 GB', '2011-11-18', 26.95, 1, UUID()),
+    ('League of Legends', 'MOBA', '22 GB', '2009-10-27', 0.0, 1, UUID()),
+    ('Brawl Stars', 'Battle Royale', '350 MB', '2018-12-12', 0.0, 2, UUID()),
+    ('Plants vs Zombies', 'Tower Defense', '150 MB', '2009-05-05', 4.99, 2, UUID()),
+    ('Fortnite', 'Battle Royale', '80 GB', '2017-07-25', 0.0, 1, UUID()),
+    ('Among Us', 'Social Deduction', '250 MB', '2018-06-15', 3.99, 2, UUID()),
+    ('Clash of Clans', 'Estrategia', '350 MB', '2012-08-02', 0.0, 1, UUID()),
+    ('Clash Royale', 'Estrategia', '400 MB', '2016-03-02', 0.0, 2, UUID()),
+    ('PUBG Mobile', 'Battle Royale', '2.5 GB', '2018-03-19', 0.0, 1, UUID()),
+    ('Free Fire', 'Battle Royale', '1.2 GB', '2017-12-04', 0.0, 2, UUID());
 
 --No está asociado a ningun jugador
 
